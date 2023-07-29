@@ -32,7 +32,7 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/estates", params.Handler.GetEstates).Methods("GET")
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}", params.Handler.GetEstateByID).Methods("GET")
 	router.HandleFunc(baseUrl+"/estate/searchOptions", params.Handler.GetSearchOptions).Methods("GET")
-	router.HandleFunc(baseUrl+"/estate/clearCache", params.Handler.GetSearchOptions).Methods("DELETE")
+	router.HandleFunc(baseUrl+"/estate/clearCache", params.Handler.ClearCache).Methods("DELETE")
 
 	handler := cors.AllowAll().Handler(router)
 
