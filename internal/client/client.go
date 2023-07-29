@@ -21,6 +21,7 @@ type Service interface {
 	SaveLead(ctx context.Context, request structs.Lead) error
 
 	GetEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error)
+	GetLuxuryEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error)
 	GetEstateByID(ctx context.Context, id int) (estate structs.Estate, err error)
 	GetSearchOptions(ctx context.Context) (option structs.SearchOptions, err error)
 	ClearCache()

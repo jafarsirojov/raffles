@@ -18,6 +18,7 @@ type EstateAdminRepo interface {
 
 type EstateClientRepo interface {
 	SelectEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error)
+	SelectLuxuryEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error)
 	SelectEstateByID(ctx context.Context, id int) (estate structs.Estate, err error)
 	SelectSearchOptions(ctx context.Context) (options structs.SearchOptions, err error)
 }

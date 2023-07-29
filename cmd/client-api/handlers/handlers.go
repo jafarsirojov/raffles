@@ -13,6 +13,7 @@ type Handler interface {
 	SaveLead(http.ResponseWriter, *http.Request)
 
 	GetEstates(http.ResponseWriter, *http.Request)
+	GetLuxuryEstates(http.ResponseWriter, *http.Request)
 	GetEstateByID(http.ResponseWriter, *http.Request)
 
 	GetSearchOptions(http.ResponseWriter, *http.Request)

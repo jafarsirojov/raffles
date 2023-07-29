@@ -46,6 +46,41 @@ func (h *handler) GetEstates(w http.ResponseWriter, r *http.Request) {
 	response.Payload = estates
 }
 
+func (h *handler) GetLuxuryEstates(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	offsetStr := r.URL.Query().Get("offset")
+	limitStr := r.URL.Query().Get("limit")
+
+	offset, err := strconv.Atoi(offsetStr)
+	if err != nil {
+		offset = 0
+	}
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		limit = 10
+	}
+
+	estates, err := h.clientService.GetLuxuryEstates(ctx, offset, limit)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info("cmd.client-api.handlers.GetLuxuryEstates h.clientService.GetLuxuryEstates bad request")
+			response = responses.NotFound
+			return
+		}
+
+		h.logger.Error("cmd.client-api.handlers.GetLuxuryEstates h.clientService.GetLuxuryEstates", zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+	response.Payload = estates
+}
+
 func (h *handler) GetEstateByID(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)

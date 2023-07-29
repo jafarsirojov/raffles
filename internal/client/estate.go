@@ -24,6 +24,23 @@ func (s *service) GetEstates(ctx context.Context, offset, limit int) (estates []
 	return estates, nil
 }
 
+func (s *service) GetLuxuryEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error) {
+	estates, err = s.estateRepo.SelectLuxuryEstates(ctx, offset, limit)
+	if err != nil {
+		if err != errors.ErrNotFound {
+			s.logger.Info("internal.client.GetLuxuryEstates s.estateRepo.SelectLuxuryEstates not found",
+				zap.Int("offset", offset), zap.Int("limit", limit))
+			return estates, err
+		}
+
+		s.logger.Error("internal.client.GetLuxuryEstates s.estateRepo.SelectLuxuryEstates",
+			zap.Error(err), zap.Int("offset", offset), zap.Int("limit", limit))
+		return estates, err
+	}
+
+	return estates, nil
+}
+
 func (s *service) GetEstateByID(ctx context.Context, id int) (estate structs.Estate, err error) {
 	estate, err = s.estateRepo.SelectEstateByID(ctx, id)
 	if err != nil {
