@@ -32,20 +32,19 @@ type EstateForList struct {
 }
 
 type PropertyDescription struct {
-	Name              string
-	Price             int
-	Country           int
-	City              int
-	Address           string
-	Beds              int
-	Baths             int
-	AreaInMeter       int
-	Type              PropertyType
-	YearBuilt         int
-	HasAssociationFee int // -- bool 0 - null, 1 - false, 2 - true
-	Description       string
-	Latitude          string
-	Longitude         string
+	Name        string
+	Price       int
+	Country     int
+	City        int
+	Address     string
+	Beds        int
+	Baths       int
+	AreaInMeter int
+	Type        PropertyType
+	YearBuilt   int
+	Description string
+	Latitude    string
+	Longitude   string
 }
 
 type InteriorFeatures struct {
@@ -73,7 +72,7 @@ type OtherDetails struct {
 	AreaName        string
 	Garage          int
 	Parking         string
-	View            int // -- bool 0 - null, 1 - false, 2 - true
+	View            string
 	Pool            int // -- bool 0 - null, 1 - false, 2 - true
 	PoolDescription string
 	WaterSource     string

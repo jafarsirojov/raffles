@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (s *service) GetEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error) {
+func (s *service) GetEstates(ctx context.Context, offset, limit int, options structs.SearchOptionsDTO) (estates []structs.EstateForList, err error) {
 	estates, err = s.estateRepo.SelectEstates(ctx, offset, limit)
 	if err != nil {
 		if err != errors.ErrNotFound {
