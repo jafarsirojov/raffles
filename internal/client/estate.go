@@ -8,7 +8,7 @@ import (
 )
 
 func (s *service) GetEstates(ctx context.Context, offset, limit int, options structs.SearchOptionsDTO) (estates []structs.EstateForList, err error) {
-	estates, err = s.estateRepo.SelectEstates(ctx, offset, limit)
+	estates, err = s.estateRepo.SelectEstates(ctx, offset, limit, options)
 	if err != nil {
 		if err != errors.ErrNotFound {
 			s.logger.Info("internal.client.GetEstates s.estateRepo.SelectEstates not found",
