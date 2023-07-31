@@ -92,3 +92,7 @@ func (s *service) GetSearchOptions(ctx context.Context) (options structs.SearchO
 func (s *service) ClearCache() {
 	delete(Cache, cacheKey)
 }
+
+func (s *service) GetImageBaseURL() string {
+	return structs.ImageBaseURL
+}

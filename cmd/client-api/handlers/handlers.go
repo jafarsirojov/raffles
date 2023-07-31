@@ -18,6 +18,7 @@ type Handler interface {
 
 	GetSearchOptions(http.ResponseWriter, *http.Request)
 	ClearCache(http.ResponseWriter, *http.Request)
+	GetImageBaseURL(http.ResponseWriter, *http.Request)
 }
 
 type HandlerParams struct {

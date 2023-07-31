@@ -25,6 +25,7 @@ type Service interface {
 	GetEstateByID(ctx context.Context, id int) (estate structs.Estate, err error)
 	GetSearchOptions(ctx context.Context) (option structs.SearchOptions, err error)
 	ClearCache()
+	GetImageBaseURL() string
 }
 
 type service struct {
