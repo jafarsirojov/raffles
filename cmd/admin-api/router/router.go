@@ -42,7 +42,7 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.DeleteEstate, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/approved", middleware.ApplyMiddleware(params.Handler.ApprovedEstate, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/uploadImage", middleware.ApplyMiddleware(params.Handler.UploadImage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
-	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteImage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteImage, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/estate/imageBaseURL", middleware.ApplyMiddleware(params.Handler.GetImageBaseURL, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 
 	handler := cors.AllowAll().Handler(router)

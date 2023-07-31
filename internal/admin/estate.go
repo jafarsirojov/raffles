@@ -92,7 +92,7 @@ func (s *service) DeleteEstate(ctx context.Context, id int) error {
 }
 
 func (s *service) ApprovedEstate(ctx context.Context, id int) error {
-	err := s.estateRepo.UpdateEstateStatus(ctx, id, "approved")
+	err := s.estateRepo.UpdateEstateStatus(ctx, id, "active")
 	if err != nil {
 		s.logger.Error("internal.admin.ApprovedEstate s.estateRepo.UpdateEstateStatus",
 			zap.Error(err), zap.Int("id", id))
