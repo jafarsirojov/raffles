@@ -19,8 +19,8 @@ type SearchOptions struct {
 type SearchOptionsDTO struct {
 	PriceMin         int
 	PriceMax         int
-	BedsMax          int
-	BathsMax         int
+	BedsMin          int
+	BathsMin         int
 	PropertyTypes    []int
 	SquareFootageMin int
 	SquareFootageMax int

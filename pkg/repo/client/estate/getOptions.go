@@ -21,16 +21,16 @@ func (r *repo) getWhereByOptions(options structs.SearchOptionsDTO, offset, limit
 		fields = append(fields, options.PriceMax)
 	}
 
-	if options.BedsMax > 0 {
+	if options.BedsMin > 0 {
 		i++
 		where = where + " AND beds > $" + strconv.Itoa(i)
-		fields = append(fields, options.BedsMax)
+		fields = append(fields, options.BedsMin)
 	}
 
-	if options.BathsMax > 0 {
+	if options.BathsMin > 0 {
 		i++
 		where = where + " AND baths > $" + strconv.Itoa(i)
-		fields = append(fields, options.BathsMax)
+		fields = append(fields, options.BathsMin)
 	}
 
 	if options.PropertyTypes != nil {

@@ -22,16 +22,16 @@ func (h *handler) getQueryValue(r *http.Request) structs.SearchOptionsDTO {
 		options.PriceMax = 0
 	}
 
-	bedsMaxStr := r.URL.Query().Get("bedsMax")
-	options.BedsMax, err = strconv.Atoi(bedsMaxStr)
+	bedsMinStr := r.URL.Query().Get("bedsMin")
+	options.BedsMin, err = strconv.Atoi(bedsMinStr)
 	if err != nil {
-		options.BedsMax = 0
+		options.BedsMin = 0
 	}
 
-	bathsMaxStr := r.URL.Query().Get("bathsMax")
-	options.BathsMax, err = strconv.Atoi(bathsMaxStr)
+	bathsMinStr := r.URL.Query().Get("bathsMin")
+	options.BathsMin, err = strconv.Atoi(bathsMinStr)
 	if err != nil {
-		options.BathsMax = 0
+		options.BathsMin = 0
 	}
 
 	squareFootageMinStr := r.URL.Query().Get("squareFootageMin")
