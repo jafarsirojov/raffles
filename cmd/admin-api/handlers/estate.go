@@ -235,3 +235,13 @@ func (h *handler) DeleteImage(w http.ResponseWriter, r *http.Request) {
 
 	response = responses.Success
 }
+
+func (h *handler) GetImageBaseURL(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	baseURL := h.adminService.GetImageBaseURL()
+
+	response = responses.Success
+	response.Payload = struct{ URL string }{URL: baseURL}
+}

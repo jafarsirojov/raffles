@@ -34,6 +34,7 @@ type Service interface {
 	ApprovedEstate(ctx context.Context, id int) error
 	UploadImages(ctx context.Context, id int, file *multipart.File) error
 	DeleteImages(ctx context.Context, id int, imageName string) error
+	GetImageBaseURL() string
 }
 
 type service struct {

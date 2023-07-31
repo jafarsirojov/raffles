@@ -102,14 +102,12 @@ func (s *service) ApprovedEstate(ctx context.Context, id int) error {
 	return nil
 }
 
-const imagePath = "./../../www/iqomi.ae/images/"
-
 func (s *service) UploadImages(ctx context.Context, id int, file *multipart.File) error {
 
 	newUUID := uuid.NewString()
 	filename := newUUID + ".png"
 
-	newFile, err := os.Create(imagePath + filename)
+	newFile, err := os.Create(structs.ImagePath + filename)
 	if err != nil {
 		s.logger.Error("internal.admin.UploadImages os.Create", zap.Error(err), zap.Int("id", id))
 		return err
@@ -182,7 +180,7 @@ func (s *service) DeleteImages(ctx context.Context, id int, imageName string) er
 		return err
 	}
 
-	err = os.Remove(imagePath + imageName)
+	err = os.Remove(structs.ImagePath + imageName)
 	if err != nil {
 		s.logger.Error("internal.admin.DeleteImages os.Remove",
 			zap.Error(err), zap.Int("id", id), zap.Any("image", imageName))
@@ -190,4 +188,8 @@ func (s *service) DeleteImages(ctx context.Context, id int, imageName string) er
 	}
 
 	return nil
+}
+
+func (s *service) GetImageBaseURL() string {
+	return structs.ImageBaseURL
 }
