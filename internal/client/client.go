@@ -15,6 +15,7 @@ type Params struct {
 	Logger     *zap.Logger
 	LeadRepo   interfaces.LeadClientRepo
 	EstateRepo interfaces.EstateClientRepo
+	TextRepo   interfaces.TextClientRepo
 }
 
 type Service interface {
@@ -26,12 +27,15 @@ type Service interface {
 	GetSearchOptions(ctx context.Context) (option structs.SearchOptions, err error)
 	ClearCache()
 	GetImageBaseURL() string
+
+	GetTexts(ctx context.Context) (texts []structs.Text, err error)
 }
 
 type service struct {
 	logger     *zap.Logger
 	leadRepo   interfaces.LeadClientRepo
 	estateRepo interfaces.EstateClientRepo
+	textRepo   interfaces.TextClientRepo
 }
 
 func NewService(params Params) Service {
@@ -39,5 +43,6 @@ func NewService(params Params) Service {
 		logger:     params.Logger,
 		leadRepo:   params.LeadRepo,
 		estateRepo: params.EstateRepo,
+		textRepo:   params.TextRepo,
 	}
 }
