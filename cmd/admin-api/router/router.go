@@ -45,6 +45,9 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteImage, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/estate/imageBaseURL", middleware.ApplyMiddleware(params.Handler.GetImageBaseURL, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 
+	router.HandleFunc(baseUrl+"/texts", middleware.ApplyMiddleware(params.Handler.GetTexts, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
+	router.HandleFunc(baseUrl+"/text", middleware.ApplyMiddleware(params.Handler.UpdateText, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
+
 	handler := cors.AllowAll().Handler(router)
 
 	server := http.Server{

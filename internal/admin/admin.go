@@ -17,6 +17,7 @@ type Params struct {
 	LeadRepo    interfaces.LeadAdminRepo
 	CommentRepo interfaces.CommentRepo
 	EstateRepo  interfaces.EstateAdminRepo
+	TextRepo    interfaces.TextAdminRepo
 }
 
 type Service interface {
@@ -35,6 +36,9 @@ type Service interface {
 	UploadImages(ctx context.Context, id int, file *multipart.File) error
 	DeleteImages(ctx context.Context, id int, imageName string) error
 	GetImageBaseURL() string
+
+	GetTexts(ctx context.Context) (texts []structs.Text, err error)
+	UpdateText(ctx context.Context, text structs.Text) error
 }
 
 type service struct {
@@ -42,6 +46,7 @@ type service struct {
 	leadRepo    interfaces.LeadAdminRepo
 	commentRepo interfaces.CommentRepo
 	estateRepo  interfaces.EstateAdminRepo
+	textRepo    interfaces.TextAdminRepo
 }
 
 func NewService(params Params) Service {
@@ -50,5 +55,6 @@ func NewService(params Params) Service {
 		leadRepo:    params.LeadRepo,
 		commentRepo: params.CommentRepo,
 		estateRepo:  params.EstateRepo,
+		textRepo:    params.TextRepo,
 	}
 }
