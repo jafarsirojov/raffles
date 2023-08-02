@@ -94,5 +94,11 @@ create table estate
     pool              int                      not null default 0, -- bool 0 - null, 1 - false, 2 - true
     pool_description  varchar                  not null,
     water_source      varchar                  not null,
-    utilities         varchar                  not null,
+    utilities         varchar                  not null
+);
+
+create table text
+(
+    key   varchar not null primary key,
+    value varchar not null
 );
