@@ -13,7 +13,7 @@ func (s *service) GetTexts(ctx context.Context) (texts []structs.Text, err error
 		return nil, err
 	}
 
-	return nil, err
+	return texts, err
 }
 
 func (s *service) UpdateText(ctx context.Context, text structs.Text) error {
