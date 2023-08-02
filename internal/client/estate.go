@@ -7,38 +7,50 @@ import (
 	"go.uber.org/zap"
 )
 
-func (s *service) GetEstates(ctx context.Context, offset, limit int, options structs.SearchOptionsDTO) (estates []structs.EstateForList, err error) {
+func (s *service) GetEstates(ctx context.Context, offset, limit int, options structs.SearchOptionsDTO) (estates []structs.EstateForList, totalCount int, err error) {
 	estates, err = s.estateRepo.SelectEstates(ctx, offset, limit, options)
 	if err != nil {
 		if err != errors.ErrNotFound {
 			s.logger.Info("internal.client.GetEstates s.estateRepo.SelectEstates not found",
 				zap.Int("offset", offset), zap.Int("limit", limit))
-			return estates, err
+			return estates, totalCount, err
 		}
 
 		s.logger.Error("internal.client.GetEstates s.estateRepo.SelectEstates",
 			zap.Error(err), zap.Int("offset", offset), zap.Int("limit", limit))
-		return estates, err
+		return estates, totalCount, err
 	}
 
-	return estates, nil
+	totalCount, err = s.estateRepo.GetEstatesTotalCount(ctx)
+	if err != nil {
+		s.logger.Error("internal.client.GetEstates s.estateRepo.GetEstatesTotalCount", zap.Error(err))
+		return estates, totalCount, err
+	}
+
+	return estates, totalCount, err
 }
 
-func (s *service) GetLuxuryEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error) {
+func (s *service) GetLuxuryEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, totalCount int, err error) {
 	estates, err = s.estateRepo.SelectLuxuryEstates(ctx, offset, limit)
 	if err != nil {
 		if err != errors.ErrNotFound {
 			s.logger.Info("internal.client.GetLuxuryEstates s.estateRepo.SelectLuxuryEstates not found",
 				zap.Int("offset", offset), zap.Int("limit", limit))
-			return estates, err
+			return estates, totalCount, err
 		}
 
 		s.logger.Error("internal.client.GetLuxuryEstates s.estateRepo.SelectLuxuryEstates",
 			zap.Error(err), zap.Int("offset", offset), zap.Int("limit", limit))
-		return estates, err
+		return estates, totalCount, err
 	}
 
-	return estates, nil
+	totalCount, err = s.estateRepo.GetEstatesTotalCount(ctx)
+	if err != nil {
+		s.logger.Error("internal.client.GetEstates s.estateRepo.GetEstatesTotalCount", zap.Error(err))
+		return estates, totalCount, err
+	}
+
+	return estates, totalCount, nil
 }
 
 func (s *service) GetEstateByID(ctx context.Context, id int) (estate structs.Estate, err error) {
