@@ -9,6 +9,9 @@ type EstateAdminRepo interface {
 	GetEstateByID(ctx context.Context, id int) (structs.Estate, error)
 	GetEstates(ctx context.Context, offset, limit int) ([]structs.Estate, error)
 	GetEstatesByStatus(ctx context.Context, offset, limit int, status string) ([]structs.Estate, error)
+	GetEstatesForList(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error)
+	GetEstatesForListByStatus(ctx context.Context, offset, limit int, status string) (estates []structs.EstateForList, err error)
+	GetEstatesTotalCount(ctx context.Context, status string) (int, error)
 	SaveEstate(ctx context.Context, request structs.Estate) error
 	UpdateEstate(ctx context.Context, request structs.Estate) error
 	UpdateEstateStatus(ctx context.Context, id int, status structs.Status) error
@@ -21,4 +24,5 @@ type EstateClientRepo interface {
 	SelectLuxuryEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error)
 	SelectEstateByID(ctx context.Context, id int) (estate structs.Estate, err error)
 	SelectSearchOptions(ctx context.Context) (options structs.SearchOptions, err error)
+	GetEstatesTotalCount(ctx context.Context) (int, error)
 }
