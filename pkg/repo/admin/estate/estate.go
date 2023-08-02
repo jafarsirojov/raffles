@@ -604,7 +604,7 @@ ORDER BY id DESC offset $1 limit $2 ;`, offset, limit, status)
 func (r *repo) GetEstatesTotalCount(ctx context.Context, status string) (count int, err error) {
 	var param []interface{}
 	c := ""
-	if len(strings.TrimSpace(status)) == 0 {
+	if len(strings.TrimSpace(status)) != 0 {
 		param = append(param, status)
 		c = "AND status = $1"
 	}

@@ -24,5 +24,5 @@ type EstateClientRepo interface {
 	SelectLuxuryEstates(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error)
 	SelectEstateByID(ctx context.Context, id int) (estate structs.Estate, err error)
 	SelectSearchOptions(ctx context.Context) (options structs.SearchOptions, err error)
-	GetEstatesTotalCount(ctx context.Context) (int, error)
+	GetEstatesTotalCount(ctx context.Context, luxury bool) (int, error)
 }
