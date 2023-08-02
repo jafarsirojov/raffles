@@ -56,7 +56,7 @@ func (h *handler) GetEstates(w http.ResponseWriter, r *http.Request) {
 		limit = 10
 	}
 
-	estates, err := h.adminService.GetEstates(ctx, offset, limit, status)
+	estates, totalCount, err := h.adminService.GetEstates(ctx, offset, limit, status)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.admin-api.handlers.GetEstates h.adminService.GetEstates not found")
@@ -69,7 +69,10 @@ func (h *handler) GetEstates(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response = responses.Success
-	response.Payload = estates
+	response.Payload = structs.EstatesResponse{
+		Estates: estates,
+		Total:   totalCount,
+	}
 }
 
 func (h *handler) AddEstate(w http.ResponseWriter, r *http.Request) {

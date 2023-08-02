@@ -30,7 +30,7 @@ func (h *handler) GetEstates(w http.ResponseWriter, r *http.Request) {
 
 	options := h.getQueryValue(r)
 
-	estates, err := h.clientService.GetEstates(ctx, offset, limit, options)
+	estates, totalCount, err := h.clientService.GetEstates(ctx, offset, limit, options)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.client-api.handlers.GetEstates h.clientService.GetEstates bad request")
@@ -44,7 +44,10 @@ func (h *handler) GetEstates(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response = responses.Success
-	response.Payload = estates
+	response.Payload = structs.EstatesResponse{
+		Estates: estates,
+		Total:   totalCount,
+	}
 }
 
 func (h *handler) GetLuxuryEstates(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +68,7 @@ func (h *handler) GetLuxuryEstates(w http.ResponseWriter, r *http.Request) {
 		limit = 10
 	}
 
-	estates, err := h.clientService.GetLuxuryEstates(ctx, offset, limit)
+	estates, totalCount, err := h.clientService.GetLuxuryEstates(ctx, offset, limit)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.client-api.handlers.GetLuxuryEstates h.clientService.GetLuxuryEstates bad request")
@@ -79,7 +82,10 @@ func (h *handler) GetLuxuryEstates(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response = responses.Success
-	response.Payload = estates
+	response.Payload = structs.EstatesResponse{
+		Estates: estates,
+		Total:   totalCount,
+	}
 }
 
 func (h *handler) GetEstateByID(w http.ResponseWriter, r *http.Request) {
