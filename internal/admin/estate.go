@@ -27,35 +27,42 @@ func (s *service) GetEstateByID(ctx context.Context, id int) (estate structs.Est
 	return estate, nil
 }
 
-func (s *service) GetEstates(ctx context.Context, offset, limit int, status string) (estates []structs.Estate, err error) {
+func (s *service) GetEstates(ctx context.Context, offset, limit int, status string) (estates []structs.EstateForList, totalCount int, err error) {
 
 	if len(strings.TrimSpace(status)) == 0 {
-		estates, err = s.estateRepo.GetEstates(ctx, offset, limit)
+		estates, err = s.estateRepo.GetEstatesForList(ctx, offset, limit)
 		if err != nil {
 			if err == errors.ErrNotFound {
-				s.logger.Warn("internal.admin.GetEstates s.estateRepo.GetEstates not found",
+				s.logger.Warn("internal.admin.GetEstates s.estateRepo.GetEstatesForList not found",
 					zap.Int("offset", offset), zap.Int("limit", limit))
-				return nil, err
+				return nil, totalCount, err
 			}
-			s.logger.Error("internal.admin.GetEstates s.estateRepo.GetEstates", zap.Error(err),
+			s.logger.Error("internal.admin.GetEstates s.estateRepo.GetEstatesForList", zap.Error(err),
 				zap.Int("offset", offset), zap.Int("limit", limit))
-			return nil, err
+			return nil, totalCount, err
 		}
 	} else {
-		estates, err = s.estateRepo.GetEstatesByStatus(ctx, offset, limit, status)
+		estates, err = s.estateRepo.GetEstatesForListByStatus(ctx, offset, limit, status)
 		if err != nil {
 			if err == errors.ErrNotFound {
-				s.logger.Warn("internal.admin.GetEstates s.estateRepo.GetEstatesByStatus not found",
+				s.logger.Warn("internal.admin.GetEstates s.estateRepo.GetEstatesForListByStatus not found",
 					zap.String("status", status), zap.Int("offset", offset), zap.Int("limit", limit))
-				return nil, err
+				return nil, totalCount, err
 			}
-			s.logger.Error("internal.admin.GetEstates s.estateRepo.GetEstatesByStatus", zap.Error(err),
+			s.logger.Error("internal.admin.GetEstates s.estateRepo.GetEstatesForListByStatus", zap.Error(err),
 				zap.String("status", status), zap.Int("offset", offset), zap.Int("limit", limit))
-			return nil, err
+			return nil, totalCount, err
 		}
 	}
 
-	return estates, nil
+	totalCount, err = s.estateRepo.GetEstatesTotalCount(ctx, status)
+	if err != nil {
+		s.logger.Error("internal.admin.GetEstates s.estateRepo.GetEstatesTotalCount", zap.Error(err),
+			zap.String("status", status))
+		return estates, totalCount, err
+	}
+
+	return estates, totalCount, nil
 }
 
 func (s *service) AddEstate(ctx context.Context, request structs.Estate) error {

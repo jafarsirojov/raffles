@@ -28,7 +28,7 @@ type Service interface {
 	UpdateLeadStatus(ctx context.Context, id int, status string) error
 
 	GetEstateByID(ctx context.Context, id int) (structs.Estate, error)
-	GetEstates(ctx context.Context, offset, limit int, status string) ([]structs.Estate, error)
+	GetEstates(ctx context.Context, offset, limit int, status string) ([]structs.EstateForList, int, error)
 	AddEstate(ctx context.Context, request structs.Estate) error
 	UpdateEstate(ctx context.Context, request structs.Estate) error
 	DeleteEstate(ctx context.Context, id int) error
