@@ -6,9 +6,11 @@ import (
 	"crm/internal/structs"
 	"crm/pkg/db"
 	"crm/pkg/errors"
+	"fmt"
 	"github.com/jackc/pgx/v4"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
+	"strings"
 )
 
 var Module = fx.Provide(NewRepo)
@@ -126,7 +128,7 @@ insert into estate (
 		request.OtherDetails.Utilities,
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.estate.AddEstate r.db.Exec", zap.Error(err), zap.Any("request", request))
+		r.logger.Error("pkg.admin.repo.estate.AddEstate r.db.Exec", zap.Error(err), zap.Any("request", request))
 		return err
 	}
 
@@ -236,11 +238,11 @@ WHERE id = $1 and status <> 'deleted';`, id).Scan(
 		if err == pgx.ErrNoRows {
 			return estate, errors.ErrNotFound
 		}
-		r.logger.Error("pkg.repo.estate.GetEstateByID r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.admin.repo.estate.GetEstateByID r.db.Query", zap.Error(err))
 		return estate, err
 	}
 
-	r.logger.Info("pkg.repo.estate.GetEstateByID", zap.Any("estate", estate))
+	r.logger.Info("pkg.repo.admin.estate.GetEstateByID", zap.Any("estate", estate))
 
 	return estate, nil
 }
@@ -298,7 +300,7 @@ FROM estate
 WHERE status <> 'deleted'
 ORDER BY id DESC offset $1 limit $2 ;`, offset, limit)
 	if err != nil {
-		r.logger.Error("pkg.repo.estate.GetEstates r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.estate.GetEstates r.db.Query", zap.Error(err))
 		return nil, err
 	}
 
@@ -354,7 +356,115 @@ ORDER BY id DESC offset $1 limit $2 ;`, offset, limit)
 			&estate.UpdateAt,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.estate.GetEstates rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.admin.estate.GetEstates rows.Scan()", zap.Error(err))
+			return nil, err
+		}
+
+		estates = append(estates, estate)
+	}
+
+	if len(estates) == 0 {
+		return nil, errors.ErrNotFound
+	}
+
+	return estates, nil
+}
+
+func (r *repo) GetEstatesForList(ctx context.Context, offset, limit int) (estates []structs.EstateForList, err error) {
+	rows, err := r.db.Query(ctx, `
+SELECT 
+    id,
+    status,
+    images,
+    
+    name,
+    price, 
+    address, 
+    beds,
+    baths,
+    area_in_meter,
+    latitude,
+    longitude
+FROM estate
+WHERE status <> 'deleted'
+ORDER BY id DESC offset $1 limit $2 ;`, offset, limit)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.estate.GetEstatesForList r.db.Query", zap.Error(err))
+		return nil, err
+	}
+
+	for rows.Next() {
+		var estate structs.EstateForList
+		err = rows.Scan(
+			&estate.ID,
+			&estate.Status,
+			&estate.Images,
+
+			&estate.Name,
+			&estate.Price,
+			&estate.Address,
+			&estate.Beds,
+			&estate.Baths,
+			&estate.AreaInMeter,
+			&estate.Latitude,
+			&estate.Longitude,
+		)
+		if err != nil {
+			r.logger.Error("pkg.repo.admin.estate.GetEstatesForList rows.Scan()", zap.Error(err))
+			return nil, err
+		}
+
+		estates = append(estates, estate)
+	}
+
+	if len(estates) == 0 {
+		return nil, errors.ErrNotFound
+	}
+
+	return estates, nil
+}
+
+func (r *repo) GetEstatesForListByStatus(ctx context.Context, offset, limit int, status string) (estates []structs.EstateForList, err error) {
+	rows, err := r.db.Query(ctx, `
+SELECT 
+    id,
+    status,
+    images,
+    
+    name,
+    price, 
+    address, 
+    beds,
+    baths,
+    area_in_meter,
+    latitude,
+    longitude
+FROM estate
+WHERE status = $3
+ORDER BY id DESC offset $1 limit $2 ;`, offset, limit, status)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.estate.GetEstatesForListByStatus r.db.Query", zap.Error(err))
+		return nil, err
+	}
+
+	for rows.Next() {
+		var estate structs.EstateForList
+		err = rows.Scan(
+			&estate.ID,
+			&estate.Status,
+			&estate.Images,
+
+			&estate.Name,
+			&estate.Price,
+			&estate.Address,
+			&estate.Beds,
+			&estate.Baths,
+			&estate.AreaInMeter,
+			&estate.Latitude,
+			&estate.Longitude,
+		)
+		if err != nil {
+			r.logger.Error("pkg.repo.admin.estate.GetEstatesForListByStatus rows.Scan()", zap.Error(err))
 			return nil, err
 		}
 
@@ -418,10 +528,10 @@ SELECT
     to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI'), 
   	to_char(updated_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
 FROM estate
-WHERE status <> 'deleted'
-ORDER BY id DESC offset $1 limit $2 ;`, offset, limit)
+WHERE status = $3
+ORDER BY id DESC offset $1 limit $2 ;`, offset, limit, status)
 	if err != nil {
-		r.logger.Error("pkg.repo.estate.GetEstates r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.estate.GetEstatesByStatus r.db.Query", zap.Error(err))
 		return nil, err
 	}
 
@@ -477,7 +587,7 @@ ORDER BY id DESC offset $1 limit $2 ;`, offset, limit)
 			&estate.UpdateAt,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.estate.GetEstates rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.admin.estate.GetEstatesByStatus rows.Scan()", zap.Error(err))
 			return nil, err
 		}
 
@@ -488,9 +598,23 @@ ORDER BY id DESC offset $1 limit $2 ;`, offset, limit)
 		return nil, errors.ErrNotFound
 	}
 
-	r.logger.Info("pkg.repo.estate.GetEstates ", zap.Any("estates", estates))
-
 	return estates, nil
+}
+
+func (r *repo) GetEstatesTotalCount(ctx context.Context, status string) (count int, err error) {
+	var param []interface{}
+	c := ""
+	if len(strings.TrimSpace(status)) == 0 {
+		param = append(param, status)
+		c = "AND status = $1"
+	}
+	err = r.db.QueryRow(ctx, fmt.Sprintf(`SELECT count(1) FROM estate WHERE status <> 'deleted' %s;`, c), param...).Scan(&count)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.estate.GetEstatesTotalCount r.db.Query", zap.Error(err))
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (r *repo) UpdateEstate(ctx context.Context, request structs.Estate) error {
