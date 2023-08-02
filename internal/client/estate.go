@@ -21,7 +21,7 @@ func (s *service) GetEstates(ctx context.Context, offset, limit int, options str
 		return estates, totalCount, err
 	}
 
-	totalCount, err = s.estateRepo.GetEstatesTotalCount(ctx)
+	totalCount, err = s.estateRepo.GetEstatesTotalCount(ctx, false)
 	if err != nil {
 		s.logger.Error("internal.client.GetEstates s.estateRepo.GetEstatesTotalCount", zap.Error(err))
 		return estates, totalCount, err
@@ -44,7 +44,7 @@ func (s *service) GetLuxuryEstates(ctx context.Context, offset, limit int) (esta
 		return estates, totalCount, err
 	}
 
-	totalCount, err = s.estateRepo.GetEstatesTotalCount(ctx)
+	totalCount, err = s.estateRepo.GetEstatesTotalCount(ctx, true)
 	if err != nil {
 		s.logger.Error("internal.client.GetEstates s.estateRepo.GetEstatesTotalCount", zap.Error(err))
 		return estates, totalCount, err

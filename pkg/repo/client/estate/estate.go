@@ -293,8 +293,13 @@ WHERE status = 'active';`,
 	return options, nil
 }
 
-func (r *repo) GetEstatesTotalCount(ctx context.Context) (count int, err error) {
-	err = r.db.QueryRow(ctx, `SELECT count(1) FROM estate WHERE status = 'active';`).Scan(&count)
+func (r *repo) GetEstatesTotalCount(ctx context.Context, luxury bool) (count int, err error) {
+	end := ";"
+	if luxury {
+		end = " AND luxury = true ;"
+	}
+
+	err = r.db.QueryRow(ctx, `SELECT count(1) FROM estate WHERE status = 'active'`+end).Scan(&count)
 	if err != nil {
 		r.logger.Error("pkg.repo.client.estate.GetEstatesTotalCount r.db.Query", zap.Error(err))
 		return 0, err
