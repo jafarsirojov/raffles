@@ -14,6 +14,11 @@ type Estate struct {
 	UpdateAt string
 }
 
+type EstatesResponse struct {
+	Estates []EstateForList
+	Total   int
+}
+
 type EstateForList struct {
 	ID          int
 	Name        string
