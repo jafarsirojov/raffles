@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
+	"mime/multipart"
 	"net/http"
 	"strconv"
 )
@@ -177,7 +178,7 @@ func (h *handler) ApprovedEstate(w http.ResponseWriter, r *http.Request) {
 	response = responses.Success
 }
 
-func (h *handler) UploadImage(w http.ResponseWriter, r *http.Request) {
+func (h *handler) UploadImages(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -185,29 +186,43 @@ func (h *handler) UploadImage(w http.ResponseWriter, r *http.Request) {
 	idStr := mux.Vars(r)["id"]
 	id, _ := strconv.Atoi(idStr)
 
+	countImagesStr := mux.Vars(r)["count"]
+	countImages, _ := strconv.Atoi(countImagesStr)
+
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UploadImage r.ParseMultipartForm", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadImages r.ParseMultipartForm", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
 
-	file, _, err := r.FormFile("myFile")
-	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UploadImage r.FormFile - Error Retrieving the File", zap.Error(err))
-		response = responses.BadRequest
-		return
-	}
-	defer file.Close()
+	var files []multipart.File
+	for i := 1; i <= countImages; i++ {
+		file, _, err := r.FormFile(strconv.Itoa(i))
+		if err != nil {
+			h.logger.Error("cmd.admin-api.handlers.UploadImages r.FormFile - Error Retrieving the File", zap.Error(err))
+			response = responses.BadRequest
+			return
+		}
 
-	err = h.adminService.UploadImages(ctx, id, &file)
+		files = append(files, file)
+		file.Close()
+	}
+
+	defer func() {
+		for i, _ := range files {
+			files[i].Close()
+		}
+	}()
+
+	err = h.adminService.UploadImages(ctx, id, files)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.UploadImage h.adminService.UploadImages not found")
+			h.logger.Info("cmd.admin-api.handlers.UploadImages h.adminService.UploadImages not found")
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.UploadImage h.adminService.UploadImages", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadImages h.adminService.UploadImages", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}

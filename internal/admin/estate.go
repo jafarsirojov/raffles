@@ -109,44 +109,54 @@ func (s *service) ApprovedEstate(ctx context.Context, id int) error {
 	return nil
 }
 
-func (s *service) UploadImages(ctx context.Context, id int, file *multipart.File) error {
+func (s *service) UploadImages(ctx context.Context, id int, files []multipart.File) error {
 
-	newUUID := uuid.NewString()
-	filename := newUUID + ".png"
+	var newImagesName []string
 
-	newFile, err := os.Create(structs.ImagePath + filename)
-	if err != nil {
-		s.logger.Error("internal.admin.UploadImages os.Create", zap.Error(err), zap.Int("id", id))
-		return err
+	for i, _ := range files {
+
+		newUUID := uuid.NewString()
+		filename := newUUID + ".png"
+
+		newFile, err := os.Create(structs.ImagePath + filename)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadImages os.Create", zap.Error(err), zap.Int("id", id))
+			return err
+		}
+
+		fileBytes, err := io.ReadAll(files[i])
+		if err != nil {
+			s.logger.Error("internal.admin.UploadImages io.ReadAll", zap.Error(err), zap.Int("id", id))
+			newFile.Close()
+			return err
+		}
+
+		_, err = newFile.Write(fileBytes)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadImages io.ReadAll", zap.Error(err), zap.Int("id", id))
+			newFile.Close()
+			return err
+		}
+
+		newImagesName = append(newImagesName, filename)
+
+		newFile.Close()
 	}
-	defer newFile.Close()
 
-	fileBytes, err := io.ReadAll(*file)
-	if err != nil {
-		s.logger.Error("internal.admin.UploadImages io.ReadAll", zap.Error(err), zap.Int("id", id))
-		return err
-	}
-
-	_, err = newFile.Write(fileBytes)
-	if err != nil {
-		s.logger.Error("internal.admin.UploadImages io.ReadAll", zap.Error(err), zap.Int("id", id))
-		return err
-	}
-
-	imageNames, err := s.estateRepo.GetImagesByEstateID(ctx, id)
+	imagesName, err := s.estateRepo.GetImagesByEstateID(ctx, id)
 	if err != nil {
 		s.logger.Error("internal.admin.UploadImages s.estateRepo.GetImagesByEstateID",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
 
-	if len(imageNames) <= 1 && len(imageNames[0]) == 0 {
-		imageNames = nil
+	if len(imagesName) <= 1 && len(imagesName[0]) == 0 {
+		imagesName = nil
 	}
 
-	imageNames = append(imageNames, filename)
+	imagesName = append(imagesName, newImagesName...)
 
-	err = s.estateRepo.UpdateEstateImages(ctx, id, imageNames)
+	err = s.estateRepo.UpdateEstateImages(ctx, id, imagesName)
 	if err != nil {
 		s.logger.Error("internal.admin.UploadImages s.estateRepo.UpdateEstateImages",
 			zap.Error(err), zap.Int("id", id))

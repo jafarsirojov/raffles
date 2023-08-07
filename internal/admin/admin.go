@@ -33,7 +33,7 @@ type Service interface {
 	UpdateEstate(ctx context.Context, request structs.Estate) error
 	DeleteEstate(ctx context.Context, id int) error
 	ApprovedEstate(ctx context.Context, id int) error
-	UploadImages(ctx context.Context, id int, file *multipart.File) error
+	UploadImages(ctx context.Context, id int, files []multipart.File) error
 	DeleteImages(ctx context.Context, id int, imageName string) error
 	GetImageBaseURL() string
 

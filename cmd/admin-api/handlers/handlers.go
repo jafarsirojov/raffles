@@ -25,7 +25,7 @@ type Handler interface {
 	UpdateEstate(http.ResponseWriter, *http.Request)
 	DeleteEstate(http.ResponseWriter, *http.Request)
 	ApprovedEstate(http.ResponseWriter, *http.Request)
-	UploadImage(http.ResponseWriter, *http.Request)
+	UploadImages(http.ResponseWriter, *http.Request)
 	DeleteImage(http.ResponseWriter, *http.Request)
 	GetImageBaseURL(http.ResponseWriter, *http.Request)
 
