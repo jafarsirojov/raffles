@@ -90,9 +90,22 @@ func (s *service) GetSearchOptions(ctx context.Context) (options structs.SearchO
 		}
 
 		options.PropertyTypes = []structs.PropertyTypeKeyValue{
-			{1, "property"},
-			{2, "villa"},
-			{3, "dacha"},
+			{1, "Co-op"},
+			{2, "Condo"},
+			{3, "Commercial"},
+			{4, "Land"},
+			{5, "Multi-family"},
+			{6, "Manufactured"},
+			{7, "Residential"},
+			{8, "Townhouse"},
+			{9, "Others"},
+		}
+
+		options.Status = []structs.Status{
+			"active",
+			"soled",
+			"canceled",
+			"new",
 		}
 
 		Cache[cacheKey] = options

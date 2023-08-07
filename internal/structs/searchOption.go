@@ -14,6 +14,8 @@ type SearchOptions struct {
 	YearBuiltMax     int
 	GarageSpacesMin  int
 	GarageSpacesMax  int
+
+	Status []Status
 }
 
 type SearchOptionsDTO struct {

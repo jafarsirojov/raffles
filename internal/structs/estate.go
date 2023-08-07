@@ -92,8 +92,5 @@ type PropertyTypeKeyValue struct {
 }
 
 type ArchStyle int
+
 type Status string
-type StatusKeyValue struct {
-	Key   int
-	Value string
-}
