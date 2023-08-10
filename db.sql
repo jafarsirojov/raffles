@@ -96,7 +96,7 @@ create table estate
     --exterior
     lot_size_in_acres int                      not null,
     exterior_features varchar                  not null,
-    arch_style        int                      not null,
+    arch_style        varchar                  not null,
     roof              varchar                  not null,
     sewer             varchar                  not null,
     --other

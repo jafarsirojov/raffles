@@ -68,7 +68,7 @@ type InteriorFeatures struct {
 type ExteriorFeatures struct {
 	LotSizeInAcres int
 	Features       string
-	ArchStyle      ArchStyle
+	ArchStyle      string
 	Roof           string
 	Sewer          string
 }
@@ -90,7 +90,5 @@ type PropertyTypeKeyValue struct {
 	Key   int
 	Value string
 }
-
-type ArchStyle int
 
 type Status string
