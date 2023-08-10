@@ -12,10 +12,11 @@ var Module = fx.Provide(NewService)
 
 type Params struct {
 	fx.In
-	Logger     *zap.Logger
-	LeadRepo   interfaces.LeadClientRepo
-	EstateRepo interfaces.EstateClientRepo
-	TextRepo   interfaces.TextClientRepo
+	Logger        *zap.Logger
+	LeadRepo      interfaces.LeadClientRepo
+	EstateRepo    interfaces.EstateClientRepo
+	TextRepo      interfaces.TextClientRepo
+	FavoritesRepo interfaces.FavoritesClientRepo
 }
 
 type Service interface {
@@ -29,20 +30,26 @@ type Service interface {
 	GetImageBaseURL() string
 
 	GetTexts(ctx context.Context) (texts []structs.Text, err error)
+
+	SaveFavorite(ctx context.Context, favorite structs.Favorite) error
+	DeleteFavorite(ctx context.Context, favorite structs.Favorite) error
+	GetEstateFavorites(ctx context.Context, userID int) (estates []structs.EstateForList, err error)
 }
 
 type service struct {
-	logger     *zap.Logger
-	leadRepo   interfaces.LeadClientRepo
-	estateRepo interfaces.EstateClientRepo
-	textRepo   interfaces.TextClientRepo
+	logger        *zap.Logger
+	leadRepo      interfaces.LeadClientRepo
+	estateRepo    interfaces.EstateClientRepo
+	textRepo      interfaces.TextClientRepo
+	favoritesRepo interfaces.FavoritesClientRepo
 }
 
 func NewService(params Params) Service {
 	return &service{
-		logger:     params.Logger,
-		leadRepo:   params.LeadRepo,
-		estateRepo: params.EstateRepo,
-		textRepo:   params.TextRepo,
+		logger:        params.Logger,
+		leadRepo:      params.LeadRepo,
+		estateRepo:    params.EstateRepo,
+		textRepo:      params.TextRepo,
+		favoritesRepo: params.FavoritesRepo,
 	}
 }

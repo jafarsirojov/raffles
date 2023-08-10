@@ -252,6 +252,60 @@ ORDER BY id DESC offset $1 limit $2 ;`, offset, limit)
 	return estates, nil
 }
 
+func (r *repo) SelectFavoriteEstates(ctx context.Context, favorites []int) (estates []structs.EstateForList, err error) {
+	rows, err := r.db.Query(ctx, `
+SELECT 
+    id,
+    status,
+    images,
+    
+    name,
+    price, 
+    address, 
+    beds,
+    baths,
+    area_in_meter,
+    latitude,
+    longitude
+FROM estate
+WHERE status = 'active' AND id = ANY ($1)
+ORDER BY id DESC;`, favorites)
+	if err != nil {
+		r.logger.Error("pkg.repo.client.estate.SelectFavoriteEstates r.db.Query", zap.Error(err))
+		return nil, err
+	}
+
+	for rows.Next() {
+		var estate structs.EstateForList
+		err = rows.Scan(
+			&estate.ID,
+			&estate.Status,
+			&estate.Images,
+
+			&estate.Name,
+			&estate.Price,
+			&estate.Address,
+			&estate.Beds,
+			&estate.Baths,
+			&estate.AreaInMeter,
+			&estate.Latitude,
+			&estate.Longitude,
+		)
+		if err != nil {
+			r.logger.Error("pkg.repo.estate.SelectFavoriteEstates rows.Scan()", zap.Error(err))
+			return nil, err
+		}
+
+		estates = append(estates, estate)
+	}
+
+	if len(estates) == 0 {
+		return nil, errors.ErrNotFound
+	}
+
+	return estates, nil
+}
+
 func (r *repo) SelectSearchOptions(ctx context.Context) (options structs.SearchOptions, err error) {
 	err = r.db.QueryRow(ctx, `
 SELECT min(price),

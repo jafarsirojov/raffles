@@ -3,6 +3,7 @@ package router
 import (
 	"context"
 	"crm/cmd/client-api/handlers"
+	"crm/internal/middleware"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -35,6 +36,13 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/estate/searchParams", params.Handler.GetSearchOptions).Methods("GET")
 	router.HandleFunc(baseUrl+"/estate/clearCache", params.Handler.ClearCache).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/estate/imageBaseURL", params.Handler.GetImageBaseURL).Methods("GET")
+
+	router.HandleFunc(baseUrl+"/signUp", params.Handler.SignUp).Methods("POST")
+	router.HandleFunc(baseUrl+"/signIn", params.Handler.SignIn).Methods("POST")
+
+	router.HandleFunc(baseUrl+"/favorite", middleware.ApplyMiddleware(params.Handler.SaveFavorite, params.Handler.MwCheckAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/favorite", middleware.ApplyMiddleware(params.Handler.DeleteFavorite, params.Handler.MwCheckAuthToken)).Methods("DELETE")
+	router.HandleFunc(baseUrl+"/favorites", middleware.ApplyMiddleware(params.Handler.GetFavorites, params.Handler.MwCheckAuthToken)).Methods("GET")
 
 	router.HandleFunc(baseUrl+"/texts", params.Handler.GetTexts).Methods("GET")
 

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"crm/pkg/repo/client/auth"
 	"crm/pkg/repo/client/estate"
 	"crm/pkg/repo/client/lead"
 	"crm/pkg/repo/client/text"
@@ -11,4 +12,5 @@ var Module = fx.Options(
 	lead.Module,
 	estate.Module,
 	text.Module,
+	auth.Module,
 )

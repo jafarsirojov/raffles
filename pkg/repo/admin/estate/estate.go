@@ -242,8 +242,6 @@ WHERE id = $1 and status <> 'deleted';`, id).Scan(
 		return estate, err
 	}
 
-	r.logger.Info("pkg.repo.admin.estate.GetEstateByID", zap.Any("estate", estate))
-
 	return estate, nil
 }
 
