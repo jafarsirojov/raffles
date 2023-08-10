@@ -18,7 +18,7 @@ type Params struct {
 	Logger *zap.Logger
 }
 
-func NewRepo(params Params) interfaces.AuthRepo {
+func NewRepo(params Params) interfaces.AuthAdminRepo {
 	return &repo{
 		db:     params.DB,
 		logger: params.Logger,
@@ -60,10 +60,10 @@ FROM admin
 WHERE status = 'enabled' AND token = $1 order by id;`, token).Scan(&id, &login)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			r.logger.Warn("pkg.repo.auth.CheckAdminToken r.db.QueryRow - not found", zap.String("login", login))
+			r.logger.Warn("pkg.repo.auth.CheckToken r.db.QueryRow - not found", zap.String("login", login))
 			return id, login, errors.ErrNotFound
 		}
-		r.logger.Error("pkg.repo.auth.CheckAdminToken r.db.QueryRow", zap.String("token", token), zap.Error(err))
+		r.logger.Error("pkg.repo.auth.CheckToken r.db.QueryRow", zap.String("token", token), zap.Error(err))
 		return id, login, err
 	}
 

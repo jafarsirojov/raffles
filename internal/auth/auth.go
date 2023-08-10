@@ -14,7 +14,7 @@ var Module = fx.Provide(NewService)
 type Params struct {
 	fx.In
 	Logger   *zap.Logger
-	AuthRepo interfaces.AuthRepo
+	AuthRepo interfaces.AuthAdminRepo
 }
 
 type Service interface {
@@ -24,7 +24,7 @@ type Service interface {
 
 type service struct {
 	logger   *zap.Logger
-	authRepo interfaces.AuthRepo
+	authRepo interfaces.AuthAdminRepo
 }
 
 func NewService(params Params) Service {
@@ -55,11 +55,11 @@ func (s *service) CheckAdminAuthToken(ctx context.Context, token string) (id int
 	id, login, err = s.authRepo.CheckAdminToken(ctx, token)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			s.logger.Warn("internal.auth.CheckAdminAuthToken s.authRepo.CheckAdminToken", zap.Error(err))
+			s.logger.Warn("internal.auth.CheckAuthToken s.authRepo.CheckToken", zap.Error(err))
 			return id, login, err
 		}
 
-		s.logger.Error("internal.auth.CheckAdminAuthToken s.authRepo.CheckAdminToken", zap.Error(err))
+		s.logger.Error("internal.auth.CheckAuthToken s.authRepo.CheckToken", zap.Error(err))
 		return id, login, err
 	}
 
