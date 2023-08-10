@@ -150,10 +150,6 @@ func (s *service) UploadImages(ctx context.Context, id int, files []multipart.Fi
 		return err
 	}
 
-	if len(imagesName) <= 1 && len(imagesName[0]) == 0 {
-		imagesName = nil
-	}
-
 	imagesName = append(imagesName, newImagesName...)
 
 	err = s.estateRepo.UpdateEstateImages(ctx, id, imagesName)
