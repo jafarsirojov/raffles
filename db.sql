@@ -34,6 +34,19 @@ create table admin
     updated_at timestamp with time zone not null default now()
 );
 
+create table user
+(
+    id         bigserial                not null primary key,
+    first_name varchar                  not null,
+    last_name  varchar                  not null,
+    phone      varchar                  not null,
+    login      varchar                  not null,
+    password   varchar                  not null,
+    token      varchar unique           not null,
+    created_at timestamp with time zone not null default now(),
+    updated_at timestamp with time zone not null default now()
+);
+
 create table comment
 (
     id          bigserial                not null primary key,
@@ -101,4 +114,12 @@ create table text
 (
     key   varchar not null primary key,
     value varchar not null
+);
+
+create table favorites
+(
+    id        bigserial                not null primary key,
+    user_id   bigint                   not null,
+    estate_id bigint                   not null,
+    create_at timestamp with time zone not null default now()
 );
