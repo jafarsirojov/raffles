@@ -35,8 +35,8 @@ func (r *repo) SignIn(ctx context.Context, login, password string) (token string
 	var passwordForDB string
 	err = r.db.QueryRow(ctx, `
 SELECT password, token
-FROM admin
-WHERE status = 'enabled' AND login = $1;`, login).Scan(&passwordForDB, &token)
+FROM client
+WHERE login = $1;`, login).Scan(&passwordForDB, &token)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			r.logger.Warn("pkg.repo.client.auth.SignIn r.db.QueryRow - not found", zap.String("login", login))
@@ -56,7 +56,7 @@ WHERE status = 'enabled' AND login = $1;`, login).Scan(&passwordForDB, &token)
 func (r *repo) SaveUser(ctx context.Context, user structs.SignUp) (token string, err error) {
 
 	_, err = r.db.Exec(ctx,
-		`INSERT INTO user (first_name, last_name, phone, login, password, token) VALUES ($1, $2, $3, $4, $5);`,
+		`INSERT INTO client (first_name, last_name, phone, login, password, token) VALUES ($1, $2, $3, $4, $5, $6);`,
 		user.FirstName,
 		user.LastName,
 		user.Phone,
@@ -69,15 +69,15 @@ func (r *repo) SaveUser(ctx context.Context, user structs.SignUp) (token string,
 		return token, err
 	}
 
-	return token, nil
+	return user.Token, nil
 }
 
 func (r *repo) CheckToken(ctx context.Context, token string) (id int, login string, err error) {
 
 	err = r.db.QueryRow(ctx, `
 SELECT id, login
-FROM user
-WHERE status = 'enabled' AND token = $1 order by id;`, token).Scan(&id, &login)
+FROM client
+WHERE token = $1 order by id;`, token).Scan(&id, &login)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			r.logger.Warn("pkg.repo.client.auth.CheckToken r.db.QueryRow - not found", zap.String("login", login))

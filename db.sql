@@ -34,13 +34,13 @@ create table admin
     updated_at timestamp with time zone not null default now()
 );
 
-create table user
+create table client
 (
     id         bigserial                not null primary key,
     first_name varchar                  not null,
     last_name  varchar                  not null,
     phone      varchar                  not null,
-    login      varchar                  not null,
+    login      varchar                  not null unique,
     password   varchar                  not null,
     token      varchar unique           not null,
     created_at timestamp with time zone not null default now(),
@@ -116,7 +116,7 @@ create table text
     value varchar not null
 );
 
-create table favorites
+create table favorite
 (
     id        bigserial                not null primary key,
     user_id   bigint                   not null,

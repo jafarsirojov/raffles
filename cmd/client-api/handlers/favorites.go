@@ -25,7 +25,9 @@ func (h *handler) SaveFavorite(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.clientService.SaveFavorite(ctx, 7, request.EstateID)
+	request.UserID = ctx.Value("userID").(int)
+
+	err = h.clientService.SaveFavorite(ctx, request)
 	if err != nil {
 		h.logger.Error("cmd.client-api.handlers.SaveFavorite json.NewDecoder", zap.Error(err))
 		response = responses.InternalErr
@@ -43,7 +45,7 @@ func (h *handler) DeleteFavorite(w http.ResponseWriter, r *http.Request) {
 	estateIDStr := mux.Vars(r)["estateID"]
 	estateID, _ := strconv.Atoi(estateIDStr)
 
-	userID := ctx.Value("id").(int)
+	userID := ctx.Value("userID").(int)
 
 	err := h.clientService.DeleteFavorite(ctx, structs.Favorite{
 		UserID:   userID,
@@ -63,8 +65,9 @@ func (h *handler) GetFavorites(w http.ResponseWriter, r *http.Request) {
 	defer reply.Json(w, http.StatusOK, &response)
 
 	var ctx = r.Context()
+	userID := ctx.Value("userID").(int)
 
-	favorites, err := h.clientService.GetEstateFavorites(ctx, 7)
+	favorites, err := h.clientService.GetEstateFavorites(ctx, userID)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			response = responses.NotFound

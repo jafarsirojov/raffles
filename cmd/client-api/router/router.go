@@ -41,7 +41,7 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/signIn", params.Handler.SignIn).Methods("POST")
 
 	router.HandleFunc(baseUrl+"/favorite", middleware.ApplyMiddleware(params.Handler.SaveFavorite, params.Handler.MwCheckAuthToken)).Methods("POST")
-	router.HandleFunc(baseUrl+"/favorite", middleware.ApplyMiddleware(params.Handler.DeleteFavorite, params.Handler.MwCheckAuthToken)).Methods("DELETE")
+	router.HandleFunc(baseUrl+"/favorite/{estateID:[0-9]+}", middleware.ApplyMiddleware(params.Handler.DeleteFavorite, params.Handler.MwCheckAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/favorites", middleware.ApplyMiddleware(params.Handler.GetFavorites, params.Handler.MwCheckAuthToken)).Methods("GET")
 
 	router.HandleFunc(baseUrl+"/texts", params.Handler.GetTexts).Methods("GET")

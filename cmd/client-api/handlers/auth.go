@@ -25,7 +25,7 @@ func (h *handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	token, err := h.authService.SignUp(ctx, request)
 	if err != nil {
 		h.logger.Error("cmd.client-api.handlers.SignUp h.authService.SignIn", zap.Error(err))
-		response = responses.Unauthorized
+		response = responses.InternalErr
 		return
 	}
 
