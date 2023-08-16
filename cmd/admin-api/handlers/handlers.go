@@ -29,6 +29,8 @@ type Handler interface {
 	DeleteImage(http.ResponseWriter, *http.Request)
 	GetImageBaseURL(http.ResponseWriter, *http.Request)
 
+	GetClientsFavorites(http.ResponseWriter, *http.Request)
+
 	GetTexts(http.ResponseWriter, *http.Request)
 	UpdateText(http.ResponseWriter, *http.Request)
 

@@ -37,6 +37,8 @@ type Service interface {
 	DeleteImages(ctx context.Context, id int, imageName string) error
 	GetImageBaseURL() string
 
+	GetClientsFavorites(ctx context.Context, offset, limit int) (clientsFavorites []structs.Client, err error)
+
 	GetTexts(ctx context.Context) (texts []structs.Text, err error)
 	UpdateText(ctx context.Context, text structs.Text) error
 }
