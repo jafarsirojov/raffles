@@ -123,3 +123,31 @@ create table favorite
     estate_id bigint                   not null,
     create_at timestamp with time zone not null default now()
 );
+
+create table availability
+(
+    id           bigserial not null primary key,
+    price_aed    integer   not null,
+    price_usd    integer   not null,
+    unique_id    varchar   not null,
+    bedroom      integer   not null,
+    parking      integer   not null,
+    area         float     not null,
+    plot         float     not null,
+    special_gift varchar   not null
+);
+
+create table lending
+(
+    id                     bigserial not null primary key,
+    name                   varchar   not null,
+    full_name              varchar   not null,
+    address                varchar   not null,
+    starting_price_aed     integer   not null,
+    starting_price_usd     integer   not null,
+    property_type          varchar   not null,
+    furnishing             varchar   not null,
+    features_and_amenities integer[] not null,
+    title                  varchar   not null,
+    description            varchar   not null
+);
