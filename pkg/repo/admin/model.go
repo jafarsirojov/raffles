@@ -5,6 +5,7 @@ import (
 	"crm/pkg/repo/admin/comment"
 	"crm/pkg/repo/admin/estate"
 	"crm/pkg/repo/admin/lead"
+	"crm/pkg/repo/admin/lending"
 	"crm/pkg/repo/admin/text"
 	"go.uber.org/fx"
 )
@@ -15,4 +16,5 @@ var Module = fx.Options(
 	comment.Module,
 	estate.Module,
 	text.Module,
+	lending.Module,
 )

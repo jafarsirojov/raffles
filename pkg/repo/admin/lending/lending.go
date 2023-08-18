@@ -18,7 +18,7 @@ type Params struct {
 	Logger *zap.Logger
 }
 
-func NewRepo(params Params) interfaces.CommentRepo {
+func NewRepo(params Params) interfaces.LendingAdminRepo {
 	return &repo{
 		db:     params.DB,
 		logger: params.Logger,
