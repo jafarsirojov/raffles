@@ -30,6 +30,42 @@ type repo struct {
 	logger *zap.Logger
 }
 
+func (r *repo) SaveLending(ctx context.Context, data structs.Lending) (err error) {
+	_, err = r.db.Exec(ctx, `
+INSERT INTO lending(
+    name,
+    full_name,
+    address,
+    starting_price_aed,
+    starting_price_usd,
+    property_type,
+    furnishing,
+    features_and_amenities,
+    title,
+    description,
+    video,
+    images) VALUES ($1, $2,$3,$4,$5,$6 ,$7,$8,$9,$10,$11,$12);`,
+		data.Name,
+		data.FullName,
+		data.Address,
+		data.StartingPrice.AED,
+		data.StartingPrice.USD,
+		data.ListingDetails.PropertyType,
+		data.ListingDetails.Furnishing,
+		data.FeaturesAndAmenities,
+		data.Title,
+		data.Description,
+		data.Video,
+		[]string{},
+	)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SaveLending r.db.Exec", zap.Error(err))
+		return err
+	}
+
+	return nil
+}
+
 func (r *repo) GetLendingByID(ctx context.Context, id int) (data structs.Lending, err error) {
 	err = r.db.QueryRow(ctx, `
 SELECT 
@@ -105,46 +141,37 @@ WHERE 1=1;`)
 	return list, nil
 }
 
-func (r *repo) SaveLending(ctx context.Context, leadID int) (comments []structs.Comment, err error) {
-	rows, err := r.db.Query(ctx, `
-SELECT 
-    id,
-    lead_id,
-    admin_id, 
-    admin_login, 
-    text, 
-    to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
-FROM comment
-WHERE lead_id = $1
-ORDER BY id DESC;`, leadID)
+func (r *repo) UpdateLending(ctx context.Context, data structs.Lending) (err error) {
+	_, err = r.db.Exec(ctx, `
+UPDATE lending SET
+    name = $2,
+    full_name = $3,
+    address = $4,
+    starting_price_aed = $5,
+    starting_price_usd = $6,
+    property_type = $7,
+    furnishing = $8,
+    features_and_amenities = $9,
+    title = $10,
+    description = $11,
+    video = $12
+    WHERE id = $1`,
+		data.Name,
+		data.FullName,
+		data.Address,
+		data.StartingPrice.AED,
+		data.StartingPrice.USD,
+		data.ListingDetails.PropertyType,
+		data.ListingDetails.Furnishing,
+		data.FeaturesAndAmenities,
+		data.Title,
+		data.Description,
+		data.Video,
+	)
 	if err != nil {
-		r.logger.Error("pkg.repo.comment.GetCommentsByLeadID r.db.Query", zap.Error(err))
-		return nil, err
+		r.logger.Error("pkg.repo.admin.lending.SaveLending r.db.Exec", zap.Error(err))
+		return err
 	}
 
-	for rows.Next() {
-		var c structs.Comment
-		err = rows.Scan(
-			&c.ID,
-			&c.LeadID,
-			&c.AdminID,
-			&c.AdminLogin,
-			&c.Text,
-			&c.CreatedAt,
-		)
-		if err != nil {
-			r.logger.Error("pkg.repo.comment.GetCommentsByLeadID rows.Scan()", zap.Error(err))
-			return nil, err
-		}
-
-		comments = append(comments, c)
-	}
-
-	if len(comments) == 0 {
-		return nil, errors.ErrNotFound
-	}
-
-	r.logger.Info("pkg.repo.comment.GetCommentsByLeadID ", zap.Any("comments", comments))
-
-	return comments, nil
+	return nil
 }
