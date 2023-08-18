@@ -127,6 +127,7 @@ create table favorite
 create table availability
 (
     id           bigserial not null primary key,
+    lending_id   integer   not null,
     price_aed    integer   not null,
     price_usd    integer   not null,
     unique_id    varchar   not null,
@@ -149,5 +150,8 @@ create table lending
     furnishing             varchar   not null,
     features_and_amenities integer[] not null,
     title                  varchar   not null,
-    description            varchar   not null
+    description            varchar   not null,
+    video                  varchar   not null,
+    images                 text[] not null,
+    created_at             timestamp with time zone
 );

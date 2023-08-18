@@ -41,6 +41,9 @@ type Service interface {
 
 	GetTexts(ctx context.Context) (texts []structs.Text, err error)
 	UpdateText(ctx context.Context, text structs.Text) error
+
+	//lending
+	GetLendingData(ctx context.Context, landingID string) (data structs.Lending, err error)
 }
 
 type service struct {
