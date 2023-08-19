@@ -9,7 +9,23 @@ import (
 	"os"
 )
 
-func (s *service) GetLendingData(ctx context.Context, landingID string) (data structs.Lending, err error) {
+func (s *service) GetLendingList(ctx context.Context) (list []structs.LendingList, err error) {
+	list, err = s.lendingRepo.GetLendingList(ctx)
+	if err != nil {
+		s.logger.Error("internal.admin.GetLendingList s.lendingRepo.GetLendingList", zap.Error(err))
+		return nil, nil
+	}
+
+	return list, nil
+}
+
+func (s *service) GetLendingData(ctx context.Context, landingID int) (data structs.Lending, err error) {
+	data, err = s.lendingRepo.GetLendingByID(ctx, landingID)
+	if err != nil {
+		s.logger.Error("internal.admin.GetLendingData s.lendingRepo.GetLendingByID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return data, nil
+	}
 
 	return data, nil
 }

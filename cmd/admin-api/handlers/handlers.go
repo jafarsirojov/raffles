@@ -34,6 +34,9 @@ type Handler interface {
 	GetTexts(http.ResponseWriter, *http.Request)
 	UpdateText(http.ResponseWriter, *http.Request)
 
+	UploadLendingImages(http.ResponseWriter, *http.Request)
+	DeleteLendingImages(http.ResponseWriter, *http.Request)
+
 	MwCheckAdminAuthToken(m middleware.Handler) middleware.Handler
 }
 

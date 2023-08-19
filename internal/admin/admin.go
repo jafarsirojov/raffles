@@ -44,7 +44,10 @@ type Service interface {
 	UpdateText(ctx context.Context, text structs.Text) error
 
 	//lending
-	GetLendingData(ctx context.Context, landingID string) (data structs.Lending, err error)
+	GetLendingData(ctx context.Context, landingID int) (data structs.Lending, err error)
+	GetLendingList(ctx context.Context) (list []structs.LendingList, err error)
+	UploadLendingImages(ctx context.Context, id int, files []multipart.File) error
+	DeleteLendingImages(ctx context.Context, id int, imageName string) error
 }
 
 type service struct {
