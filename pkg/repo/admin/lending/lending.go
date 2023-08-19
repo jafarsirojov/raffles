@@ -82,8 +82,9 @@ SELECT
     description,
     video,
     images,
-    to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
-FROM lending
+    to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI'),
+    to_char(updated_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
+FROM 	lending
 WHERE id = $1;`, id).Scan(
 		&data.ID,
 		&data.Name,
@@ -99,6 +100,7 @@ WHERE id = $1;`, id).Scan(
 		&data.Video,
 		&data.Images,
 		&data.CreatedAt,
+		&data.UpdatedAt,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.GetLendingByID r.db.QueryRow", zap.Error(err))
@@ -154,7 +156,8 @@ UPDATE lending SET
     features_and_amenities = $9,
     title = $10,
     description = $11,
-    video = $12
+    video = $12,
+    updated_at = now()
     WHERE id = $1`,
 		data.Name,
 		data.FullName,

@@ -140,18 +140,19 @@ create table availability
 
 create table lending
 (
-    id                     bigserial not null primary key,
-    name                   varchar   not null,
-    full_name              varchar   not null,
-    address                varchar   not null,
-    starting_price_aed     integer   not null,
-    starting_price_usd     integer   not null,
-    property_type          varchar   not null,
-    furnishing             varchar   not null,
-    features_and_amenities integer[] not null,
-    title                  varchar   not null,
-    description            varchar   not null,
-    video                  varchar   not null,
-    images                 text[] not null,
-    created_at             timestamp with time zone
+    id                     bigserial           not null primary key,
+    name                   varchar             not null,
+    full_name              varchar             not null,
+    address                varchar             not null,
+    starting_price_aed     integer             not null,
+    starting_price_usd     integer             not null,
+    property_type          varchar             not null,
+    furnishing             varchar             not null,
+    features_and_amenities integer[]           not null,
+    title                  varchar             not null,
+    description            varchar             not null,
+    video                  varchar             not null,
+    images                 text[]              not null,
+    created_at             timestamp with time not null zone default now(),
+    updated_at             timestamp with time not null zone default now(),
 );

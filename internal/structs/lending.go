@@ -14,6 +14,7 @@ type Lending struct {
 	Images               []string
 	Availabilities       []Availability
 	CreatedAt            string
+	UpdatedAt            string
 }
 
 type LendingList struct {
