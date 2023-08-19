@@ -41,8 +41,8 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/estate", middleware.ApplyMiddleware(params.Handler.UpdateEstate, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.DeleteEstate, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/approved", middleware.ApplyMiddleware(params.Handler.ApprovedEstate, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
-	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/uploadImages/{count:[0-9]+}", middleware.ApplyMiddleware(params.Handler.UploadImages, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
-	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteImage, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
+	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/uploadImages/{count:[0-9]+}", middleware.ApplyMiddleware(params.Handler.UploadEstateImages, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteEstateImages, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/estate/imageBaseURL", middleware.ApplyMiddleware(params.Handler.GetImageBaseURL, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 
 	router.HandleFunc(baseUrl+"/clients/favorites", middleware.ApplyMiddleware(params.Handler.GetClientsFavorites, params.Handler.MwCheckAdminAuthToken)).Methods("GET")

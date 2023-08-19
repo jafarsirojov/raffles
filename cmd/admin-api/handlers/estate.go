@@ -178,7 +178,7 @@ func (h *handler) ApprovedEstate(w http.ResponseWriter, r *http.Request) {
 	response = responses.Success
 }
 
-func (h *handler) UploadImages(w http.ResponseWriter, r *http.Request) {
+func (h *handler) UploadEstateImages(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -191,7 +191,7 @@ func (h *handler) UploadImages(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UploadImages r.ParseMultipartForm", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadEstateImages r.ParseMultipartForm", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
@@ -200,7 +200,7 @@ func (h *handler) UploadImages(w http.ResponseWriter, r *http.Request) {
 	for i := 1; i <= countImages; i++ {
 		file, _, err := r.FormFile(strconv.Itoa(i))
 		if err != nil {
-			h.logger.Error("cmd.admin-api.handlers.UploadImages r.FormFile - Error Retrieving the File", zap.Error(err))
+			h.logger.Error("cmd.admin-api.handlers.UploadEstateImages r.FormFile - Error Retrieving the File", zap.Error(err))
 			response = responses.BadRequest
 			return
 		}
@@ -215,14 +215,14 @@ func (h *handler) UploadImages(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	err = h.adminService.UploadImages(ctx, id, files)
+	err = h.adminService.UploadEstateImages(ctx, id, files)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.UploadImages h.adminService.UploadImages not found")
+			h.logger.Info("cmd.admin-api.handlers.UploadEstateImages h.adminService.UploadEstateImages not found")
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.UploadImages h.adminService.UploadImages", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadEstateImages h.adminService.UploadEstateImages", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}
@@ -230,7 +230,7 @@ func (h *handler) UploadImages(w http.ResponseWriter, r *http.Request) {
 	response = responses.Success
 }
 
-func (h *handler) DeleteImage(w http.ResponseWriter, r *http.Request) {
+func (h *handler) DeleteEstateImages(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -239,14 +239,14 @@ func (h *handler) DeleteImage(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(idStr)
 	imageName := mux.Vars(r)["imageName"]
 
-	err := h.adminService.DeleteImages(ctx, id, imageName)
+	err := h.adminService.DeleteEstateImages(ctx, id, imageName)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.DeleteImage h.adminService.DeleteImages not found")
+			h.logger.Info("cmd.admin-api.handlers.DeleteEstateImages h.adminService.DeleteEstateImages not found")
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.DeleteImage h.adminService.DeleteImages", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.DeleteEstateImages h.adminService.DeleteEstateImages", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}

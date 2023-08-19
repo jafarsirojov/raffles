@@ -18,6 +18,7 @@ type Params struct {
 	CommentRepo interfaces.CommentRepo
 	EstateRepo  interfaces.EstateAdminRepo
 	TextRepo    interfaces.TextAdminRepo
+	LendingRepo interfaces.LendingAdminRepo
 }
 
 type Service interface {
@@ -33,8 +34,8 @@ type Service interface {
 	UpdateEstate(ctx context.Context, request structs.Estate) error
 	DeleteEstate(ctx context.Context, id int) error
 	ApprovedEstate(ctx context.Context, id int) error
-	UploadImages(ctx context.Context, id int, files []multipart.File) error
-	DeleteImages(ctx context.Context, id int, imageName string) error
+	UploadEstateImages(ctx context.Context, id int, files []multipart.File) error
+	DeleteEstateImages(ctx context.Context, id int, imageName string) error
 	GetImageBaseURL() string
 
 	GetClientsFavorites(ctx context.Context, offset, limit int) (clientsFavorites []structs.Client, err error)
@@ -52,6 +53,7 @@ type service struct {
 	commentRepo interfaces.CommentRepo
 	estateRepo  interfaces.EstateAdminRepo
 	textRepo    interfaces.TextAdminRepo
+	lendingRepo interfaces.LendingAdminRepo
 }
 
 func NewService(params Params) Service {
