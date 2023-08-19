@@ -4,9 +4,7 @@ import (
 	"context"
 	"crm/internal/structs"
 	"crm/pkg/errors"
-	"github.com/google/uuid"
 	"go.uber.org/zap"
-	"io"
 	"mime/multipart"
 	"os"
 	"strings"
@@ -109,43 +107,17 @@ func (s *service) ApprovedEstate(ctx context.Context, id int) error {
 	return nil
 }
 
-func (s *service) UploadImages(ctx context.Context, id int, files []multipart.File) error {
+func (s *service) UploadEstateImages(ctx context.Context, id int, files []multipart.File) error {
 
-	var newImagesName []string
-
-	for i, _ := range files {
-
-		newUUID := uuid.NewString()
-		filename := newUUID + ".png"
-
-		newFile, err := os.Create(structs.ImagePath + filename)
-		if err != nil {
-			s.logger.Error("internal.admin.UploadImages os.Create", zap.Error(err), zap.Int("id", id))
-			return err
-		}
-
-		fileBytes, err := io.ReadAll(files[i])
-		if err != nil {
-			s.logger.Error("internal.admin.UploadImages io.ReadAll", zap.Error(err), zap.Int("id", id))
-			newFile.Close()
-			return err
-		}
-
-		_, err = newFile.Write(fileBytes)
-		if err != nil {
-			s.logger.Error("internal.admin.UploadImages io.ReadAll", zap.Error(err), zap.Int("id", id))
-			newFile.Close()
-			return err
-		}
-
-		newImagesName = append(newImagesName, filename)
-
-		newFile.Close()
+	newImagesName, err := s.uploadImages(files)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadEstateImages s.uploadImages", zap.Error(err), zap.Int("id", id))
+		return err
 	}
 
 	imagesName, err := s.estateRepo.GetImagesByEstateID(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadImages s.estateRepo.GetImagesByEstateID",
+		s.logger.Error("internal.admin.UploadEstateImages s.estateRepo.GetImagesByEstateID",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
@@ -154,7 +126,7 @@ func (s *service) UploadImages(ctx context.Context, id int, files []multipart.Fi
 
 	err = s.estateRepo.UpdateEstateImages(ctx, id, imagesName)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadImages s.estateRepo.UpdateEstateImages",
+		s.logger.Error("internal.admin.UploadEstateImages s.estateRepo.UpdateEstateImages",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
@@ -162,10 +134,10 @@ func (s *service) UploadImages(ctx context.Context, id int, files []multipart.Fi
 	return nil
 }
 
-func (s *service) DeleteImages(ctx context.Context, id int, imageName string) error {
+func (s *service) DeleteEstateImages(ctx context.Context, id int, imageName string) error {
 	imageNames, err := s.estateRepo.GetImagesByEstateID(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteImages s.estateRepo.GetImagesByEstateID",
+		s.logger.Error("internal.admin.DeleteEstateImages s.estateRepo.GetImagesByEstateID",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
@@ -188,14 +160,14 @@ func (s *service) DeleteImages(ctx context.Context, id int, imageName string) er
 
 	err = s.estateRepo.UpdateEstateImages(ctx, id, imageNames)
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteImages s.estateRepo.UpdateEstateImages",
+		s.logger.Error("internal.admin.DeleteEstateImages s.estateRepo.UpdateEstateImages",
 			zap.Error(err), zap.Int("id", id), zap.Any("images", imageNames))
 		return err
 	}
 
 	err = os.Remove(structs.ImagePath + imageName)
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteImages os.Remove",
+		s.logger.Error("internal.admin.DeleteEstateImages os.Remove",
 			zap.Error(err), zap.Int("id", id), zap.Any("image", imageName))
 		return err
 	}
