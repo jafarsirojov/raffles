@@ -6,6 +6,7 @@ import (
 	"crm/pkg/repo/client/favorites"
 	"crm/pkg/repo/client/lead"
 	"crm/pkg/repo/client/lending"
+	"crm/pkg/repo/client/serviceKeys"
 	"crm/pkg/repo/client/text"
 	"go.uber.org/fx"
 )
@@ -17,4 +18,5 @@ var Module = fx.Options(
 	auth.Module,
 	favorites.Module,
 	lending.Module,
+	serviceKeys.Module,
 )
