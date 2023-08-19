@@ -34,6 +34,13 @@ func (s *service) GetLendingData(ctx context.Context, landingID int) (data struc
 		return data, err
 	}
 
+	data.Availabilities, err = s.lendingRepo.GetAvailabilitiesByLandingID(ctx, data.ID)
+	if err != nil {
+		s.logger.Error("internal.admin.GetLendingData s.lendingRepo.GetAvailabilitiesByLandingID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return data, err
+	}
+
 	return data, nil
 }
 
