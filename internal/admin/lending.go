@@ -13,7 +13,7 @@ func (s *service) GetLendingList(ctx context.Context) (list []structs.LendingLis
 	list, err = s.lendingRepo.GetLendingList(ctx)
 	if err != nil {
 		s.logger.Error("internal.admin.GetLendingList s.lendingRepo.GetLendingList", zap.Error(err))
-		return nil, nil
+		return nil, err
 	}
 
 	return list, nil
@@ -24,10 +24,32 @@ func (s *service) GetLendingData(ctx context.Context, landingID int) (data struc
 	if err != nil {
 		s.logger.Error("internal.admin.GetLendingData s.lendingRepo.GetLendingByID",
 			zap.Error(err), zap.Int("landingID", landingID))
-		return data, nil
+		return data, err
 	}
 
 	return data, nil
+}
+
+func (s *service) SaveLending(ctx context.Context, data structs.Lending) error {
+	err := s.lendingRepo.SaveLending(ctx, data)
+	if err != nil {
+		s.logger.Error("internal.admin.SaveLending s.lendingRepo.SaveLending",
+			zap.Error(err), zap.Any("data", data))
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) UpdateLending(ctx context.Context, data structs.Lending) error {
+	err := s.lendingRepo.UpdateLending(ctx, data)
+	if err != nil {
+		s.logger.Error("internal.admin.UpdateLending s.lendingRepo.UpdateLending",
+			zap.Error(err), zap.Any("data", data))
+		return err
+	}
+
+	return nil
 }
 
 func (s *service) UploadLendingImages(ctx context.Context, id int, files []multipart.File) error {
