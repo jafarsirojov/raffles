@@ -44,6 +44,8 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/favorite/{estateID:[0-9]+}", middleware.ApplyMiddleware(params.Handler.DeleteFavorite, params.Handler.MwCheckAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/favorites", middleware.ApplyMiddleware(params.Handler.GetFavorites, params.Handler.MwCheckAuthToken)).Methods("GET")
 
+	router.HandleFunc(baseUrl+"/landing", params.Handler.GetLendingData).Methods("GET")
+
 	router.HandleFunc(baseUrl+"/texts", params.Handler.GetTexts).Methods("GET")
 
 	handler := cors.AllowAll().Handler(router)
