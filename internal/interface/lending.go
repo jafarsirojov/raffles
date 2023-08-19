@@ -25,4 +25,5 @@ type LendingAdminRepo interface {
 type LendingClientRepo interface {
 	SelectLendingData(ctx context.Context, id int) (data structs.Lending, err error)
 	SelectFeaturesAndAmenitiesByIDs(ctx context.Context, ids []int) (list []structs.FeatureOrAmenity, err error)
+	GetAvailabilitiesByLandingID(ctx context.Context, landingID int) (list []structs.Availability, err error)
 }
