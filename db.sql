@@ -163,3 +163,11 @@ create table feature_or_amenity
     name varchar   not null,
     icon varchar   not null
 );
+
+create table service_keys
+(
+    id         serial not null primary key,
+    name       varchar   not null,
+    key        varchar   not null unique,
+    lending_id integer   not null
+);
