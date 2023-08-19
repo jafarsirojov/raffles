@@ -5,12 +5,81 @@ import (
 	"crm/internal/structs"
 	"crm/pkg/errors"
 	"crm/pkg/reply"
+	"encoding/json"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"mime/multipart"
 	"net/http"
 	"strconv"
 )
+
+func (h *handler) AddLendingPage(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	var request structs.Lending
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.AddLendingPage json.NewDecoder", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	err = h.adminService.SaveLending(ctx, request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.AddLendingPage h.adminService.SaveLending", zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) UpdateLendingPage(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	var request structs.Lending
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UpdateLendingPage json.NewDecoder", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	err = h.adminService.UpdateLending(ctx, request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UpdateLendingPage h.adminService.UpdateLending", zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) GetLendingList(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+
+	estate, err := h.adminService.GetLendingList(ctx)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info("cmd.admin-api.handlers.GetLendingList h.adminService.GetLendingList not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.GetLendingList h.adminService.GetLendingList", zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+	response.Payload = estate
+}
 
 func (h *handler) GetLendingData(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
@@ -20,21 +89,21 @@ func (h *handler) GetLendingData(w http.ResponseWriter, r *http.Request) {
 	idStr := mux.Vars(r)["id"]
 	id, _ := strconv.Atoi(idStr)
 
-	estate, err := h.adminService.GetEstateByID(ctx, id)
+	lending, err := h.adminService.GetLendingData(ctx, id)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.GetEstateByID h.adminService.GetEstateByID not found",
+			h.logger.Info("cmd.admin-api.handlers.GetLendingData h.adminService.GetLendingData not found",
 				zap.Int("id", id))
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.GetEstateByID h.adminService.GetEstateByID", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.GetLendingData h.adminService.GetLendingData", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}
 
 	response = responses.Success
-	response.Payload = estate
+	response.Payload = lending
 }
 
 func (h *handler) UploadLendingImages(w http.ResponseWriter, r *http.Request) {
@@ -111,4 +180,28 @@ func (h *handler) DeleteLendingImages(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response = responses.Success
+}
+
+func (h *handler) GetFeaturesAndAmenities(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+
+	estate, err := h.adminService.GetFeaturesAndAmenities(ctx)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info(
+				"cmd.admin-api.handlers.GetFeaturesAndAmenities h.adminService.GetFeaturesAndAmenities not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.GetFeaturesAndAmenities h.adminService.GetFeaturesAndAmenities",
+			zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+	response.Payload = estate
 }

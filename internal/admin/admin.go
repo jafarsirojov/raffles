@@ -50,6 +50,7 @@ type Service interface {
 	GetLendingList(ctx context.Context) (list []structs.LendingList, err error)
 	UploadLendingImages(ctx context.Context, id int, files []multipart.File) error
 	DeleteLendingImages(ctx context.Context, id int, imageName string) error
+	GetFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error)
 }
 
 type service struct {

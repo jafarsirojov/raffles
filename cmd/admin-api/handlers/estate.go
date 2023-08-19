@@ -91,11 +91,6 @@ func (h *handler) AddEstate(w http.ResponseWriter, r *http.Request) {
 
 	err = h.adminService.AddEstate(ctx, request)
 	if err != nil {
-		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.AddEstate h.adminService.AddEstate not found")
-			response = responses.NotFound
-			return
-		}
 		h.logger.Error("cmd.admin-api.handlers.AddEstate h.adminService.AddEstate", zap.Error(err))
 		response = responses.InternalErr
 		return
@@ -119,11 +114,6 @@ func (h *handler) UpdateEstate(w http.ResponseWriter, r *http.Request) {
 
 	err = h.adminService.UpdateEstate(ctx, request)
 	if err != nil {
-		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.UpdateEstate h.adminService.UpdateEstate not found")
-			response = responses.NotFound
-			return
-		}
 		h.logger.Error("cmd.admin-api.handlers.UpdateEstate h.adminService.UpdateEstate", zap.Error(err))
 		response = responses.InternalErr
 		return

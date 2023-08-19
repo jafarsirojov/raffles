@@ -12,6 +12,8 @@ type LendingAdminRepo interface {
 	GetLendingByID(ctx context.Context, id int) (data structs.Lending, err error)
 	GetImagesByLendingID(ctx context.Context, id int) (images []string, err error)
 	UpdateLendingImages(ctx context.Context, id int, images []string) error
+	SelectFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error)
+	SelectFeaturesAndAmenitiesByIDs(ctx context.Context, ids []int) (list []structs.FeatureOrAmenity, err error)
 }
 
 type LendingClientRepo interface {

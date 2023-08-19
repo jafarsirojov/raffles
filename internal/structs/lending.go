@@ -1,20 +1,21 @@
 package structs
 
 type Lending struct {
-	ID                   int
-	Name                 string
-	FullName             string
-	Address              string
-	StartingPrice        MultiCurrency
-	ListingDetails       ListingDetails
-	FeaturesAndAmenities []FeatureOrAmenity
-	Title                string
-	Description          string
-	Video                string
-	Images               []string
-	Availabilities       []Availability
-	CreatedAt            string
-	UpdatedAt            string
+	ID                      int
+	Name                    string
+	FullName                string
+	Address                 string
+	StartingPrice           MultiCurrency
+	ListingDetails          ListingDetails
+	FeaturesAndAmenities    []FeatureOrAmenity
+	FeaturesAndAmenitiesIDs []int
+	Title                   string
+	Description             string
+	Video                   string
+	Images                  []string
+	Availabilities          []Availability
+	CreatedAt               string
+	UpdatedAt               string
 }
 
 type LendingList struct {
@@ -45,6 +46,7 @@ type ListingDetails struct {
 }
 
 type FeatureOrAmenity struct {
-	IconURL string
-	Name    string
+	ID   int
+	Icon string
+	Name string
 }

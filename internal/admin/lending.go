@@ -27,6 +27,13 @@ func (s *service) GetLendingData(ctx context.Context, landingID int) (data struc
 		return data, err
 	}
 
+	data.FeaturesAndAmenities, err = s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, data.FeaturesAndAmenitiesIDs)
+	if err != nil {
+		s.logger.Error("internal.admin.GetLendingData s.lendingRepo.SelectFeaturesAndAmenitiesByIDs",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return data, err
+	}
+
 	return data, nil
 }
 
@@ -118,4 +125,15 @@ func (s *service) DeleteLendingImages(ctx context.Context, id int, imageName str
 	}
 
 	return nil
+}
+
+func (s *service) GetFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error) {
+	list, err = s.lendingRepo.SelectFeaturesAndAmenities(ctx)
+	if err != nil {
+		s.logger.Error("internal.admin.GetFeaturesAndAmenities s.lendingRepo.SelectFeaturesAndAmenities",
+			zap.Error(err))
+		return nil, err
+	}
+
+	return list, nil
 }
