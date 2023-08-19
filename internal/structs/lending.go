@@ -18,6 +18,21 @@ type Lending struct {
 	UpdatedAt               string
 }
 
+type LendingData struct {
+	Name                 string
+	FullName             string
+	Address              string
+	StartingPrice        MultiCurrency
+	ListingDetails       ListingDetails
+	FeaturesAndAmenities []FeatureOrAmenity
+	Title                string
+	Description          string
+	Video                string
+	Images               []string
+	Availabilities       []Availability
+	ImageURL             string
+}
+
 type LendingList struct {
 	ID   int
 	Name string

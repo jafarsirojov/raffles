@@ -172,7 +172,7 @@ UPDATE lending SET
 		data.Video,
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.SaveLending r.db.Exec", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.lending.UpdateLending r.db.Exec", zap.Error(err))
 		return err
 	}
 
