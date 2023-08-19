@@ -12,11 +12,13 @@ var Module = fx.Provide(NewService)
 
 type Params struct {
 	fx.In
-	Logger        *zap.Logger
-	LeadRepo      interfaces.LeadClientRepo
-	EstateRepo    interfaces.EstateClientRepo
-	TextRepo      interfaces.TextClientRepo
-	FavoritesRepo interfaces.FavoritesClientRepo
+	Logger         *zap.Logger
+	LeadRepo       interfaces.LeadClientRepo
+	EstateRepo     interfaces.EstateClientRepo
+	TextRepo       interfaces.TextClientRepo
+	FavoritesRepo  interfaces.FavoritesClientRepo
+	LendingRepo    interfaces.LendingClientRepo
+	ServiceKeyRepo interfaces.ServiceKeysClientRepo
 }
 
 type Service interface {
@@ -34,14 +36,18 @@ type Service interface {
 	SaveFavorite(ctx context.Context, favorite structs.Favorite) error
 	DeleteFavorite(ctx context.Context, favorite structs.Favorite) error
 	GetEstateFavorites(ctx context.Context, userID int) (estates []structs.EstateForList, err error)
+
+	GetLendingData(ctx context.Context, key string) (data structs.LendingData, err error)
 }
 
 type service struct {
-	logger        *zap.Logger
-	leadRepo      interfaces.LeadClientRepo
-	estateRepo    interfaces.EstateClientRepo
-	textRepo      interfaces.TextClientRepo
-	favoritesRepo interfaces.FavoritesClientRepo
+	logger         *zap.Logger
+	leadRepo       interfaces.LeadClientRepo
+	estateRepo     interfaces.EstateClientRepo
+	textRepo       interfaces.TextClientRepo
+	favoritesRepo  interfaces.FavoritesClientRepo
+	lendingRepo    interfaces.LendingClientRepo
+	serviceKeyRepo interfaces.ServiceKeysClientRepo
 }
 
 func NewService(params Params) Service {
