@@ -97,7 +97,8 @@ UPDATE availability SET
     parking = $7,
     area = $8,
     plot = $9,
-    special_gift = $10
+    special_gift = $10,
+    updated_at = now()
     WHERE id = $1`,
 		data.LendingID,
 		data.Price.AED,
@@ -111,6 +112,30 @@ UPDATE availability SET
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateAvailability r.db.Exec", zap.Error(err))
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) SelectPaymentPlanByAvailabilityID(ctx context.Context, id int) (paymentPlan string, err error) {
+	err = r.db.QueryRow(ctx,
+		`SELECT payment_plan FROM availability WHERE id = $1;`, id).Scan(&paymentPlan)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SelectPaymentPlanByAvailability r.db.QueryRow",
+			zap.Error(err), zap.Int("id", id))
+		return paymentPlan, err
+	}
+
+	return paymentPlan, nil
+}
+
+func (r *repo) UpdatePaymentPlan(ctx context.Context, id int, new string) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE availability SET payment_plan = $2, updated_at = now() WHERE id = $1;`, id, new)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdatePaymentPlan r.db.Exec",
+			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
 		return err
 	}
 

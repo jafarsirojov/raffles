@@ -30,7 +30,7 @@ type LendingData struct {
 	Video                string
 	Images               []string
 	Availabilities       []Availability
-	ImageURL             string
+	FileURL              string
 }
 
 type LendingList struct {
@@ -48,6 +48,7 @@ type Availability struct {
 	Area        float32
 	Plot        float32
 	SpecialGift string
+	PaymentPlan string
 }
 
 type MultiCurrency struct {

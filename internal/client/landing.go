@@ -53,7 +53,7 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 		return data, err
 	}
 
-	data.ImageURL = structs.ImageBaseURL
+	data.FileURL = structs.ImageBaseURL
 
 	return data, err
 }

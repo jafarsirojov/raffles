@@ -126,16 +126,19 @@ create table favorite
 
 create table availability
 (
-    id           bigserial not null primary key,
-    lending_id   integer   not null,
-    price_aed    integer   not null,
-    price_usd    integer   not null,
-    unique_id    varchar   not null,
-    bedroom      integer   not null,
-    parking      integer   not null,
-    area         float     not null,
-    plot         float     not null,
-    special_gift varchar   not null
+    id           bigserial           not null primary key,
+    lending_id   integer             not null,
+    price_aed    integer             not null,
+    price_usd    integer             not null,
+    unique_id    varchar             not null,
+    bedroom      integer             not null,
+    parking      integer             not null,
+    area         float               not null,
+    plot         float               not null,
+    special_gift varchar             not null,
+    payment_plan varchar             not null default '',
+    created_at   timestamp with time not null zone default now(),
+    updated_at   timestamp with time not null zone default now()
 );
 
 create table lending
@@ -154,7 +157,7 @@ create table lending
     video                  varchar             not null,
     images                 text[] not null,
     created_at             timestamp with time not null zone default now(),
-    updated_at             timestamp with time not null zone default now(),
+    updated_at             timestamp with time not null zone default now()
 );
 
 create table feature_or_amenity
@@ -166,8 +169,8 @@ create table feature_or_amenity
 
 create table service_keys
 (
-    id         serial not null primary key,
-    name       varchar   not null,
-    key        varchar   not null unique,
-    lending_id integer   not null
+    id         serial  not null primary key,
+    name       varchar not null,
+    key        varchar not null unique,
+    lending_id integer not null
 );
