@@ -38,6 +38,7 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	data.Description = lending.Description
 	data.Video = lending.Video
 	data.Images = lending.Images
+	data.BackgroundImage = lending.BackgroundImage
 
 	data.FeaturesAndAmenities, err = s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, lending.FeaturesAndAmenitiesIDs)
 	if err != nil {
