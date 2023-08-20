@@ -19,7 +19,8 @@ SELECT
     parking,
     area,
     plot,
-    special_gift
+    special_gift, 
+    payment_plan
 FROM availability
 WHERE lending_id = $1;`, landingID)
 	if err != nil {
@@ -40,6 +41,7 @@ WHERE lending_id = $1;`, landingID)
 			&a.Area,
 			&a.Plot,
 			&a.SpecialGift,
+			&a.PaymentPlan,
 		)
 		if err != nil {
 			r.logger.Error("pkg.repo.client.lending.GetAvailabilitiesByLandingID rows.Scan()", zap.Error(err))

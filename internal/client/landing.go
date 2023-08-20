@@ -12,11 +12,11 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	id, err := s.serviceKeyRepo.SelectLendingIdByKey(ctx, key)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			s.logger.Warn("internal.client.GetLendingData s.lendingRepo.SelectLendingData not found",
+			s.logger.Warn("internal.client.GetLendingData s.lendingRepo.SelectLendingIdByKey not found",
 				zap.String("key", key))
 			return data, errors.ErrBadRequest
 		}
-		s.logger.Error("internal.client.GetLendingData s.lendingRepo.SelectLendingData",
+		s.logger.Error("internal.client.GetLendingData s.lendingRepo.SelectLendingIdByKey",
 			zap.Error(err))
 		return data, err
 	}
