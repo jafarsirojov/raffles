@@ -4,9 +4,12 @@ import (
 	"context"
 	"crm/internal/structs"
 	"crm/pkg/errors"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
+	"io"
 	"mime/multipart"
 	"os"
+	"strings"
 )
 
 func (s *service) GetLendingList(ctx context.Context) (list []structs.LendingList, err error) {
@@ -143,4 +146,100 @@ func (s *service) GetFeaturesAndAmenities(ctx context.Context) (list []structs.F
 	}
 
 	return list, nil
+}
+
+func (s *service) UploadPaymentPlan(ctx context.Context, availabilityID int, file multipart.File) error {
+	newUUID := uuid.NewString()
+	filename := newUUID + ".pdf"
+
+	newFile, err := os.Create(structs.ImagePath + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPaymentPlan os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPaymentPlan io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPaymentPlan io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	paymentPlan, err := s.lendingRepo.SelectPaymentPlanByAvailabilityID(ctx, availabilityID)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPaymentPlan s.lendingRepo.SelectPaymentPlanByAvailabilityID",
+			zap.Error(err), zap.Int("availabilityID", availabilityID))
+		return err
+	}
+
+	err = s.lendingRepo.UpdatePaymentPlan(ctx, availabilityID, filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPaymentPlan s.lendingRepo.UpdatePaymentPlan",
+			zap.Error(err), zap.Int("availabilityID", availabilityID))
+		return err
+	}
+
+	if len(strings.TrimSpace(paymentPlan)) != 0 {
+		err = os.Remove(structs.ImagePath + filename)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadPaymentPlan os.Remove",
+				zap.Error(err), zap.Int("availabilityID", availabilityID), zap.Any("filename", filename))
+		}
+	}
+
+	return nil
+}
+
+func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File) error {
+	newUUID := uuid.NewString()
+	filename := newUUID + ".png"
+
+	newFile, err := os.Create(structs.ImagePath + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundImage os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundImage io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundImage io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	backgroundImage, err := s.lendingRepo.SelectBackgroundImageLandingID(ctx, landingID)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundImage s.lendingRepo.SelectBackgroundImageLandingID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	err = s.lendingRepo.UpdateBackgroundImage(ctx, landingID, filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundImage s.lendingRepo.UpdateBackgroundImage",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	if len(strings.TrimSpace(backgroundImage)) != 0 {
+		err = os.Remove(structs.ImagePath + filename)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadBackgroundImage os.Remove",
+				zap.Error(err), zap.Int("landingID", landingID), zap.Any("filename", filename))
+		}
+	}
+
+	return nil
 }

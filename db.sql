@@ -126,38 +126,39 @@ create table favorite
 
 create table availability
 (
-    id           bigserial           not null primary key,
-    lending_id   integer             not null,
-    price_aed    integer             not null,
-    price_usd    integer             not null,
-    unique_id    varchar             not null,
-    bedroom      integer             not null,
-    parking      integer             not null,
-    area         float               not null,
-    plot         float               not null,
-    special_gift varchar             not null,
-    payment_plan varchar             not null default '',
-    created_at   timestamp with time not null zone default now(),
-    updated_at   timestamp with time not null zone default now()
+    id           bigserial                not null primary key,
+    lending_id   integer                  not null,
+    price_aed    integer                  not null,
+    price_usd    integer                  not null,
+    unique_id    varchar                  not null,
+    bedroom      integer                  not null,
+    parking      integer                  not null,
+    area         float                    not null,
+    plot         float                    not null,
+    special_gift varchar                  not null,
+    payment_plan varchar                  not null default '',
+    created_at   timestamp with time zone not null default now(),
+    updated_at   timestamp with time zone not null default now()
 );
 
 create table lending
 (
-    id                     bigserial           not null primary key,
-    name                   varchar             not null,
-    full_name              varchar             not null,
-    address                varchar             not null,
-    starting_price_aed     integer             not null,
-    starting_price_usd     integer             not null,
-    property_type          varchar             not null,
-    furnishing             varchar             not null,
+    id                     bigserial                not null primary key,
+    name                   varchar                  not null,
+    full_name              varchar                  not null,
+    address                varchar                  not null,
+    starting_price_aed     integer                  not null,
+    starting_price_usd     integer                  not null,
+    property_type          varchar                  not null,
+    furnishing             varchar                  not null,
     features_and_amenities integer[] not null,
-    title                  varchar             not null,
-    description            varchar             not null,
-    video                  varchar             not null,
+    title                  varchar                  not null,
+    description            varchar                  not null,
+    video                  varchar                  not null,
+    background_image       varchar                  not null default '',
     images                 text[] not null,
-    created_at             timestamp with time not null zone default now(),
-    updated_at             timestamp with time not null zone default now()
+    created_at             timestamp with time zone not null default now(),
+    updated_at             timestamp with time zone not null default now()
 );
 
 create table feature_or_amenity

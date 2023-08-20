@@ -82,6 +82,7 @@ SELECT
     description,
     video,
     images,
+    background_image,
     to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI'),
     to_char(updated_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
 FROM 	lending
@@ -99,6 +100,7 @@ WHERE id = $1;`, id).Scan(
 		&data.Description,
 		&data.Video,
 		&data.Images,
+		&data.BackgroundImage,
 		&data.CreatedAt,
 		&data.UpdatedAt,
 	)

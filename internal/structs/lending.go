@@ -12,6 +12,7 @@ type Lending struct {
 	Title                   string
 	Description             string
 	Video                   string
+	BackgroundImage         string
 	Images                  []string
 	Availabilities          []Availability
 	CreatedAt               string
@@ -28,6 +29,7 @@ type LendingData struct {
 	Title                string
 	Description          string
 	Video                string
+	BackgroundImage      string
 	Images               []string
 	Availabilities       []Availability
 	FileURL              string

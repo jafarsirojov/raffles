@@ -44,7 +44,8 @@ SELECT
     title,
     description,
     video,
-    images
+    images,
+    background_image
 FROM lending
 WHERE id = $1;`, id).Scan(
 		&data.ID,
@@ -60,6 +61,7 @@ WHERE id = $1;`, id).Scan(
 		&data.Description,
 		&data.Video,
 		&data.Images,
+		&data.BackgroundImage,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.client.lending.SelectLendingData r.db.QueryRow", zap.Error(err))
