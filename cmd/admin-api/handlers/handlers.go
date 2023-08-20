@@ -42,6 +42,8 @@ type Handler interface {
 	UploadLendingImages(http.ResponseWriter, *http.Request)
 	DeleteLendingImages(http.ResponseWriter, *http.Request)
 	GetFeaturesAndAmenities(http.ResponseWriter, *http.Request)
+	UploadBackgroundImage(http.ResponseWriter, *http.Request)
+	UploadPaymentPlan(http.ResponseWriter, *http.Request)
 
 	MwCheckAdminAuthToken(m middleware.Handler) middleware.Handler
 }
