@@ -58,6 +58,9 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteLendingImages, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/landing/featuresAndAmenities", middleware.ApplyMiddleware(params.Handler.GetFeaturesAndAmenities, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadBackgroundImage", middleware.ApplyMiddleware(params.Handler.UploadBackgroundImage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/landing/availability", middleware.ApplyMiddleware(params.Handler.AddAvailability, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/landing/availability", middleware.ApplyMiddleware(params.Handler.UpdateAvailability, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
+	router.HandleFunc(baseUrl+"/landing/availability/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.RemoveAvailability, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/landing/availability/{id:[0-9]+}/uploadPaymentPlan", middleware.ApplyMiddleware(params.Handler.UploadPaymentPlan, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 
 	// text

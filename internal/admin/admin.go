@@ -22,12 +22,14 @@ type Params struct {
 }
 
 type Service interface {
+	// lead
 	GetLeadList(ctx context.Context, offset, limit int, status string) (list []structs.Lead, err error)
 	GetLeadListXLSX(ctx context.Context, status string) (url string, err error)
 	GetLeadAndCommentsByID(ctx context.Context, id int) (lead structs.LeadAndComments, err error)
 	AddComment(ctx context.Context, comment structs.Comment) error
 	UpdateLeadStatus(ctx context.Context, id int, status string) error
 
+	// home website
 	GetEstateByID(ctx context.Context, id int) (structs.Estate, error)
 	GetEstates(ctx context.Context, offset, limit int, status string) ([]structs.EstateForList, int, error)
 	AddEstate(ctx context.Context, request structs.Estate) error
@@ -50,9 +52,14 @@ type Service interface {
 	GetLendingList(ctx context.Context) (list []structs.LendingList, err error)
 	UploadLendingImages(ctx context.Context, id int, files []multipart.File) error
 	DeleteLendingImages(ctx context.Context, id int, imageName string) error
-	UploadPaymentPlan(ctx context.Context, availabilityID int, file multipart.File) error
 	UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File) error
+
 	GetFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error)
+
+	SaveAvailability(ctx context.Context, data structs.Availability) error
+	UpdateAvailability(ctx context.Context, data structs.Availability) error
+	RemoveAvailability(ctx context.Context, id int) error
+	UploadPaymentPlan(ctx context.Context, availabilityID int, file multipart.File) error
 }
 
 type service struct {

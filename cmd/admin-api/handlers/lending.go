@@ -245,6 +245,78 @@ func (h *handler) UploadBackgroundImage(w http.ResponseWriter, r *http.Request) 
 	response = responses.Success
 }
 
+func (h *handler) AddAvailability(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	var request structs.Availability
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.AddAvailability json.NewDecoder", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	err = h.adminService.SaveAvailability(ctx, request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.AddAvailability h.adminService.SaveAvailability", zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) UpdateAvailability(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	var request structs.Availability
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UpdateAvailability json.NewDecoder", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	err = h.adminService.UpdateAvailability(ctx, request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UpdateAvailability h.adminService.UpdateAvailability", zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) RemoveAvailability(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	idStr := mux.Vars(r)["id"]
+	id, _ := strconv.Atoi(idStr)
+
+	var request structs.Availability
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.RemoveAvailability json.NewDecoder", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	err = h.adminService.RemoveAvailability(ctx, id)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.RemoveAvailability h.adminService.RemoveAvailability", zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
 func (h *handler) UploadPaymentPlan(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)

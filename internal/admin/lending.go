@@ -69,6 +69,39 @@ func (s *service) UpdateLending(ctx context.Context, data structs.Lending) error
 	return nil
 }
 
+func (s *service) SaveAvailability(ctx context.Context, data structs.Availability) error {
+	err := s.lendingRepo.SaveAvailability(ctx, data)
+	if err != nil {
+		s.logger.Error("internal.admin.SaveAvailability s.lendingRepo.SaveAvailability",
+			zap.Error(err), zap.Any("data", data))
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) UpdateAvailability(ctx context.Context, data structs.Availability) error {
+	err := s.lendingRepo.UpdateAvailability(ctx, data)
+	if err != nil {
+		s.logger.Error("internal.admin.UpdateAvailability s.lendingRepo.UpdateAvailability",
+			zap.Error(err), zap.Any("data", data))
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) RemoveAvailability(ctx context.Context, id int) error {
+	err := s.lendingRepo.DeleteAvailability(ctx, id)
+	if err != nil {
+		s.logger.Error("internal.admin.RemoveAvailability s.lendingRepo.RemoveAvailability",
+			zap.Error(err), zap.Any("id", id))
+		return err
+	}
+
+	return nil
+}
+
 func (s *service) UploadLendingImages(ctx context.Context, id int, files []multipart.File) error {
 
 	newImagesName, err := s.uploadImages(files)

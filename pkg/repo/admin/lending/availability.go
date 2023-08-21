@@ -118,6 +118,16 @@ UPDATE availability SET
 	return nil
 }
 
+func (r *repo) DeleteAvailability(ctx context.Context, id int) (err error) {
+	_, err = r.db.Exec(ctx, `DELETE FROM availability WHERE id = $1;`, id)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.DeleteAvailability r.db.Exec", zap.Error(err))
+		return err
+	}
+
+	return nil
+}
+
 func (r *repo) SelectPaymentPlanByAvailabilityID(ctx context.Context, id int) (paymentPlan string, err error) {
 	err = r.db.QueryRow(ctx,
 		`SELECT payment_plan FROM availability WHERE id = $1;`, id).Scan(&paymentPlan)
