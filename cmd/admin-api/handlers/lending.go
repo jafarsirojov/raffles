@@ -221,7 +221,7 @@ func (h *handler) UploadBackgroundImage(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	file, _, err := r.FormFile("1")
+	file, _, err := r.FormFile("BackgroundImage")
 	if err != nil {
 		h.logger.Error("cmd.admin-api.handlers.UploadBackgroundImage r.FormFile - Error Retrieving the File", zap.Error(err))
 		response = responses.BadRequest
@@ -332,7 +332,7 @@ func (h *handler) UploadPaymentPlan(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, _, err := r.FormFile("1")
+	file, _, err := r.FormFile("PaymentPlan")
 	if err != nil {
 		h.logger.Error("cmd.admin-api.handlers.UploadPaymentPlan r.FormFile - Error Retrieving the File", zap.Error(err))
 		response = responses.BadRequest

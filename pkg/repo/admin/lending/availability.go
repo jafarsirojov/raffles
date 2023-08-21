@@ -100,6 +100,7 @@ UPDATE availability SET
     special_gift = $10,
     updated_at = now()
     WHERE id = $1`,
+		data.ID,
 		data.LendingID,
 		data.Price.AED,
 		data.Price.USD,

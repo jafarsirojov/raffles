@@ -47,8 +47,8 @@ type Availability struct {
 	UniqueID    string
 	Bedroom     int
 	Parking     int
-	Area        float32
-	Plot        float32
+	Area        string
+	Plot        string
 	SpecialGift string
 	PaymentPlan string
 }
