@@ -34,6 +34,7 @@ func (r *repo) SelectLendingData(ctx context.Context, id int) (data structs.Lend
 SELECT 
     id,
     name,
+    main_description,
     full_name,
     address,
     starting_price_aed,
@@ -50,6 +51,7 @@ FROM lending
 WHERE id = $1;`, id).Scan(
 		&data.ID,
 		&data.Name,
+		&data.MainDescription,
 		&data.FullName,
 		&data.Address,
 		&data.StartingPrice.AED,

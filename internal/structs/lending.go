@@ -3,6 +3,7 @@ package structs
 type Lending struct {
 	ID                      int
 	Name                    string
+	MainDescription         string
 	FullName                string
 	Address                 string
 	StartingPrice           MultiCurrency
@@ -21,6 +22,7 @@ type Lending struct {
 
 type LendingData struct {
 	Name                 string
+	MainDescription      string
 	FullName             string
 	Address              string
 	StartingPrice        MultiCurrency

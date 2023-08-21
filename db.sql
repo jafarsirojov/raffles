@@ -145,6 +145,7 @@ create table lending
 (
     id                     bigserial                not null primary key,
     name                   varchar                  not null,
+    main_description       varchar                  not null,
     full_name              varchar                  not null,
     address                varchar                  not null,
     starting_price_aed     integer                  not null,

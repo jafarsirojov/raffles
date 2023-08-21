@@ -34,6 +34,7 @@ func (r *repo) SaveLending(ctx context.Context, data structs.Lending) (err error
 	_, err = r.db.Exec(ctx, `
 INSERT INTO lending(
     name,
+    main_description,
     full_name,
     address,
     starting_price_aed,
@@ -44,8 +45,9 @@ INSERT INTO lending(
     title,
     description,
     video,
-    images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`,
+    images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);`,
 		data.Name,
+		data.MainDescription,
 		data.FullName,
 		data.Address,
 		data.StartingPrice.AED,
@@ -71,6 +73,7 @@ func (r *repo) GetLendingByID(ctx context.Context, id int) (data structs.Lending
 SELECT 
     id,
     name,
+    main_description,
     full_name,
     address,
     starting_price_aed,
@@ -89,6 +92,7 @@ FROM lending
 WHERE id = $1;`, id).Scan(
 		&data.ID,
 		&data.Name,
+		&data.MainDescription,
 		&data.FullName,
 		&data.Address,
 		&data.StartingPrice.AED,
@@ -159,6 +163,7 @@ UPDATE lending SET
     title = $10,
     description = $11,
     video = $12,
+    main_description = $13,
     updated_at = now()
     WHERE id = $1`,
 		data.ID,
@@ -173,6 +178,7 @@ UPDATE lending SET
 		data.Title,
 		data.Description,
 		data.Video,
+		data.MainDescription,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateLending r.db.Exec", zap.Error(err))

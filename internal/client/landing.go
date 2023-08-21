@@ -29,6 +29,7 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	}
 
 	data.Name = lending.Name
+	data.MainDescription = lending.MainDescription
 	data.FullName = lending.FullName
 	data.Address = lending.Address
 	data.StartingPrice = lending.StartingPrice
