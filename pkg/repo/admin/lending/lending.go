@@ -85,7 +85,7 @@ SELECT
     background_image,
     to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI'),
     to_char(updated_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
-FROM 	lending
+FROM lending
 WHERE id = $1;`, id).Scan(
 		&data.ID,
 		&data.Name,
@@ -161,6 +161,7 @@ UPDATE lending SET
     video = $12,
     updated_at = now()
     WHERE id = $1`,
+		data.ID,
 		data.Name,
 		data.FullName,
 		data.Address,

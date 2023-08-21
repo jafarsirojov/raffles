@@ -28,6 +28,7 @@ func NewRouter(params RouterParams) {
 
 	baseUrl := "/api/crm-admin/v1"
 
+	// lead
 	router.HandleFunc(baseUrl+"/signIn", middleware.ApplyMiddleware(params.Handler.SignIn)).Methods("POST")
 	router.HandleFunc(baseUrl+"/leads", middleware.ApplyMiddleware(params.Handler.GetLeadList, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/leads/xlsx", middleware.ApplyMiddleware(params.Handler.GetLeadListXlSX, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
@@ -35,6 +36,7 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/lead/{id:[0-9]+}/comment", middleware.ApplyMiddleware(params.Handler.AddComment, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 	router.HandleFunc(baseUrl+"/lead/{id:[0-9]+}/status", middleware.ApplyMiddleware(params.Handler.UpdateLeadStatus, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
 
+	// home site
 	router.HandleFunc(baseUrl+"/estate/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.GetEstateByID, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/estates", middleware.ApplyMiddleware(params.Handler.GetEstates, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/estate", middleware.ApplyMiddleware(params.Handler.AddEstate, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
@@ -47,6 +49,7 @@ func NewRouter(params RouterParams) {
 
 	router.HandleFunc(baseUrl+"/clients/favorites", middleware.ApplyMiddleware(params.Handler.GetClientsFavorites, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 
+	// lending
 	router.HandleFunc(baseUrl+"/landing", middleware.ApplyMiddleware(params.Handler.AddLendingPage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 	router.HandleFunc(baseUrl+"/landing", middleware.ApplyMiddleware(params.Handler.UpdateLendingPage, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.GetLendingData, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
@@ -57,6 +60,7 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadBackgroundImage", middleware.ApplyMiddleware(params.Handler.UploadBackgroundImage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 	router.HandleFunc(baseUrl+"/landing/availability/{id:[0-9]+}/uploadPaymentPlan", middleware.ApplyMiddleware(params.Handler.UploadPaymentPlan, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 
+	// text
 	router.HandleFunc(baseUrl+"/texts", middleware.ApplyMiddleware(params.Handler.GetTexts, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/text", middleware.ApplyMiddleware(params.Handler.UpdateText, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
 

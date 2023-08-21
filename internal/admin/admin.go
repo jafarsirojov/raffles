@@ -71,5 +71,6 @@ func NewService(params Params) Service {
 		commentRepo: params.CommentRepo,
 		estateRepo:  params.EstateRepo,
 		textRepo:    params.TextRepo,
+		lendingRepo: params.LendingRepo,
 	}
 }

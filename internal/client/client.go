@@ -52,10 +52,12 @@ type service struct {
 
 func NewService(params Params) Service {
 	return &service{
-		logger:        params.Logger,
-		leadRepo:      params.LeadRepo,
-		estateRepo:    params.EstateRepo,
-		textRepo:      params.TextRepo,
-		favoritesRepo: params.FavoritesRepo,
+		logger:         params.Logger,
+		leadRepo:       params.LeadRepo,
+		estateRepo:     params.EstateRepo,
+		textRepo:       params.TextRepo,
+		favoritesRepo:  params.FavoritesRepo,
+		lendingRepo:    params.LendingRepo,
+		serviceKeyRepo: params.ServiceKeyRepo,
 	}
 }

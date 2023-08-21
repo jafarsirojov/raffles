@@ -15,7 +15,7 @@ func (h *handler) GetClientsFavorites(w http.ResponseWriter, r *http.Request) {
 
 	var ctx = r.Context()
 
-	estate, err := h.adminService.GetClientsFavorites(ctx)
+	estate, err := h.adminService.GetClientsFavorites(ctx, 0, 10)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.admin-api.handlers.GetEstateByID h.adminService.GetEstateByID not found")
