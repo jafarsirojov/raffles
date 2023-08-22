@@ -109,7 +109,7 @@ func (s *service) ApprovedEstate(ctx context.Context, id int) error {
 
 func (s *service) UploadEstateImages(ctx context.Context, id int, files []multipart.File) error {
 
-	newImagesName, err := s.uploadImages(files)
+	newImagesName, err := s.uploadImages(files, structs.ImagePath)
 	if err != nil {
 		s.logger.Error("internal.admin.UploadEstateImages s.uploadImages", zap.Error(err), zap.Int("id", id))
 		return err

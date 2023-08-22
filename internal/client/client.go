@@ -38,6 +38,7 @@ type Service interface {
 	GetEstateFavorites(ctx context.Context, userID int) (estates []structs.EstateForList, err error)
 
 	GetLendingData(ctx context.Context, key string) (data structs.LendingData, err error)
+	GetLandingsList(ctx context.Context) (data structs.LendingListMainPage, err error)
 }
 
 type service struct {

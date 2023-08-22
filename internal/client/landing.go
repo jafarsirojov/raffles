@@ -7,6 +7,20 @@ import (
 	"go.uber.org/zap"
 )
 
+func (s *service) GetLandingsList(ctx context.Context) (data structs.LendingListMainPage, err error) {
+
+	data, err = s.lendingRepo.SelectLandingList(ctx)
+	if err != nil {
+		s.logger.Error("internal.client.GetLendingData s.lendingRepo.SelectLendingData",
+			zap.Error(err))
+		return data, err
+	}
+
+	data.FileURL = structs.FileBaseURLPathRafflesHomes
+
+	return data, err
+}
+
 func (s *service) GetLendingData(ctx context.Context, key string) (data structs.LendingData, err error) {
 
 	id, err := s.serviceKeyRepo.SelectLendingIdByKey(ctx, key)
@@ -55,7 +69,7 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 		return data, err
 	}
 
-	data.FileURL = structs.ImageBaseURL
+	data.FileURL = structs.FileBaseURLPathRafflesHomes
 
 	return data, err
 }

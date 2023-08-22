@@ -104,7 +104,7 @@ func (s *service) RemoveAvailability(ctx context.Context, id int) error {
 
 func (s *service) UploadLendingImages(ctx context.Context, id int, files []multipart.File) error {
 
-	newImagesName, err := s.uploadImages(files)
+	newImagesName, err := s.uploadImages(files, structs.FilePathRafflesHomes)
 	if err != nil {
 		s.logger.Error("internal.admin.UploadLendingImages s.uploadImages", zap.Error(err), zap.Int("id", id))
 		return err
@@ -160,7 +160,7 @@ func (s *service) DeleteLendingImages(ctx context.Context, id int, imageName str
 		return err
 	}
 
-	err = os.Remove(structs.ImagePath + imageName)
+	err = os.Remove(structs.FilePathRafflesHomes + imageName)
 	if err != nil {
 		s.logger.Error("internal.admin.DeleteLendingImages os.Remove",
 			zap.Error(err), zap.Int("id", id), zap.Any("image", imageName))
@@ -185,7 +185,7 @@ func (s *service) UploadPaymentPlan(ctx context.Context, availabilityID int, fil
 	newUUID := uuid.NewString()
 	filename := newUUID + ".pdf"
 
-	newFile, err := os.Create(structs.ImagePath + filename)
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
 	if err != nil {
 		s.logger.Error("internal.admin.UploadPaymentPlan os.Create", zap.Error(err))
 		return err
@@ -219,7 +219,7 @@ func (s *service) UploadPaymentPlan(ctx context.Context, availabilityID int, fil
 	}
 
 	if len(strings.TrimSpace(paymentPlan)) != 0 {
-		err = os.Remove(structs.ImagePath + filename)
+		err = os.Remove(structs.FilePathRafflesHomes + filename)
 		if err != nil {
 			s.logger.Error("internal.admin.UploadPaymentPlan os.Remove",
 				zap.Error(err), zap.Int("availabilityID", availabilityID), zap.Any("filename", filename))
@@ -233,7 +233,7 @@ func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file
 	newUUID := uuid.NewString()
 	filename := newUUID + ".png"
 
-	newFile, err := os.Create(structs.ImagePath + filename)
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
 	if err != nil {
 		s.logger.Error("internal.admin.UploadBackgroundImage os.Create", zap.Error(err))
 		return err
@@ -267,7 +267,7 @@ func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file
 	}
 
 	if len(strings.TrimSpace(backgroundImage)) != 0 {
-		err = os.Remove(structs.ImagePath + filename)
+		err = os.Remove(structs.FilePathRafflesHomes + filename)
 		if err != nil {
 			s.logger.Error("internal.admin.UploadBackgroundImage os.Remove",
 				zap.Error(err), zap.Int("landingID", landingID), zap.Any("filename", filename))

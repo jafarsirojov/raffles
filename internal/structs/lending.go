@@ -42,6 +42,13 @@ type LendingList struct {
 	Name string
 }
 
+type LendingListMainPage struct {
+	Name            string
+	MainDescription string
+	BackgroundImage string
+	FileURL         string
+}
+
 type Availability struct {
 	ID          int
 	LendingID   int

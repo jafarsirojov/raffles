@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"crm/internal/structs"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 	"io"
@@ -9,13 +8,13 @@ import (
 	"os"
 )
 
-func (s *service) uploadImages(files []multipart.File) (newImagesName []string, err error) {
+func (s *service) uploadImages(files []multipart.File, path string) (newImagesName []string, err error) {
 	for i, _ := range files {
 
 		newUUID := uuid.NewString()
 		filename := newUUID + ".png"
 
-		newFile, err := os.Create(structs.ImagePath + filename)
+		newFile, err := os.Create(path + filename)
 		if err != nil {
 			s.logger.Error("internal.admin.uploadImages os.Create", zap.Error(err))
 			return newImagesName, err
