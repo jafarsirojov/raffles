@@ -45,6 +45,7 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	data.Name = lending.Name
 	data.MainDescription = lending.MainDescription
 	data.FullName = lending.FullName
+	data.Slogan = lending.Slogan
 	data.Address = lending.Address
 	data.StartingPrice = lending.StartingPrice
 	data.ListingDetails = lending.ListingDetails
@@ -54,6 +55,9 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	data.Video = lending.Video
 	data.Images = lending.Images
 	data.BackgroundImage = lending.BackgroundImage
+	data.MainLogo = lending.MainLogo
+	data.PartnerLogo = lending.PartnerLogo
+	data.OurLogo = lending.OurLogo
 
 	data.FeaturesAndAmenities, err = s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, lending.FeaturesAndAmenitiesIDs)
 	if err != nil {

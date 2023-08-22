@@ -50,3 +50,75 @@ func (r *repo) UpdateBackgroundImage(ctx context.Context, id int, new string) er
 
 	return nil
 }
+
+func (r *repo) SelectMainLogoByLandingID(ctx context.Context, id int) (logo string, err error) {
+	err = r.db.QueryRow(ctx,
+		`SELECT main_logo FROM lending WHERE id = $1;`, id).Scan(&logo)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SelectMainLogoByLandingID r.db.QueryRow",
+			zap.Error(err), zap.Int("id", id))
+		return logo, err
+	}
+
+	return logo, nil
+}
+
+func (r *repo) UpdateMainLogo(ctx context.Context, id int, new string) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE lending SET main_logo = $2, updated_at = now() WHERE id = $1;`, id, new)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdateMainLogo r.db.Exec",
+			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) SelectPartnerLogoByLandingID(ctx context.Context, id int) (logo string, err error) {
+	err = r.db.QueryRow(ctx,
+		`SELECT partner_logo FROM lending WHERE id = $1;`, id).Scan(&logo)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SelectPartnerLogoLandingID r.db.QueryRow",
+			zap.Error(err), zap.Int("id", id))
+		return logo, err
+	}
+
+	return logo, nil
+}
+
+func (r *repo) UpdatePartnerLogo(ctx context.Context, id int, new string) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE lending SET partner_logo = $2, updated_at = now() WHERE id = $1;`, id, new)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdatePartnerLogo r.db.Exec",
+			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) SelectOurLogoByLandingID(ctx context.Context, id int) (logo string, err error) {
+	err = r.db.QueryRow(ctx,
+		`SELECT our_logo FROM lending WHERE id = $1;`, id).Scan(&logo)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SelectOurLogoByLandingID r.db.QueryRow",
+			zap.Error(err), zap.Int("id", id))
+		return logo, err
+	}
+
+	return logo, nil
+}
+
+func (r *repo) UpdateOurLogo(ctx context.Context, id int, new string) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE lending SET our_logo = $2, updated_at = now() WHERE id = $1;`, id, new)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdateOurLogo r.db.Exec",
+			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
+		return err
+	}
+
+	return nil
+}

@@ -15,6 +15,9 @@ type Lending struct {
 	Description             string
 	Video                   string
 	BackgroundImage         string
+	MainLogo                string
+	PartnerLogo             string
+	OurLogo                 string
 	Images                  []string
 	Availabilities          []Availability
 	CreatedAt               string
@@ -25,6 +28,7 @@ type LendingData struct {
 	Name                 string
 	MainDescription      string
 	FullName             string
+	Slogan               string
 	Address              string
 	StartingPrice        MultiCurrency
 	ListingDetails       ListingDetails
@@ -33,6 +37,9 @@ type LendingData struct {
 	Description          string
 	Video                string
 	BackgroundImage      string
+	MainLogo             string
+	PartnerLogo          string
+	OurLogo              string
 	Images               []string
 	Availabilities       []Availability
 	FileURL              string

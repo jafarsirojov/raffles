@@ -5,6 +5,7 @@ import (
 	"crm/internal/structs"
 	"crm/pkg/errors"
 	"crm/pkg/reply"
+	"crm/pkg/util"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
@@ -348,6 +349,123 @@ func (h *handler) UploadPaymentPlan(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		h.logger.Error("cmd.admin-api.handlers.UploadPaymentPlan h.adminService.UploadPaymentPlan",
+			zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) UploadMainLogo(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	idStr := mux.Vars(r)["id"]
+	id, _ := strconv.Atoi(idStr)
+
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadMainLogo r.ParseMultipartForm", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	file, info, err := r.FormFile("MainLogo")
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadMainLogo r.FormFile - Error Retrieving the File", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+	defer file.Close()
+
+	err = h.adminService.UploadMainLogo(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info("cmd.admin-api.handlers.UploadMainLogo h.adminService.UploadMainLogo not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.UploadMainLogo h.adminService.UploadMainLogo",
+			zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) UploadPartnerLogo(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	idStr := mux.Vars(r)["id"]
+	id, _ := strconv.Atoi(idStr)
+
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadPartnerLogo r.ParseMultipartForm", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	file, info, err := r.FormFile("PartnerLogo")
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadPartnerLogo r.FormFile - Error Retrieving the File", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+	defer file.Close()
+
+	err = h.adminService.UploadPartnerLogo(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info("cmd.admin-api.handlers.UploadPartnerLogo h.adminService.UploadPartnerLogo not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.UploadPartnerLogo h.adminService.UploadPartnerLogo",
+			zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) UploadOurLogo(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	idStr := mux.Vars(r)["id"]
+	id, _ := strconv.Atoi(idStr)
+
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadOurLogo r.ParseMultipartForm", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	file, info, err := r.FormFile("OurLogo")
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadOurLogo r.FormFile - Error Retrieving the File", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+	defer file.Close()
+
+	err = h.adminService.UploadOurLogo(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info("cmd.admin-api.handlers.UploadOurLogo h.adminService.UploadOurLogo not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.UploadOurLogo h.adminService.UploadOurLogo",
 			zap.Error(err))
 		response = responses.InternalErr
 		return

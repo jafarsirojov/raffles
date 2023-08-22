@@ -219,10 +219,10 @@ func (s *service) UploadPaymentPlan(ctx context.Context, availabilityID int, fil
 	}
 
 	if len(strings.TrimSpace(paymentPlan)) != 0 {
-		err = os.Remove(structs.FilePathRafflesHomes + filename)
+		err = os.Remove(structs.FilePathRafflesHomes + paymentPlan)
 		if err != nil {
 			s.logger.Error("internal.admin.UploadPaymentPlan os.Remove",
-				zap.Error(err), zap.Int("availabilityID", availabilityID), zap.Any("filename", filename))
+				zap.Error(err), zap.Int("availabilityID", availabilityID), zap.Any("old filename", paymentPlan))
 		}
 	}
 
@@ -267,10 +267,151 @@ func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file
 	}
 
 	if len(strings.TrimSpace(backgroundImage)) != 0 {
-		err = os.Remove(structs.FilePathRafflesHomes + filename)
+		err = os.Remove(structs.FilePathRafflesHomes + backgroundImage)
 		if err != nil {
 			s.logger.Error("internal.admin.UploadBackgroundImage os.Remove",
-				zap.Error(err), zap.Int("landingID", landingID), zap.Any("filename", filename))
+				zap.Error(err), zap.Int("landingID", landingID), zap.Any("old file", backgroundImage))
+		}
+	}
+
+	return nil
+}
+
+func (s *service) UploadMainLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error {
+	filename := uuid.NewString() + typeName
+
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadMainLogo os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadMainLogo io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadMainLogo io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	oldFile, err := s.lendingRepo.SelectMainLogoByLandingID(ctx, landingID)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadMainLogo s.lendingRepo.SelectMainLogoByLandingID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	err = s.lendingRepo.UpdateMainLogo(ctx, landingID, filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadMainLogo s.lendingRepo.UpdateMainLogo",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	if len(strings.TrimSpace(oldFile)) != 0 {
+		err = os.Remove(structs.FilePathRafflesHomes + oldFile)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadMainLogo os.Remove",
+				zap.Error(err), zap.Int("landingID", landingID), zap.Any("old file", oldFile))
+		}
+	}
+
+	return nil
+}
+
+func (s *service) UploadPartnerLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error {
+	filename := uuid.NewString() + typeName
+
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPartnerLogo os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPartnerLogo io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPartnerLogo io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	oldFile, err := s.lendingRepo.SelectPartnerLogoByLandingID(ctx, landingID)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPartnerLogo s.lendingRepo.SelectPartnerLogoByLandingID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	err = s.lendingRepo.UpdatePartnerLogo(ctx, landingID, filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadPartnerLogo s.lendingRepo.UpdatePartnerLogo",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	if len(strings.TrimSpace(oldFile)) != 0 {
+		err = os.Remove(structs.FilePathRafflesHomes + oldFile)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadPartnerLogo os.Remove",
+				zap.Error(err), zap.Int("landingID", landingID), zap.Any("old file", oldFile))
+		}
+	}
+
+	return nil
+}
+
+func (s *service) UploadOurLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error {
+	filename := uuid.NewString() + typeName
+
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadOurLogo os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadOurLogo io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadOurLogo io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	oldFile, err := s.lendingRepo.SelectOurLogoByLandingID(ctx, landingID)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadOurLogo s.lendingRepo.SelectOurLogoByLandingID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	err = s.lendingRepo.UpdateOurLogo(ctx, landingID, filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadOurLogo s.lendingRepo.UpdateOurLogo",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	if len(strings.TrimSpace(oldFile)) != 0 {
+		err = os.Remove(structs.FilePathRafflesHomes + oldFile)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadOurLogo os.Remove",
+				zap.Error(err), zap.Int("landingID", landingID), zap.Any("old file", oldFile))
 		}
 	}
 

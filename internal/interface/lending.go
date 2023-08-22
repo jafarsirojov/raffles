@@ -15,6 +15,12 @@ type LendingAdminRepo interface {
 	UpdateLendingImages(ctx context.Context, id int, images []string) error
 	SelectBackgroundImageLandingID(ctx context.Context, id int) (backgroundImage string, err error)
 	UpdateBackgroundImage(ctx context.Context, id int, new string) error
+	SelectMainLogoByLandingID(ctx context.Context, id int) (logo string, err error)
+	UpdateMainLogo(ctx context.Context, id int, new string) error
+	SelectPartnerLogoByLandingID(ctx context.Context, id int) (logo string, err error)
+	UpdatePartnerLogo(ctx context.Context, id int, new string) error
+	SelectOurLogoByLandingID(ctx context.Context, id int) (logo string, err error)
+	UpdateOurLogo(ctx context.Context, id int, new string) error
 
 	SelectFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error)
 	SelectFeaturesAndAmenitiesByIDs(ctx context.Context, ids []int) (list []structs.FeatureOrAmenity, err error)

@@ -158,6 +158,9 @@ create table lending
     description            varchar                  not null,
     video                  varchar                  not null,
     background_image       varchar                  not null default '',
+    main_logo              varchar                  not null default '',
+    partner_logo           varchar                  not null default '',
+    our_logo               varchar                  not null default '',
     images                 text[] not null,
     created_at             timestamp with time zone not null default now(),
     updated_at             timestamp with time zone not null default now()

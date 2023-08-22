@@ -89,6 +89,9 @@ SELECT
     video,
     images,
     background_image,
+	main_logo,
+	partner_logo, 
+	our_logo,
     to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI'),
     to_char(updated_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
 FROM lending
@@ -109,6 +112,9 @@ WHERE id = $1;`, id).Scan(
 		&data.Video,
 		&data.Images,
 		&data.BackgroundImage,
+		&data.MainLogo,
+		&data.PartnerLogo,
+		&data.OurLogo,
 		&data.CreatedAt,
 		&data.UpdatedAt,
 	)
