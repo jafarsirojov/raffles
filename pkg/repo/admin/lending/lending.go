@@ -36,6 +36,7 @@ INSERT INTO lending(
     name,
     main_description,
     full_name,
+    slogan,
     address,
     starting_price_aed,
     starting_price_usd,
@@ -49,6 +50,7 @@ INSERT INTO lending(
 		data.Name,
 		data.MainDescription,
 		data.FullName,
+		data.Slogan,
 		data.Address,
 		data.StartingPrice.AED,
 		data.StartingPrice.USD,
@@ -75,6 +77,7 @@ SELECT
     name,
     main_description,
     full_name,
+    slogan,
     address,
     starting_price_aed,
     starting_price_usd,
@@ -94,6 +97,7 @@ WHERE id = $1;`, id).Scan(
 		&data.Name,
 		&data.MainDescription,
 		&data.FullName,
+		&data.Slogan,
 		&data.Address,
 		&data.StartingPrice.AED,
 		&data.StartingPrice.USD,
@@ -164,6 +168,7 @@ UPDATE lending SET
     description = $11,
     video = $12,
     main_description = $13,
+    slogan = $14,
     updated_at = now()
     WHERE id = $1`,
 		data.ID,
@@ -179,6 +184,7 @@ UPDATE lending SET
 		data.Description,
 		data.Video,
 		data.MainDescription,
+		data.Slogan,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateLending r.db.Exec", zap.Error(err))

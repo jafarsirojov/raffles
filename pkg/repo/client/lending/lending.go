@@ -5,6 +5,7 @@ import (
 	interfaces "crm/internal/interface"
 	"crm/internal/structs"
 	"crm/pkg/db"
+	"crm/pkg/errors"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -29,6 +30,39 @@ type repo struct {
 	logger *zap.Logger
 }
 
+func (r *repo) SelectLandingList(ctx context.Context) (landings []structs.LendingListMainPage, err error) {
+	rows, err := r.db.Query(ctx, `
+SELECT 
+    name,
+    main_description,
+    background_image
+FROM lending
+WHERE 1=1;`)
+	if err != nil {
+		r.logger.Error("pkg.repo.client.lending.SelectLandingList r.db.Query", zap.Error(err))
+		return nil, err
+	}
+
+	for rows.Next() {
+		var l structs.LendingListMainPage
+		err = rows.Scan(
+			&l.Name,
+			&l.MainDescription,
+			&l.BackgroundImage,
+		)
+		if err != nil {
+			r.logger.Error("pkg.repo.client.lending.SelectLandingList rows.Scan", zap.Error(err))
+			return nil, err
+		}
+	}
+
+	if len(landings) == 0 {
+		return nil, errors.ErrNotFound
+	}
+
+	return landings, nil
+}
+
 func (r *repo) SelectLendingData(ctx context.Context, id int) (data structs.Lending, err error) {
 	err = r.db.QueryRow(ctx, `
 SELECT 
@@ -36,6 +70,7 @@ SELECT
     name,
     main_description,
     full_name,
+    slogan,
     address,
     starting_price_aed,
     starting_price_usd,
@@ -53,6 +88,7 @@ WHERE id = $1;`, id).Scan(
 		&data.Name,
 		&data.MainDescription,
 		&data.FullName,
+		&data.Slogan,
 		&data.Address,
 		&data.StartingPrice.AED,
 		&data.StartingPrice.USD,

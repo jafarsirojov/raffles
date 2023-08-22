@@ -5,6 +5,7 @@ type Lending struct {
 	Name                    string
 	MainDescription         string
 	FullName                string
+	Slogan                  string
 	Address                 string
 	StartingPrice           MultiCurrency
 	ListingDetails          ListingDetails
@@ -42,11 +43,15 @@ type LendingList struct {
 	Name string
 }
 
+type ListMainPage struct {
+	List    []LendingListMainPage
+	FileURL string
+}
+
 type LendingListMainPage struct {
 	Name            string
 	MainDescription string
 	BackgroundImage string
-	FileURL         string
 }
 
 type Availability struct {
