@@ -46,7 +46,8 @@ INSERT INTO lending(
     title,
     description,
     video,
-    images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);`,
+    title_plan,
+    images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);`,
 		data.Name,
 		data.MainDescription,
 		data.FullName,
@@ -60,6 +61,7 @@ INSERT INTO lending(
 		data.Title,
 		data.Description,
 		data.Video,
+		data.TitlePlan,
 		[]string{},
 	)
 	if err != nil {
@@ -88,6 +90,7 @@ SELECT
     description,
     video,
     file_plan,
+    title_plan, 
     images,
     background_image,
 	main_logo,
@@ -112,6 +115,7 @@ WHERE id = $1;`, id).Scan(
 		&data.Description,
 		&data.Video,
 		&data.FilePlan,
+		&data.TitlePlan,
 		&data.Images,
 		&data.BackgroundImage,
 		&data.MainLogo,
@@ -177,6 +181,7 @@ UPDATE lending SET
     video = $12,
     main_description = $13,
     slogan = $14,
+    title_plan = $15,
     updated_at = now()
     WHERE id = $1`,
 		data.ID,
@@ -193,6 +198,7 @@ UPDATE lending SET
 		data.Video,
 		data.MainDescription,
 		data.Slogan,
+		data.TitlePlan,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateLending r.db.Exec", zap.Error(err))
