@@ -417,3 +417,60 @@ func (s *service) UploadOurLogo(ctx context.Context, landingID int, file multipa
 
 	return nil
 }
+
+func (s *service) AddFeatureAndAmenity(ctx context.Context, file multipart.File, typeName, featureName string) error {
+	filename := uuid.NewString() + typeName
+
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.AddFeatureAndAmenity os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.AddFeatureAndAmenity io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.AddFeatureAndAmenity io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	err = s.lendingRepo.InsertFeatureAndAmenity(ctx, filename, featureName)
+	if err != nil {
+		s.logger.Error("internal.admin.AddFeatureAndAmenity s.lendingRepo.UpdateOurLogo",
+			zap.Error(err), zap.String("featureName", featureName))
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) DeleteFeatureAndAmenity(ctx context.Context, id int) error {
+
+	list, err := s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, []int{id})
+	if err != nil {
+		s.logger.Error("internal.admin.DeleteFeatureAndAmenity s.lendingRepo.SelectFeaturesAndAmenitiesByIDs",
+			zap.Error(err), zap.Int("id", id))
+		return err
+	}
+
+	err = s.lendingRepo.DeleteFeatureAndAmenity(ctx, id)
+	if err != nil {
+		s.logger.Error("internal.admin.DeleteFeatureAndAmenity s.lendingRepo.DeleteFeatureAndAmenity",
+			zap.Error(err), zap.Int("id", id))
+		return err
+	}
+
+	err = os.Remove(structs.FilePathRafflesHomes + list[0].Name)
+	if err != nil {
+		s.logger.Error("internal.admin.DeleteFeatureAndAmenity os.Remove",
+			zap.Error(err), zap.Int("id", id), zap.Any("old file", list[0].Name))
+	}
+
+	return nil
+}

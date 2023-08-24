@@ -74,3 +74,27 @@ WHERE id = ANY ($1);`, ids)
 
 	return list, nil
 }
+
+func (r *repo) InsertFeatureAndAmenity(ctx context.Context, name, icon string) error {
+	_, err := r.db.Exec(ctx,
+		`INSERT INTO feature_or_amenity (name, icon) VALUES ($1, $2);`, name, icon)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdateOurLogo r.db.Exec",
+			zap.Error(err), zap.String("name", name), zap.String("icon", icon))
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) DeleteFeatureAndAmenity(ctx context.Context, id int) error {
+	_, err := r.db.Exec(ctx,
+		`DELETE FROM feature_or_amenity WHERE id = $1;`, id)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.DeleteFeatureAndAmenity r.db.Exec",
+			zap.Error(err), zap.Int("id", id))
+		return err
+	}
+
+	return nil
+}

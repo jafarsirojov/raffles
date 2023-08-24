@@ -473,3 +473,67 @@ func (h *handler) UploadOurLogo(w http.ResponseWriter, r *http.Request) {
 
 	response = responses.Success
 }
+
+func (h *handler) AddFeatureAndAmenity(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+
+	featureName := r.URL.Query().Get("featureName")
+
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.AddFeatureAndAmenity r.ParseMultipartForm", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	file, info, err := r.FormFile("FeatureAndAmenity")
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.AddFeatureAndAmenity r.FormFile - Error Retrieving the File", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+	defer file.Close()
+
+	err = h.adminService.AddFeatureAndAmenity(ctx, file, util.GetFileTypeByFilename(info.Filename), featureName)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info("cmd.admin-api.handlers.AddFeatureAndAmenity h.adminService.AddFeatureAndAmenity not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.AddFeatureAndAmenity h.adminService.AddFeatureAndAmenity",
+			zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) DeleteFeatureAndAmenity(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	idStr := mux.Vars(r)["id"]
+	id, _ := strconv.Atoi(idStr)
+
+	err := h.adminService.DeleteFeatureAndAmenity(ctx, id)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info(
+				"cmd.admin-api.handlers.DeleteFeatureAndAmenity h.adminService.DeleteFeatureAndAmenity not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.DeleteFeatureAndAmenity h.adminService.DeleteFeatureAndAmenity",
+			zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}

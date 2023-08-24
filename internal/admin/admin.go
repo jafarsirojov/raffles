@@ -56,13 +56,15 @@ type Service interface {
 	UploadMainLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadPartnerLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadOurLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
+	UploadPaymentPlan(ctx context.Context, availabilityID int, file multipart.File) error
 
+	AddFeatureAndAmenity(ctx context.Context, file multipart.File, typeName, featureName string) error
+	DeleteFeatureAndAmenity(ctx context.Context, id int) error
 	GetFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error)
 
 	SaveAvailability(ctx context.Context, data structs.Availability) error
 	UpdateAvailability(ctx context.Context, data structs.Availability) error
 	RemoveAvailability(ctx context.Context, id int) error
-	UploadPaymentPlan(ctx context.Context, availabilityID int, file multipart.File) error
 }
 
 type service struct {

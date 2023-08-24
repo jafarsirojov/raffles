@@ -45,12 +45,15 @@ type Handler interface {
 	UploadMainLogo(http.ResponseWriter, *http.Request)
 	UploadPartnerLogo(http.ResponseWriter, *http.Request)
 	UploadOurLogo(http.ResponseWriter, *http.Request)
+	UploadPaymentPlan(http.ResponseWriter, *http.Request)
+
 	GetFeaturesAndAmenities(http.ResponseWriter, *http.Request)
+	AddFeatureAndAmenity(http.ResponseWriter, *http.Request)
+	DeleteFeatureAndAmenity(http.ResponseWriter, *http.Request)
 
 	UpdateAvailability(http.ResponseWriter, *http.Request)
 	AddAvailability(http.ResponseWriter, *http.Request)
 	RemoveAvailability(http.ResponseWriter, *http.Request)
-	UploadPaymentPlan(http.ResponseWriter, *http.Request)
 
 	MwCheckAdminAuthToken(m middleware.Handler) middleware.Handler
 }

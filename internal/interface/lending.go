@@ -24,6 +24,8 @@ type LendingAdminRepo interface {
 
 	SelectFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error)
 	SelectFeaturesAndAmenitiesByIDs(ctx context.Context, ids []int) (list []structs.FeatureOrAmenity, err error)
+	InsertFeatureAndAmenity(ctx context.Context, name, icon string) error
+	DeleteFeatureAndAmenity(ctx context.Context, id int) error
 
 	SaveAvailability(ctx context.Context, data structs.Availability) (err error)
 	GetAvailabilitiesByLandingID(ctx context.Context, landingID int) (list []structs.Availability, err error)

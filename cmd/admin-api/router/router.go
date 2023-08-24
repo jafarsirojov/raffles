@@ -57,6 +57,8 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadImages/{count:[0-9]+}", middleware.ApplyMiddleware(params.Handler.UploadLendingImages, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteLendingImages, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/landing/featuresAndAmenities", middleware.ApplyMiddleware(params.Handler.GetFeaturesAndAmenities, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
+	router.HandleFunc(baseUrl+"/landing/featureAndAmenity", middleware.ApplyMiddleware(params.Handler.AddFeatureAndAmenity, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/landing/featureAndAmenity", middleware.ApplyMiddleware(params.Handler.DeleteFeatureAndAmenity, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadBackgroundImage", middleware.ApplyMiddleware(params.Handler.UploadBackgroundImage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadMainLogo", middleware.ApplyMiddleware(params.Handler.UploadMainLogo, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadPartnerLogo", middleware.ApplyMiddleware(params.Handler.UploadPartnerLogo, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
