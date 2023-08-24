@@ -318,7 +318,7 @@ func (h *handler) RemoveAvailability(w http.ResponseWriter, r *http.Request) {
 	response = responses.Success
 }
 
-func (h *handler) UploadPaymentPlan(w http.ResponseWriter, r *http.Request) {
+func (h *handler) UploadFilePlan(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -328,27 +328,27 @@ func (h *handler) UploadPaymentPlan(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UploadPaymentPlan r.ParseMultipartForm", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadFilePlan r.ParseMultipartForm", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
 
-	file, _, err := r.FormFile("PaymentPlan")
+	file, _, err := r.FormFile("FilePlan")
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UploadPaymentPlan r.FormFile - Error Retrieving the File", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadFilePlan r.FormFile - Error Retrieving the File", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
 	defer file.Close()
 
-	err = h.adminService.UploadPaymentPlan(ctx, id, file)
+	err = h.adminService.UploadFilePlan(ctx, id, file)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.UploadPaymentPlan h.adminService.UploadPaymentPlan not found")
+			h.logger.Info("cmd.admin-api.handlers.UploadFilePlan h.adminService.UploadFilePlan not found")
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.UploadPaymentPlan h.adminService.UploadPaymentPlan",
+		h.logger.Error("cmd.admin-api.handlers.UploadFilePlan h.adminService.UploadFilePlan",
 			zap.Error(err))
 		response = responses.InternalErr
 		return

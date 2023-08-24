@@ -136,7 +136,6 @@ create table availability
     area         varchar                  not null,
     plot         varchar                  not null,
     special_gift varchar                  not null,
-    payment_plan varchar                  not null default '',
     created_at   timestamp with time zone not null default now(),
     updated_at   timestamp with time zone not null default now()
 );
@@ -157,6 +156,7 @@ create table lending
     title                  varchar                  not null,
     description            varchar                  not null,
     video                  varchar                  not null,
+    file_plan              varchar                  not null default '',
     background_image       varchar                  not null default '',
     main_logo              varchar                  not null default '',
     partner_logo           varchar                  not null default '',

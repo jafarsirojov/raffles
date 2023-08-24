@@ -56,7 +56,7 @@ type Service interface {
 	UploadMainLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadPartnerLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadOurLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
-	UploadPaymentPlan(ctx context.Context, availabilityID int, file multipart.File) error
+	UploadFilePlan(ctx context.Context, availabilityID int, file multipart.File) error
 
 	AddFeatureAndAmenity(ctx context.Context, file multipart.File, typeName, featureName string) error
 	DeleteFeatureAndAmenity(ctx context.Context, id int) error

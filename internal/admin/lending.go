@@ -181,39 +181,39 @@ func (s *service) GetFeaturesAndAmenities(ctx context.Context) (list []structs.F
 	return list, nil
 }
 
-func (s *service) UploadPaymentPlan(ctx context.Context, availabilityID int, file multipart.File) error {
+func (s *service) UploadFilePlan(ctx context.Context, availabilityID int, file multipart.File) error {
 	newUUID := uuid.NewString()
 	filename := newUUID + ".pdf"
 
 	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadPaymentPlan os.Create", zap.Error(err))
+		s.logger.Error("internal.admin.UploadFilePlan os.Create", zap.Error(err))
 		return err
 	}
 	defer newFile.Close()
 
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadPaymentPlan io.ReadAll", zap.Error(err))
+		s.logger.Error("internal.admin.UploadFilePlan io.ReadAll", zap.Error(err))
 		return err
 	}
 
 	_, err = newFile.Write(fileBytes)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadPaymentPlan io.ReadAll", zap.Error(err))
+		s.logger.Error("internal.admin.UploadFilePlan io.ReadAll", zap.Error(err))
 		return err
 	}
 
-	paymentPlan, err := s.lendingRepo.SelectPaymentPlanByAvailabilityID(ctx, availabilityID)
+	paymentPlan, err := s.lendingRepo.SelectFilePlanByLandingID(ctx, availabilityID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadPaymentPlan s.lendingRepo.SelectPaymentPlanByAvailabilityID",
+		s.logger.Error("internal.admin.UploadFilePlan s.lendingRepo.SelectFilePlanByLandingID",
 			zap.Error(err), zap.Int("availabilityID", availabilityID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdatePaymentPlan(ctx, availabilityID, filename)
+	err = s.lendingRepo.UpdateFilePlan(ctx, availabilityID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadPaymentPlan s.lendingRepo.UpdatePaymentPlan",
+		s.logger.Error("internal.admin.UploadFilePlan s.lendingRepo.UpdateFilePlan",
 			zap.Error(err), zap.Int("availabilityID", availabilityID))
 		return err
 	}
@@ -221,7 +221,7 @@ func (s *service) UploadPaymentPlan(ctx context.Context, availabilityID int, fil
 	if len(strings.TrimSpace(paymentPlan)) != 0 {
 		err = os.Remove(structs.FilePathRafflesHomes + paymentPlan)
 		if err != nil {
-			s.logger.Error("internal.admin.UploadPaymentPlan os.Remove",
+			s.logger.Error("internal.admin.UploadFilePlan os.Remove",
 				zap.Error(err), zap.Int("availabilityID", availabilityID), zap.Any("old filename", paymentPlan))
 		}
 	}

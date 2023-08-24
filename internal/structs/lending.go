@@ -14,6 +14,7 @@ type Lending struct {
 	Title                   string
 	Description             string
 	Video                   string
+	FilePlan                string
 	BackgroundImage         string
 	MainLogo                string
 	PartnerLogo             string
@@ -36,6 +37,7 @@ type LendingData struct {
 	Title                string
 	Description          string
 	Video                string
+	FilePlan             string
 	BackgroundImage      string
 	MainLogo             string
 	PartnerLogo          string
@@ -71,7 +73,6 @@ type Availability struct {
 	Area        string
 	Plot        string
 	SpecialGift string
-	PaymentPlan string
 }
 
 type MultiCurrency struct {

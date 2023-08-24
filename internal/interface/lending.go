@@ -31,8 +31,8 @@ type LendingAdminRepo interface {
 	GetAvailabilitiesByLandingID(ctx context.Context, landingID int) (list []structs.Availability, err error)
 	UpdateAvailability(ctx context.Context, data structs.Availability) (err error)
 	DeleteAvailability(ctx context.Context, id int) (err error)
-	SelectPaymentPlanByAvailabilityID(ctx context.Context, id int) (paymentPlan string, err error)
-	UpdatePaymentPlan(ctx context.Context, id int, new string) error
+	SelectFilePlanByLandingID(ctx context.Context, id int) (paymentPlan string, err error)
+	UpdateFilePlan(ctx context.Context, id int, new string) error
 }
 
 type LendingClientRepo interface {

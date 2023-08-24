@@ -87,6 +87,7 @@ SELECT
     title,
     description,
     video,
+    file_plan,
     images,
     background_image,
 	main_logo,
@@ -110,6 +111,7 @@ WHERE id = $1;`, id).Scan(
 		&data.Title,
 		&data.Description,
 		&data.Video,
+		&data.FilePlan,
 		&data.Images,
 		&data.BackgroundImage,
 		&data.MainLogo,
@@ -194,6 +196,30 @@ UPDATE lending SET
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateLending r.db.Exec", zap.Error(err))
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) SelectFilePlanByLandingID(ctx context.Context, id int) (paymentPlan string, err error) {
+	err = r.db.QueryRow(ctx,
+		`SELECT file_plan FROM lending WHERE id = $1;`, id).Scan(&paymentPlan)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SelectFilePlanByLandingID r.db.QueryRow",
+			zap.Error(err), zap.Int("id", id))
+		return paymentPlan, err
+	}
+
+	return paymentPlan, nil
+}
+
+func (r *repo) UpdateFilePlan(ctx context.Context, id int, new string) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE lending SET file_plan = $2, updated_at = now() WHERE id = $1;`, id, new)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdateFilePlan r.db.Exec",
+			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
 		return err
 	}
 
