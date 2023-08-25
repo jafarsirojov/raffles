@@ -32,12 +32,13 @@ type repo struct {
 
 func (r *repo) SelectLandingList(ctx context.Context) (landings []structs.LendingListMainPage, err error) {
 	rows, err := r.db.Query(ctx, `
-SELECT 
-    name,
-    main_description,
-    background_image
-FROM lending
-WHERE 1=1;`)
+SELECT l.name,
+       l.main_description,
+       l.background_image,
+       sk.key
+FROM lending l
+         JOIN service_keys sk on l.id = sk.lending_id
+WHERE 1 = 1;`)
 	if err != nil {
 		r.logger.Error("pkg.repo.client.lending.SelectLandingList r.db.Query", zap.Error(err))
 		return nil, err
@@ -49,11 +50,14 @@ WHERE 1=1;`)
 			&l.Name,
 			&l.MainDescription,
 			&l.BackgroundImage,
+			&l.Key,
 		)
 		if err != nil {
 			r.logger.Error("pkg.repo.client.lending.SelectLandingList rows.Scan", zap.Error(err))
 			return nil, err
 		}
+
+		landings = append(landings, l)
 	}
 
 	if len(landings) == 0 {

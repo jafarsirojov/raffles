@@ -63,6 +63,7 @@ type LendingListMainPage struct {
 	Name            string
 	MainDescription string
 	BackgroundImage string
+	Key             string
 }
 
 type Availability struct {
@@ -88,7 +89,7 @@ type ListingDetails struct {
 }
 
 type FeatureOrAmenity struct {
-	ID   int
+	ID   int `json:"ID,omitempty"`
 	Icon string
 	Name string
 }
