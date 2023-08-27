@@ -163,6 +163,8 @@ create table lending
     partner_logo           varchar                  not null default '',
     our_logo               varchar                  not null default '',
     images                 text[] not null,
+    latitude               varchar                  not null,
+    longitude              varchar                  not null,
     created_at             timestamp with time zone not null default now(),
     updated_at             timestamp with time zone not null default now()
 );

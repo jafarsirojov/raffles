@@ -22,6 +22,8 @@ type Lending struct {
 	OurLogo                 string
 	Images                  []string
 	Availabilities          []Availability
+	Latitude                string
+	Longitude               string
 	CreatedAt               string
 	UpdatedAt               string
 }
@@ -46,6 +48,8 @@ type LendingData struct {
 	OurLogo              string
 	Images               []string
 	Availabilities       []Availability
+	Latitude             string
+	Longitude            string
 	FileURL              string
 }
 

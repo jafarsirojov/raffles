@@ -60,6 +60,8 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	data.MainLogo = lending.MainLogo
 	data.PartnerLogo = lending.PartnerLogo
 	data.OurLogo = lending.OurLogo
+	data.Latitude = lending.Latitude
+	data.Longitude = lending.Longitude
 
 	data.FeaturesAndAmenities, err = s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, lending.FeaturesAndAmenitiesIDs)
 	if err != nil {
