@@ -48,6 +48,8 @@ type Handler interface {
 	UploadOurLogo(http.ResponseWriter, *http.Request)
 	UploadFilePlan(http.ResponseWriter, *http.Request)
 
+	Upload(http.ResponseWriter, *http.Request)
+
 	GetFeaturesAndAmenities(http.ResponseWriter, *http.Request)
 	AddFeatureAndAmenity(http.ResponseWriter, *http.Request)
 	DeleteFeatureAndAmenity(http.ResponseWriter, *http.Request)

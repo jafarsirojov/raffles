@@ -207,6 +207,159 @@ func (h *handler) GetFeaturesAndAmenities(w http.ResponseWriter, r *http.Request
 	response.Payload = estate
 }
 
+const (
+	BackgroundImage     = "BackgroundImage"
+	BackgroundForMobile = "BackgroundForMobile"
+	FilePlan            = "FilePlan"
+	MainLogo            = "MainLogo"
+	PartnerLogo         = "PartnerLogo"
+	OurLogo             = "OurLogo"
+)
+
+func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	idStr := mux.Vars(r)["id"]
+	id, _ := strconv.Atoi(idStr)
+
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.Upload r.ParseMultipartForm", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	keys := []string{BackgroundImage, BackgroundForMobile, FilePlan, MainLogo, PartnerLogo, OurLogo}
+	var file multipart.File
+	var info *multipart.FileHeader
+	var methodKey string
+	for _, key := range keys {
+		file, info, err = r.FormFile(key)
+		if err == nil {
+			methodKey = key
+			break
+		}
+	}
+	defer file.Close()
+
+	if len(methodKey) == 0 {
+		h.logger.Error("cmd.admin-api.handlers.Upload r.FormFile - Error Retrieving the File", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	switch methodKey {
+	case BackgroundImage:
+		err = h.adminService.UploadBackgroundImage(ctx, id, file)
+		if err != nil {
+			if err == errors.ErrNotFound {
+				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadBackgroundImage not found")
+				response = responses.NotFound
+				return
+			}
+			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadBackgroundImage",
+				zap.Error(err))
+			response = responses.InternalErr
+			return
+		}
+
+		response = responses.Success
+		return
+
+	case BackgroundForMobile:
+		err = h.adminService.UploadBackgroundForMobile(ctx, id, file)
+		if err != nil {
+			if err == errors.ErrNotFound {
+				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadBackgroundForMobile not found")
+				response = responses.NotFound
+				return
+			}
+			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadBackgroundForMobile",
+				zap.Error(err))
+			response = responses.InternalErr
+			return
+		}
+
+		response = responses.Success
+		return
+
+	case FilePlan:
+		err = h.adminService.UploadFilePlan(ctx, id, file)
+		if err != nil {
+			if err == errors.ErrNotFound {
+				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadFilePlan not found")
+				response = responses.NotFound
+				return
+			}
+			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadFilePlan",
+				zap.Error(err))
+			response = responses.InternalErr
+			return
+		}
+
+		response = responses.Success
+		return
+
+	case MainLogo:
+		err = h.adminService.UploadMainLogo(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
+		if err != nil {
+			if err == errors.ErrNotFound {
+				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadMainLogo not found")
+				response = responses.NotFound
+				return
+			}
+			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadMainLogo",
+				zap.Error(err))
+			response = responses.InternalErr
+			return
+		}
+
+		response = responses.Success
+		return
+
+	case PartnerLogo:
+		err = h.adminService.UploadPartnerLogo(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
+		if err != nil {
+			if err == errors.ErrNotFound {
+				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadPartnerLogo not found")
+				response = responses.NotFound
+				return
+			}
+			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadPartnerLogo",
+				zap.Error(err))
+			response = responses.InternalErr
+			return
+		}
+
+		response = responses.Success
+		return
+
+	case OurLogo:
+		err = h.adminService.UploadOurLogo(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
+		if err != nil {
+			if err == errors.ErrNotFound {
+				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadOurLogo not found")
+				response = responses.NotFound
+				return
+			}
+			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadOurLogo",
+				zap.Error(err))
+			response = responses.InternalErr
+			return
+		}
+
+		response = responses.Success
+		return
+
+	default:
+		h.logger.Error("cmd.admin-api.handlers.Upload not found file")
+		response = responses.BadRequest
+		return
+	}
+}
+
 func (h *handler) UploadBackgroundImage(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
