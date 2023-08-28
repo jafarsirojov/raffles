@@ -68,17 +68,15 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	if err != nil {
 		s.logger.Error("internal.client.GetLendingData s.lendingRepo.SelectFeaturesAndAmenitiesByIDs",
 			zap.Error(err), zap.Any("lending.FeaturesAndAmenitiesIDs", lending.FeaturesAndAmenitiesIDs))
-		return data, err
 	}
 
 	data.Availabilities, err = s.lendingRepo.GetAvailabilitiesByLandingID(ctx, id)
 	if err != nil {
 		s.logger.Error("internal.client.GetLendingData s.lendingRepo.GetAvailabilitiesByLandingID",
 			zap.Error(err), zap.Any("lending.FeaturesAndAmenitiesIDs", lending.FeaturesAndAmenitiesIDs))
-		return data, err
 	}
 
 	data.FileURL = structs.FileBaseURLPathRafflesHomes
 
-	return data, err
+	return data, nil
 }
