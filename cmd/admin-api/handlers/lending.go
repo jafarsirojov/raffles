@@ -118,7 +118,7 @@ func (h *handler) UploadLendingImages(w http.ResponseWriter, r *http.Request) {
 	countImagesStr := mux.Vars(r)["count"]
 	countImages, _ := strconv.Atoi(countImagesStr)
 
-	err := r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(30 << 20)
 	if err != nil {
 		h.logger.Error("cmd.admin-api.handlers.UploadLendingImages r.ParseMultipartForm", zap.Error(err))
 		response = responses.BadRequest
@@ -238,6 +238,45 @@ func (h *handler) UploadBackgroundImage(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 		h.logger.Error("cmd.admin-api.handlers.UploadBackgroundImage h.adminService.UploadBackgroundImage",
+			zap.Error(err))
+		response = responses.InternalErr
+		return
+	}
+
+	response = responses.Success
+}
+
+func (h *handler) UploadBackgroundForMobile(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+	idStr := mux.Vars(r)["id"]
+	id, _ := strconv.Atoi(idStr)
+
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadBackgroundForMobile r.ParseMultipartForm", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+
+	file, _, err := r.FormFile("BackgroundForMobile")
+	if err != nil {
+		h.logger.Error("cmd.admin-api.handlers.UploadBackgroundForMobile r.FormFile - Error Retrieving the File", zap.Error(err))
+		response = responses.BadRequest
+		return
+	}
+	defer file.Close()
+
+	err = h.adminService.UploadBackgroundForMobile(ctx, id, file)
+	if err != nil {
+		if err == errors.ErrNotFound {
+			h.logger.Info("cmd.admin-api.handlers.UploadBackgroundForMobile h.adminService.UploadBackgroundForMobile not found")
+			response = responses.NotFound
+			return
+		}
+		h.logger.Error("cmd.admin-api.handlers.UploadBackgroundForMobile h.adminService.UploadBackgroundForMobile",
 			zap.Error(err))
 		response = responses.InternalErr
 		return

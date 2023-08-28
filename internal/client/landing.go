@@ -57,6 +57,7 @@ func (s *service) GetLendingData(ctx context.Context, key string) (data structs.
 	data.TitlePlan = lending.TitlePlan
 	data.Images = lending.Images
 	data.BackgroundImage = lending.BackgroundImage
+	data.BackgroundForMobile = lending.BackgroundForMobile
 	data.MainLogo = lending.MainLogo
 	data.PartnerLogo = lending.PartnerLogo
 	data.OurLogo = lending.OurLogo

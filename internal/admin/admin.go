@@ -53,6 +53,7 @@ type Service interface {
 	UploadLendingImages(ctx context.Context, id int, files []multipart.File) error
 	DeleteLendingImages(ctx context.Context, id int, imageName string) error
 	UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File) error
+	UploadBackgroundForMobile(ctx context.Context, landingID int, file multipart.File) error
 	UploadMainLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadPartnerLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadOurLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error

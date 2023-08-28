@@ -252,9 +252,9 @@ func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file
 		return err
 	}
 
-	backgroundImage, err := s.lendingRepo.SelectBackgroundImageLandingID(ctx, landingID)
+	backgroundImage, err := s.lendingRepo.SelectBackgroundImageByLandingID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadBackgroundImage s.lendingRepo.SelectBackgroundImageLandingID",
+		s.logger.Error("internal.admin.UploadBackgroundImage s.lendingRepo.SelectBackgroundImageByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
@@ -270,6 +270,54 @@ func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file
 		err = os.Remove(structs.FilePathRafflesHomes + backgroundImage)
 		if err != nil {
 			s.logger.Error("internal.admin.UploadBackgroundImage os.Remove",
+				zap.Error(err), zap.Int("landingID", landingID), zap.Any("old file", backgroundImage))
+		}
+	}
+
+	return nil
+}
+
+func (s *service) UploadBackgroundForMobile(ctx context.Context, landingID int, file multipart.File) error {
+	newUUID := uuid.NewString()
+	filename := newUUID + ".png"
+
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundForMobile os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundForMobile io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundForMobile io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	backgroundImage, err := s.lendingRepo.SelectBackgroundForMobileByLandingID(ctx, landingID)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundForMobile s.lendingRepo.SelectBackgroundForMobileByLandingID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	err = s.lendingRepo.UpdateBackgroundForMobile(ctx, landingID, filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadBackgroundForMobile s.lendingRepo.UpdateBackgroundForMobile",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	if len(strings.TrimSpace(backgroundImage)) != 0 {
+		err = os.Remove(structs.FilePathRafflesHomes + backgroundImage)
+		if err != nil {
+			s.logger.Error("internal.admin.UploadBackgroundForMobile os.Remove",
 				zap.Error(err), zap.Int("landingID", landingID), zap.Any("old file", backgroundImage))
 		}
 	}

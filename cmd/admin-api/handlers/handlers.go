@@ -42,6 +42,7 @@ type Handler interface {
 	UploadLendingImages(http.ResponseWriter, *http.Request)
 	DeleteLendingImages(http.ResponseWriter, *http.Request)
 	UploadBackgroundImage(http.ResponseWriter, *http.Request)
+	UploadBackgroundForMobile(http.ResponseWriter, *http.Request)
 	UploadMainLogo(http.ResponseWriter, *http.Request)
 	UploadPartnerLogo(http.ResponseWriter, *http.Request)
 	UploadOurLogo(http.ResponseWriter, *http.Request)

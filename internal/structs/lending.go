@@ -17,6 +17,7 @@ type Lending struct {
 	FilePlan                string
 	TitlePlan               string
 	BackgroundImage         string
+	BackgroundForMobile     string
 	MainLogo                string
 	PartnerLogo             string
 	OurLogo                 string
@@ -43,6 +44,7 @@ type LendingData struct {
 	FilePlan             string
 	TitlePlan            string
 	BackgroundImage      string
+	BackgroundForMobile  string
 	MainLogo             string
 	PartnerLogo          string
 	OurLogo              string

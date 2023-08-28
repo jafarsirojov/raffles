@@ -27,11 +27,11 @@ func (r *repo) UpdateLendingImages(ctx context.Context, id int, images []string)
 	return nil
 }
 
-func (r *repo) SelectBackgroundImageLandingID(ctx context.Context, id int) (backgroundImage string, err error) {
+func (r *repo) SelectBackgroundImageByLandingID(ctx context.Context, id int) (backgroundImage string, err error) {
 	err = r.db.QueryRow(ctx,
 		`SELECT background_image FROM lending WHERE id = $1;`, id).Scan(&backgroundImage)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.SelectBackgroundImageLandingID r.db.QueryRow",
+		r.logger.Error("pkg.repo.admin.lending.SelectBackgroundImageByLandingID r.db.QueryRow",
 			zap.Error(err), zap.Int("id", id))
 		return backgroundImage, err
 	}
@@ -44,6 +44,30 @@ func (r *repo) UpdateBackgroundImage(ctx context.Context, id int, new string) er
 		`UPDATE lending SET background_image = $2, updated_at = now() WHERE id = $1;`, id, new)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateBackgroundImage r.db.Exec",
+			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) SelectBackgroundForMobileByLandingID(ctx context.Context, id int) (backgroundImage string, err error) {
+	err = r.db.QueryRow(ctx,
+		`SELECT background_for_mobile FROM lending WHERE id = $1;`, id).Scan(&backgroundImage)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SelectBackgroundForMobileByLandingID r.db.QueryRow",
+			zap.Error(err), zap.Int("id", id))
+		return backgroundImage, err
+	}
+
+	return backgroundImage, nil
+}
+
+func (r *repo) UpdateBackgroundForMobile(ctx context.Context, id int, new string) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE lending SET background_for_mobile = $2, updated_at = now() WHERE id = $1;`, id, new)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdateBackgroundForMobile r.db.Exec",
 			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
 		return err
 	}
