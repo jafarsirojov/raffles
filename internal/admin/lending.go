@@ -486,7 +486,7 @@ func (s *service) AddFeatureAndAmenity(ctx context.Context, file multipart.File,
 		return err
 	}
 
-	err = s.lendingRepo.InsertFeatureAndAmenity(ctx, filename, featureName)
+	err = s.lendingRepo.InsertFeatureAndAmenity(ctx, featureName, filename)
 	if err != nil {
 		s.logger.Error("internal.admin.AddFeatureAndAmenity s.lendingRepo.UpdateOurLogo",
 			zap.Error(err), zap.String("featureName", featureName))
