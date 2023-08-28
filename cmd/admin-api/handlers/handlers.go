@@ -49,6 +49,7 @@ type Handler interface {
 	UploadFilePlan(http.ResponseWriter, *http.Request)
 
 	Upload(http.ResponseWriter, *http.Request)
+	GetFileURL(http.ResponseWriter, *http.Request)
 
 	GetFeaturesAndAmenities(http.ResponseWriter, *http.Request)
 	AddFeatureAndAmenity(http.ResponseWriter, *http.Request)

@@ -520,3 +520,7 @@ func (s *service) DeleteFeatureAndAmenity(ctx context.Context, id int) error {
 
 	return nil
 }
+
+func (s *service) GetFileURL(ctx context.Context) string {
+	return structs.FileBaseURLPathRafflesHomes
+}

@@ -360,6 +360,17 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *handler) GetFileURL(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+	var ctx = r.Context()
+
+	url := h.adminService.GetFileURL(ctx)
+
+	response = responses.Success
+	response.Payload = struct{ URL string }{URL: url}
+}
+
 func (h *handler) UploadBackgroundImage(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
