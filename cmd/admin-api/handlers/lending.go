@@ -242,13 +242,13 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	defer file.Close()
 
 	if len(methodKey) == 0 {
 		h.logger.Error("cmd.admin-api.handlers.Upload r.FormFile - Error Retrieving the File", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
+	defer file.Close()
 
 	switch methodKey {
 	case BackgroundImage:
