@@ -179,9 +179,8 @@ func (s *service) GetFeaturesAndAmenities(ctx context.Context) (list []structs.F
 	return list, nil
 }
 
-func (s *service) UploadFilePlan(ctx context.Context, availabilityID int, file multipart.File) error {
-	newUUID := uuid.NewString()
-	filename := newUUID + ".pdf"
+func (s *service) UploadFilePlan(ctx context.Context, availabilityID int, file multipart.File, typeName string) error {
+	filename := uuid.NewString() + typeName
 
 	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
 	if err != nil {
@@ -227,9 +226,8 @@ func (s *service) UploadFilePlan(ctx context.Context, availabilityID int, file m
 	return nil
 }
 
-func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File) error {
-	newUUID := uuid.NewString()
-	filename := newUUID + ".png"
+func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File, typeName string) error {
+	filename := uuid.NewString() + typeName
 
 	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
 	if err != nil {
@@ -275,9 +273,8 @@ func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file
 	return nil
 }
 
-func (s *service) UploadBackgroundForMobile(ctx context.Context, landingID int, file multipart.File) error {
-	newUUID := uuid.NewString()
-	filename := newUUID + ".png"
+func (s *service) UploadBackgroundForMobile(ctx context.Context, landingID int, file multipart.File, typeName string) error {
+	filename := uuid.NewString() + typeName
 
 	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
 	if err != nil {

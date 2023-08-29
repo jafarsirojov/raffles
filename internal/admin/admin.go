@@ -52,12 +52,12 @@ type Service interface {
 	GetLendingList(ctx context.Context) (list []structs.LendingList, err error)
 	UploadLendingImages(ctx context.Context, id int, files []multipart.File) error
 	DeleteLendingImages(ctx context.Context, id int, imageName string) error
-	UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File) error
-	UploadBackgroundForMobile(ctx context.Context, landingID int, file multipart.File) error
+	UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File, typeName string) error
+	UploadBackgroundForMobile(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadMainLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadPartnerLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadOurLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
-	UploadFilePlan(ctx context.Context, availabilityID int, file multipart.File) error
+	UploadFilePlan(ctx context.Context, availabilityID int, file multipart.File, typeName string) error
 	GetFileURL(ctx context.Context) string
 	GetSpecialGiftIcons(ctx context.Context) []structs.SpecialGiftIcon
 

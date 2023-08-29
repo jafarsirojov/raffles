@@ -252,7 +252,7 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 
 	switch methodKey {
 	case BackgroundImage:
-		err = h.adminService.UploadBackgroundImage(ctx, id, file)
+		err = h.adminService.UploadBackgroundImage(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
 		if err != nil {
 			if err == errors.ErrNotFound {
 				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadBackgroundImage not found")
@@ -269,7 +269,7 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case BackgroundForMobile:
-		err = h.adminService.UploadBackgroundForMobile(ctx, id, file)
+		err = h.adminService.UploadBackgroundForMobile(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
 		if err != nil {
 			if err == errors.ErrNotFound {
 				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadBackgroundForMobile not found")
@@ -286,7 +286,7 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 
 	case FilePlan:
-		err = h.adminService.UploadFilePlan(ctx, id, file)
+		err = h.adminService.UploadFilePlan(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
 		if err != nil {
 			if err == errors.ErrNotFound {
 				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadFilePlan not found")
@@ -386,7 +386,7 @@ func (h *handler) UploadBackgroundImage(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	file, _, err := r.FormFile("BackgroundImage")
+	file, info, err := r.FormFile("BackgroundImage")
 	if err != nil {
 		h.logger.Error("cmd.admin-api.handlers.UploadBackgroundImage r.FormFile - Error Retrieving the File", zap.Error(err))
 		response = responses.BadRequest
@@ -394,7 +394,7 @@ func (h *handler) UploadBackgroundImage(w http.ResponseWriter, r *http.Request) 
 	}
 	defer file.Close()
 
-	err = h.adminService.UploadBackgroundImage(ctx, id, file)
+	err = h.adminService.UploadBackgroundImage(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.admin-api.handlers.UploadBackgroundImage h.adminService.UploadBackgroundImage not found")
@@ -425,7 +425,7 @@ func (h *handler) UploadBackgroundForMobile(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	file, _, err := r.FormFile("BackgroundForMobile")
+	file, info, err := r.FormFile("BackgroundForMobile")
 	if err != nil {
 		h.logger.Error("cmd.admin-api.handlers.UploadBackgroundForMobile r.FormFile - Error Retrieving the File", zap.Error(err))
 		response = responses.BadRequest
@@ -433,7 +433,7 @@ func (h *handler) UploadBackgroundForMobile(w http.ResponseWriter, r *http.Reque
 	}
 	defer file.Close()
 
-	err = h.adminService.UploadBackgroundForMobile(ctx, id, file)
+	err = h.adminService.UploadBackgroundForMobile(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.admin-api.handlers.UploadBackgroundForMobile h.adminService.UploadBackgroundForMobile not found")
@@ -536,7 +536,7 @@ func (h *handler) UploadFilePlan(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	file, _, err := r.FormFile("FilePlan")
+	file, info, err := r.FormFile("FilePlan")
 	if err != nil {
 		h.logger.Error("cmd.admin-api.handlers.UploadFilePlan r.FormFile - Error Retrieving the File", zap.Error(err))
 		response = responses.BadRequest
@@ -544,7 +544,7 @@ func (h *handler) UploadFilePlan(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	err = h.adminService.UploadFilePlan(ctx, id, file)
+	err = h.adminService.UploadFilePlan(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.admin-api.handlers.UploadFilePlan h.adminService.UploadFilePlan not found")
