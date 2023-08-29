@@ -126,18 +126,19 @@ create table favorite
 
 create table availability
 (
-    id           bigserial                not null primary key,
-    lending_id   integer                  not null,
-    price_aed    integer                  not null,
-    price_usd    integer                  not null,
-    unique_id    varchar                  not null,
-    bedroom      integer                  not null,
-    parking      integer                  not null,
-    area         varchar                  not null,
-    plot         varchar                  not null,
-    special_gift varchar                  not null,
-    created_at   timestamp with time zone not null default now(),
-    updated_at   timestamp with time zone not null default now()
+    id                bigserial                not null primary key,
+    lending_id        integer                  not null,
+    price_aed         integer                  not null,
+    price_usd         integer                  not null,
+    unique_id         varchar                  not null,
+    bedroom           integer                  not null,
+    parking           integer                  not null,
+    area              varchar                  not null,
+    plot              varchar                  not null,
+    special_gift      varchar                  not null,
+    special_gift_icon varchar                  not null,
+    created_at        timestamp with time zone not null default now(),
+    updated_at        timestamp with time zone not null default now()
 );
 
 create table lending

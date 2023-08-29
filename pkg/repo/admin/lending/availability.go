@@ -18,7 +18,8 @@ INSERT INTO availability(
     parking,
     area,
     plot,
-    special_gift) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);`,
+    special_gift,
+    special_gift_icon) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`,
 		data.LendingID,
 		data.Price.AED,
 		data.Price.USD,
@@ -28,6 +29,7 @@ INSERT INTO availability(
 		data.Area,
 		data.Plot,
 		data.SpecialGift,
+		data.SpecialGiftIcon,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.SaveAvailability r.db.Exec", zap.Error(err))
@@ -49,7 +51,8 @@ SELECT
     parking,
     area,
     plot,
-    special_gift
+    special_gift,
+    special_gift_icon
 FROM availability
 WHERE lending_id = $1;`, landingID)
 	if err != nil {
@@ -70,6 +73,7 @@ WHERE lending_id = $1;`, landingID)
 			&a.Area,
 			&a.Plot,
 			&a.SpecialGift,
+			&a.SpecialGiftIcon,
 		)
 		if err != nil {
 			r.logger.Error("pkg.repo.admin.lending.GetAvailabilitiesByLandingID rows.Scan()", zap.Error(err))
@@ -98,6 +102,7 @@ UPDATE availability SET
     area = $8,
     plot = $9,
     special_gift = $10,
+    special_gift_icon = $11,
     updated_at = now()
     WHERE id = $1`,
 		data.ID,
@@ -110,6 +115,7 @@ UPDATE availability SET
 		data.Area,
 		data.Plot,
 		data.SpecialGift,
+		data.SpecialGiftIcon,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateAvailability r.db.Exec", zap.Error(err))

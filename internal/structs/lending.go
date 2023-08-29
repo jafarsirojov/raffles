@@ -73,15 +73,16 @@ type LendingListMainPage struct {
 }
 
 type Availability struct {
-	ID          int
-	LendingID   int
-	Price       MultiCurrency
-	UniqueID    string
-	Bedroom     int
-	Parking     int
-	Area        string
-	Plot        string
-	SpecialGift string
+	ID              int
+	LendingID       int
+	Price           MultiCurrency
+	UniqueID        string
+	Bedroom         int
+	Parking         int
+	Area            string
+	Plot            string
+	SpecialGift     string
+	SpecialGiftIcon string
 }
 
 type SpecialGiftIcon struct {
