@@ -503,15 +503,7 @@ func (h *handler) RemoveAvailability(w http.ResponseWriter, r *http.Request) {
 	idStr := mux.Vars(r)["id"]
 	id, _ := strconv.Atoi(idStr)
 
-	var request structs.Availability
-	err := json.NewDecoder(r.Body).Decode(&request)
-	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.RemoveAvailability json.NewDecoder", zap.Error(err))
-		response = responses.BadRequest
-		return
-	}
-
-	err = h.adminService.RemoveAvailability(ctx, id)
+	err := h.adminService.RemoveAvailability(ctx, id)
 	if err != nil {
 		h.logger.Error("cmd.admin-api.handlers.RemoveAvailability h.adminService.RemoveAvailability", zap.Error(err))
 		response = responses.InternalErr
