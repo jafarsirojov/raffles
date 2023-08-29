@@ -524,3 +524,15 @@ func (s *service) DeleteFeatureAndAmenity(ctx context.Context, id int) error {
 func (s *service) GetFileURL(ctx context.Context) string {
 	return structs.FileBaseURLPathRafflesHomes
 }
+
+func (s *service) GetSpecialGiftIcons(ctx context.Context) []structs.SpecialGiftIcon {
+	return []structs.SpecialGiftIcon{
+		{
+			Gift: "Car",
+			Icon: "car.svg",
+		}, {
+			Gift: "Rolex",
+			Icon: "rolex.svg",
+		},
+	}
+}

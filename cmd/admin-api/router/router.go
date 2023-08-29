@@ -69,6 +69,7 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/landing/availability/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.RemoveAvailability, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadFilePlan", middleware.ApplyMiddleware(params.Handler.UploadFilePlan, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 
+	router.HandleFunc(baseUrl+"/landing/specialGiftIcons", middleware.ApplyMiddleware(params.Handler.GetSpecialGiftIcons, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/landing/fileURL", middleware.ApplyMiddleware(params.Handler.GetFileURL, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/upload", middleware.ApplyMiddleware(params.Handler.Upload, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 

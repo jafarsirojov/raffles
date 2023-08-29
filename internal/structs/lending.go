@@ -84,6 +84,11 @@ type Availability struct {
 	SpecialGift string
 }
 
+type SpecialGiftIcon struct {
+	Gift string
+	Icon string
+}
+
 type MultiCurrency struct {
 	AED int
 	USD int

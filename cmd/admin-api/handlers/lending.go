@@ -740,3 +740,15 @@ func (h *handler) DeleteFeatureAndAmenity(w http.ResponseWriter, r *http.Request
 
 	response = responses.Success
 }
+
+func (h *handler) GetSpecialGiftIcons(w http.ResponseWriter, r *http.Request) {
+	var response structs.Response
+	defer reply.Json(w, http.StatusOK, &response)
+
+	var ctx = r.Context()
+
+	specialGiftIcons := h.adminService.GetSpecialGiftIcons(ctx)
+
+	response = responses.Success
+	response.Payload = specialGiftIcons
+}

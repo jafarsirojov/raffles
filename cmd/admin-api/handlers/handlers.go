@@ -50,6 +50,7 @@ type Handler interface {
 
 	Upload(http.ResponseWriter, *http.Request)
 	GetFileURL(http.ResponseWriter, *http.Request)
+	GetSpecialGiftIcons(http.ResponseWriter, *http.Request)
 
 	GetFeaturesAndAmenities(http.ResponseWriter, *http.Request)
 	AddFeatureAndAmenity(http.ResponseWriter, *http.Request)
