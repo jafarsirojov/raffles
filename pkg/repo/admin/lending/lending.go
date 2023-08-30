@@ -49,7 +49,8 @@ INSERT INTO lending(
     title_plan,
     latitude,
     longitude,
-    images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17);`,
+    location_description,
+    images) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18);`,
 		data.Name,
 		data.MainDescription,
 		data.FullName,
@@ -66,6 +67,7 @@ INSERT INTO lending(
 		data.TitlePlan,
 		data.Latitude,
 		data.Longitude,
+		data.LocationDescription,
 		[]string{},
 	)
 	if err != nil {
@@ -103,6 +105,7 @@ SELECT
 	our_logo,
 	latitude,
     longitude,
+    location_description,
     to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI'),
     to_char(updated_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
 FROM lending
@@ -131,6 +134,7 @@ WHERE id = $1;`, id).Scan(
 		&data.OurLogo,
 		&data.Latitude,
 		&data.Longitude,
+		&data.LocationDescription,
 		&data.CreatedAt,
 		&data.UpdatedAt,
 	)
@@ -200,6 +204,7 @@ UPDATE lending SET
     title_plan = $15,
     latitude = $16,
     longitude = $17,
+    location_description = $18,
     updated_at = now()
     WHERE id = $1`,
 		data.ID,
@@ -219,6 +224,7 @@ UPDATE lending SET
 		data.TitlePlan,
 		data.Latitude,
 		data.Longitude,
+		data.LocationDescription,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateLending r.db.Exec", zap.Error(err))

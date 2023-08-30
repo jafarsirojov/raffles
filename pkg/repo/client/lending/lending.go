@@ -93,7 +93,8 @@ SELECT
 	partner_logo, 
 	our_logo,
 	latitude, 
-	longitude
+	longitude,
+	location_description
 FROM lending
 WHERE id = $1;`, id).Scan(
 		&data.ID,
@@ -120,6 +121,7 @@ WHERE id = $1;`, id).Scan(
 		&data.OurLogo,
 		&data.Latitude,
 		&data.Longitude,
+		&data.LocationDescription,
 	)
 	if err != nil {
 		r.logger.Error("pkg.repo.client.lending.SelectLendingData r.db.QueryRow", zap.Error(err))

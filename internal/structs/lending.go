@@ -25,6 +25,7 @@ type Lending struct {
 	Availabilities          []Availability
 	Latitude                string
 	Longitude               string
+	LocationDescription     string
 	CreatedAt               string
 	UpdatedAt               string
 }
@@ -52,6 +53,7 @@ type LendingData struct {
 	Availabilities       []Availability
 	Latitude             string
 	Longitude            string
+	LocationDescription  string
 	FileURL              string
 }
 
