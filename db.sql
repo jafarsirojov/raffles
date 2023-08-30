@@ -157,6 +157,7 @@ create table lending
     title                  varchar                  not null,
     description            varchar                  not null,
     video                  varchar                  not null,
+    video_cover            varchar                  not null,
     file_plan              varchar                  not null default '',
     title_plan             varchar                  not null,
     background_image       varchar                  not null default '',

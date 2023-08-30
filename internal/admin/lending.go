@@ -461,6 +461,53 @@ func (s *service) UploadOurLogo(ctx context.Context, landingID int, file multipa
 	return nil
 }
 
+func (s *service) UploadVideoCover(ctx context.Context, landingID int, file multipart.File, typeName string) error {
+	filename := uuid.NewString() + typeName
+
+	newFile, err := os.Create(structs.FilePathRafflesHomes + filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadVideoCover os.Create", zap.Error(err))
+		return err
+	}
+	defer newFile.Close()
+
+	fileBytes, err := io.ReadAll(file)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadVideoCover io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	_, err = newFile.Write(fileBytes)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadVideoCover io.ReadAll", zap.Error(err))
+		return err
+	}
+
+	oldFile, err := s.lendingRepo.SelectVideoCoverByLandingID(ctx, landingID)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadVideoCover s.lendingRepo.SelectVideoCoverByLandingID",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	err = s.lendingRepo.UpdateVideoCover(ctx, landingID, filename)
+	if err != nil {
+		s.logger.Error("internal.admin.UploadVideoCover s.lendingRepo.UpdateVideoCover",
+			zap.Error(err), zap.Int("landingID", landingID))
+		return err
+	}
+
+	if len(strings.TrimSpace(oldFile)) != 0 {
+		err = os.Remove(structs.FilePathRafflesHomes + oldFile)
+		if err != nil {
+			s.logger.Error("internal.admin.UpdateVideoCover os.Remove",
+				zap.Error(err), zap.Int("landingID", landingID), zap.Any("old file", oldFile))
+		}
+	}
+
+	return nil
+}
+
 func (s *service) AddFeatureAndAmenity(ctx context.Context, file multipart.File, typeName, featureName string) error {
 	filename := uuid.NewString() + typeName
 

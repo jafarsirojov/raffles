@@ -14,6 +14,7 @@ type Lending struct {
 	Title                   string
 	Description             string
 	Video                   string
+	VideoCover              string
 	FilePlan                string
 	TitlePlan               string
 	BackgroundImage         string
@@ -42,6 +43,7 @@ type LendingData struct {
 	Title                string
 	Description          string
 	Video                string
+	VideoCover           string
 	FilePlan             string
 	TitlePlan            string
 	BackgroundImage      string

@@ -51,6 +51,30 @@ func (r *repo) UpdateBackgroundImage(ctx context.Context, id int, new string) er
 	return nil
 }
 
+func (r *repo) SelectVideoCoverByLandingID(ctx context.Context, id int) (cover string, err error) {
+	err = r.db.QueryRow(ctx,
+		`SELECT video_cover FROM lending WHERE id = $1;`, id).Scan(&cover)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.SelectVideoCoverByLandingID r.db.QueryRow",
+			zap.Error(err), zap.Int("id", id))
+		return cover, err
+	}
+
+	return cover, nil
+}
+
+func (r *repo) UpdateVideoCover(ctx context.Context, id int, new string) error {
+	_, err := r.db.Exec(ctx,
+		`UPDATE lending SET background_image = $2, updated_at = now() WHERE id = $1;`, id, new)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.UpdateVideoCover r.db.Exec",
+			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
+		return err
+	}
+
+	return nil
+}
+
 func (r *repo) SelectBackgroundForMobileByLandingID(ctx context.Context, id int) (backgroundImage string, err error) {
 	err = r.db.QueryRow(ctx,
 		`SELECT background_for_mobile FROM lending WHERE id = $1;`, id).Scan(&backgroundImage)

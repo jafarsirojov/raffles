@@ -58,6 +58,7 @@ type Service interface {
 	UploadPartnerLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadOurLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadFilePlan(ctx context.Context, availabilityID int, file multipart.File, typeName string) error
+	UploadVideoCover(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	GetFileURL(ctx context.Context) string
 	GetSpecialGiftIcons(ctx context.Context) []structs.SpecialGiftIcon
 

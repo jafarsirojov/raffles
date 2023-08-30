@@ -23,6 +23,8 @@ type LendingAdminRepo interface {
 	UpdatePartnerLogo(ctx context.Context, id int, new string) error
 	SelectOurLogoByLandingID(ctx context.Context, id int) (logo string, err error)
 	UpdateOurLogo(ctx context.Context, id int, new string) error
+	SelectVideoCoverByLandingID(ctx context.Context, id int) (cover string, err error)
+	UpdateVideoCover(ctx context.Context, id int, new string) error
 
 	SelectFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error)
 	SelectFeaturesAndAmenitiesByIDs(ctx context.Context, ids []int) (list []structs.FeatureOrAmenity, err error)

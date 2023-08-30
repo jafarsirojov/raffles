@@ -232,6 +232,7 @@ const (
 	MainLogo            = "MainLogo"
 	PartnerLogo         = "PartnerLogo"
 	OurLogo             = "OurLogo"
+	VideoCover          = "VideoCover"
 )
 
 func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
@@ -249,7 +250,7 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	keys := []string{BackgroundImage, BackgroundForMobile, FilePlan, MainLogo, PartnerLogo, OurLogo}
+	keys := []string{BackgroundImage, BackgroundForMobile, FilePlan, MainLogo, PartnerLogo, OurLogo, VideoCover}
 	var file multipart.File
 	var info *multipart.FileHeader
 	var methodKey string
@@ -363,6 +364,23 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadOurLogo",
+				zap.Error(err))
+			response = responses.InternalErr
+			return
+		}
+
+		response = responses.Success
+		return
+
+	case VideoCover:
+		err = h.adminService.UploadVideoCover(ctx, id, file, util.GetFileTypeByFilename(info.Filename))
+		if err != nil {
+			if err == errors.ErrNotFound {
+				h.logger.Info("cmd.admin-api.handlers.Upload h.adminService.UploadVideoCover not found")
+				response = responses.NotFound
+				return
+			}
+			h.logger.Error("cmd.admin-api.handlers.Upload h.adminService.UploadVideoCover",
 				zap.Error(err))
 			response = responses.InternalErr
 			return
