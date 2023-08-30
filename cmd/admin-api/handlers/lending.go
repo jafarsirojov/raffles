@@ -65,8 +65,20 @@ func (h *handler) GetLendingList(w http.ResponseWriter, r *http.Request) {
 	defer reply.Json(w, http.StatusOK, &response)
 
 	var ctx = r.Context()
+	offsetStr := r.URL.Query().Get("offset")
+	limitStr := r.URL.Query().Get("limit")
 
-	estate, err := h.adminService.GetLendingList(ctx)
+	offset, err := strconv.Atoi(offsetStr)
+	if err != nil {
+		offset = 0
+	}
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		limit = 10
+	}
+
+	estate, count, err := h.adminService.GetLendingList(ctx, offset, limit)
 	if err != nil {
 		if err == errors.ErrNotFound {
 			h.logger.Info("cmd.admin-api.handlers.GetLendingList h.adminService.GetLendingList not found")
@@ -79,7 +91,13 @@ func (h *handler) GetLendingList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response = responses.Success
-	response.Payload = estate
+	response.Payload = struct {
+		List      []structs.LendingList
+		CountRows int
+	}{
+		List:      estate,
+		CountRows: count,
+	}
 }
 
 func (h *handler) GetLendingData(w http.ResponseWriter, r *http.Request) {

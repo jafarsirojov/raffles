@@ -12,14 +12,14 @@ import (
 	"strings"
 )
 
-func (s *service) GetLendingList(ctx context.Context) (list []structs.LendingList, err error) {
-	list, err = s.lendingRepo.GetLendingList(ctx)
+func (s *service) GetLendingList(ctx context.Context, offset, limit int) (list []structs.LendingList, count int, err error) {
+	list, count, err = s.lendingRepo.GetLendingList(ctx, offset, limit)
 	if err != nil {
 		s.logger.Error("internal.admin.GetLendingList s.lendingRepo.GetLendingList", zap.Error(err))
-		return nil, err
+		return nil, 0, err
 	}
 
-	return list, nil
+	return list, 0, nil
 }
 
 func (s *service) GetLendingData(ctx context.Context, landingID int) (data structs.Lending, err error) {

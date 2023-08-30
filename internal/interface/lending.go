@@ -8,7 +8,7 @@ import (
 type LendingAdminRepo interface {
 	SaveLending(ctx context.Context, data structs.Lending) error
 	UpdateLending(ctx context.Context, data structs.Lending) (err error)
-	GetLendingList(ctx context.Context) (list []structs.LendingList, err error)
+	GetLendingList(ctx context.Context, offset, limit int) (list []structs.LendingList, count int, err error)
 	GetLendingByID(ctx context.Context, id int) (data structs.Lending, err error)
 
 	GetImagesByLendingID(ctx context.Context, id int) (images []string, err error)

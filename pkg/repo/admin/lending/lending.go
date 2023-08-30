@@ -142,16 +142,17 @@ WHERE id = $1;`, id).Scan(
 	return data, nil
 }
 
-func (r *repo) GetLendingList(ctx context.Context) (list []structs.LendingList, err error) {
+func (r *repo) GetLendingList(ctx context.Context, offset, limit int) (list []structs.LendingList, count int, err error) {
 	rows, err := r.db.Query(ctx, `
 SELECT 
     id,
     name
 FROM lending
-WHERE 1=1;`)
+WHERE 1=1
+ORDER BY id DESC OFFSET $1 LIMIT $2;`, offset, limit)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.GetLendingList r.db.Query", zap.Error(err))
-		return list, err
+		return list, 0, err
 	}
 
 	for rows.Next() {
@@ -162,17 +163,22 @@ WHERE 1=1;`)
 		)
 		if err != nil {
 			r.logger.Error("pkg.repo.admin.lending.GetLendingList rows.Scan()", zap.Error(err))
-			return nil, err
+			return nil, 0, err
 		}
 
 		list = append(list, data)
 	}
 
 	if len(list) == 0 {
-		return nil, errors.ErrNotFound
+		return nil, 0, errors.ErrNotFound
 	}
 
-	return list, nil
+	err = r.db.QueryRow(ctx, "SELECT count(1) FROM lending WHERE 1=1;").Scan(&count)
+	if err != nil {
+		r.logger.Error("pkg.repo.admin.lending.GetLendingList rows.Scan()", zap.Error(err))
+	}
+
+	return list, count, nil
 }
 
 func (r *repo) UpdateLending(ctx context.Context, data structs.Lending) (err error) {
