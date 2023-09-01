@@ -32,7 +32,7 @@ type repo struct {
 
 func (r *repo) SelectLendingIdByKey(ctx context.Context, key string) (id int, err error) {
 	err = r.db.QueryRow(ctx,
-		`SELECT id FROM service_keys WHERE key = $1;`, key).Scan(&id)
+		`SELECT lending_id FROM service_keys WHERE key = $1;`, key).Scan(&id)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			r.logger.Warn("pkg.repo.client.serviceKeys.SelectLendingIdByKey r.db.QueryRow not found",
