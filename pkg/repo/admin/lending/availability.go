@@ -54,7 +54,8 @@ SELECT
     special_gift,
     special_gift_icon
 FROM availability
-WHERE lending_id = $1;`, landingID)
+WHERE lending_id = $1
+ORDER BY id;`, landingID)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.GetAvailabilitiesByLandingID r.db.Query", zap.Error(err))
 		return list, err

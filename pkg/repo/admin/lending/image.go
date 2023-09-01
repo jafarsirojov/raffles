@@ -65,7 +65,7 @@ func (r *repo) SelectVideoCoverByLandingID(ctx context.Context, id int) (cover s
 
 func (r *repo) UpdateVideoCover(ctx context.Context, id int, new string) error {
 	_, err := r.db.Exec(ctx,
-		`UPDATE lending SET background_image = $2, updated_at = now() WHERE id = $1;`, id, new)
+		`UPDATE lending SET video_cover = $2, updated_at = now() WHERE id = $1;`, id, new)
 	if err != nil {
 		r.logger.Error("pkg.repo.admin.lending.UpdateVideoCover r.db.Exec",
 			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
