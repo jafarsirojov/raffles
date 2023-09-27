@@ -1,4 +1,4 @@
-package lending
+package landing
 
 import (
 	"context"
@@ -16,7 +16,7 @@ SELECT
 FROM feature_or_amenity
 WHERE 1=1;`)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.SelectFeaturesAndAmenities r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.SelectFeaturesAndAmenities r.db.Query", zap.Error(err))
 		return list, err
 	}
 
@@ -28,7 +28,7 @@ WHERE 1=1;`)
 			&data.Icon,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.admin.lending.SelectFeaturesAndAmenities rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.admin.landing.SelectFeaturesAndAmenities rows.Scan()", zap.Error(err))
 			return nil, err
 		}
 
@@ -50,7 +50,7 @@ SELECT
 FROM feature_or_amenity
 WHERE id = ANY ($1);`, ids)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.SelectFeaturesAndAmenitiesByIDs r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.SelectFeaturesAndAmenitiesByIDs r.db.Query", zap.Error(err))
 		return list, err
 	}
 
@@ -61,7 +61,7 @@ WHERE id = ANY ($1);`, ids)
 			&data.Icon,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.admin.lending.SelectFeaturesAndAmenitiesByIDs rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.admin.landing.SelectFeaturesAndAmenitiesByIDs rows.Scan()", zap.Error(err))
 			return nil, err
 		}
 
@@ -79,7 +79,7 @@ func (r *repo) InsertFeatureAndAmenity(ctx context.Context, name, icon string) e
 	_, err := r.db.Exec(ctx,
 		`INSERT INTO feature_or_amenity (name, icon) VALUES ($1, $2);`, name, icon)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.UpdateOurLogo r.db.Exec",
+		r.logger.Error("pkg.repo.admin.landing.UpdateOurLogo r.db.Exec",
 			zap.Error(err), zap.String("name", name), zap.String("icon", icon))
 		return err
 	}
@@ -91,7 +91,7 @@ func (r *repo) DeleteFeatureAndAmenity(ctx context.Context, id int) error {
 	_, err := r.db.Exec(ctx,
 		`DELETE FROM feature_or_amenity WHERE id = $1;`, id)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.DeleteFeatureAndAmenity r.db.Exec",
+		r.logger.Error("pkg.repo.admin.landing.DeleteFeatureAndAmenity r.db.Exec",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}

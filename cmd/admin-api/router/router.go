@@ -49,13 +49,13 @@ func NewRouter(params RouterParams) {
 
 	router.HandleFunc(baseUrl+"/clients/favorites", middleware.ApplyMiddleware(params.Handler.GetClientsFavorites, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 
-	// lending
-	router.HandleFunc(baseUrl+"/landing", middleware.ApplyMiddleware(params.Handler.AddLendingPage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
-	router.HandleFunc(baseUrl+"/landing", middleware.ApplyMiddleware(params.Handler.UpdateLendingPage, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
-	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.GetLendingData, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
-	router.HandleFunc(baseUrl+"/landings", middleware.ApplyMiddleware(params.Handler.GetLendingList, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
-	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadImages/{count:[0-9]+}", middleware.ApplyMiddleware(params.Handler.UploadLendingImages, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
-	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteLendingImages, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
+	// landing
+	router.HandleFunc(baseUrl+"/landing", middleware.ApplyMiddleware(params.Handler.AddLandingPage, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/landing", middleware.ApplyMiddleware(params.Handler.UpdateLandingPage, params.Handler.MwCheckAdminAuthToken)).Methods("PUT")
+	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.GetLandingData, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
+	router.HandleFunc(baseUrl+"/landings", middleware.ApplyMiddleware(params.Handler.GetLandingList, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
+	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/uploadImages/{count:[0-9]+}", middleware.ApplyMiddleware(params.Handler.UploadLandingImages, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
+	router.HandleFunc(baseUrl+"/landing/{id:[0-9]+}/removeImage/{imageName}", middleware.ApplyMiddleware(params.Handler.DeleteLandingImages, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")
 	router.HandleFunc(baseUrl+"/landing/featuresAndAmenities", middleware.ApplyMiddleware(params.Handler.GetFeaturesAndAmenities, params.Handler.MwCheckAdminAuthToken)).Methods("GET")
 	router.HandleFunc(baseUrl+"/landing/featureAndAmenity", middleware.ApplyMiddleware(params.Handler.AddFeatureAndAmenity, params.Handler.MwCheckAdminAuthToken)).Methods("POST")
 	router.HandleFunc(baseUrl+"/landing/featureAndAmenity/{id:[0-9]+}", middleware.ApplyMiddleware(params.Handler.DeleteFeatureAndAmenity, params.Handler.MwCheckAdminAuthToken)).Methods("DELETE")

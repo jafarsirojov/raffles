@@ -9,9 +9,9 @@ import (
 
 func (s *service) GetLandingsList(ctx context.Context) (list structs.ListMainPage, err error) {
 
-	list.List, err = s.lendingRepo.SelectLandingList(ctx)
+	list.List, err = s.landingRepo.SelectLandingList(ctx)
 	if err != nil {
-		s.logger.Error("internal.client.GetLandingsList s.lendingRepo.SelectLandingList",
+		s.logger.Error("internal.client.GetLandingsList s.landingRepo.SelectLandingList",
 			zap.Error(err))
 		return list, err
 	}
@@ -21,61 +21,61 @@ func (s *service) GetLandingsList(ctx context.Context) (list structs.ListMainPag
 	return list, err
 }
 
-func (s *service) GetLendingData(ctx context.Context, key string) (data structs.LendingData, err error) {
+func (s *service) GetLandingData(ctx context.Context, key string) (data structs.LandingData, err error) {
 
-	id, err := s.serviceKeyRepo.SelectLendingIdByKey(ctx, key)
+	id, err := s.serviceKeyRepo.SelectLandingIdByKey(ctx, key)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			s.logger.Warn("internal.client.GetLendingData s.lendingRepo.SelectLendingIdByKey not found",
+			s.logger.Warn("internal.client.GetLandingData s.serviceKeyRepo.SelectLandingIdByKey not found",
 				zap.String("key", key))
 			return data, errors.ErrBadRequest
 		}
-		s.logger.Error("internal.client.GetLendingData s.lendingRepo.SelectLendingIdByKey",
+		s.logger.Error("internal.client.GetLandingData s.serviceKeyRepo.SelectLandingIdByKey",
 			zap.Error(err))
 		return data, err
 	}
 
-	lending, err := s.lendingRepo.SelectLendingData(ctx, id)
+	landing, err := s.landingRepo.SelectLandingData(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.client.GetLendingData s.lendingRepo.SelectLendingData",
+		s.logger.Error("internal.client.GetLandingData s.serviceKeyRepo.SelectLandingData",
 			zap.Error(err))
 		return data, err
 	}
 
-	data.Name = lending.Name
-	data.MainDescription = lending.MainDescription
-	data.FullName = lending.FullName
-	data.Slogan = lending.Slogan
-	data.Address = lending.Address
-	data.StartingPrice = lending.StartingPrice
-	data.ListingDetails = lending.ListingDetails
-	data.FeaturesAndAmenities = lending.FeaturesAndAmenities
-	data.Title = lending.Title
-	data.Description = lending.Description
-	data.Video = lending.Video
-	data.VideoCover = lending.VideoCover
-	data.FilePlan = lending.FilePlan
-	data.TitlePlan = lending.TitlePlan
-	data.Images = lending.Images
-	data.BackgroundImage = lending.BackgroundImage
-	data.BackgroundForMobile = lending.BackgroundForMobile
-	data.MainLogo = lending.MainLogo
-	data.PartnerLogo = lending.PartnerLogo
-	data.OurLogo = lending.OurLogo
-	data.Latitude = lending.Latitude
-	data.Longitude = lending.Longitude
-	data.LocationDescription = lending.LocationDescription
+	data.Name = landing.Name
+	data.MainDescription = landing.MainDescription
+	data.FullName = landing.FullName
+	data.Slogan = landing.Slogan
+	data.Address = landing.Address
+	data.StartingPrice = landing.StartingPrice
+	data.ListingDetails = landing.ListingDetails
+	data.FeaturesAndAmenities = landing.FeaturesAndAmenities
+	data.Title = landing.Title
+	data.Description = landing.Description
+	data.Video = landing.Video
+	data.VideoCover = landing.VideoCover
+	data.FilePlan = landing.FilePlan
+	data.TitlePlan = landing.TitlePlan
+	data.Images = landing.Images
+	data.BackgroundImage = landing.BackgroundImage
+	data.BackgroundForMobile = landing.BackgroundForMobile
+	data.MainLogo = landing.MainLogo
+	data.PartnerLogo = landing.PartnerLogo
+	data.OurLogo = landing.OurLogo
+	data.Latitude = landing.Latitude
+	data.Longitude = landing.Longitude
+	data.LocationDescription = landing.LocationDescription
 
-	data.FeaturesAndAmenities, err = s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, lending.FeaturesAndAmenitiesIDs)
+	data.FeaturesAndAmenities, err = s.landingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, landing.FeaturesAndAmenitiesIDs)
 	if err != nil {
-		s.logger.Error("internal.client.GetLendingData s.lendingRepo.SelectFeaturesAndAmenitiesByIDs",
-			zap.Error(err), zap.Any("lending.FeaturesAndAmenitiesIDs", lending.FeaturesAndAmenitiesIDs))
+		s.logger.Error("internal.client.GetLandingData s.landingRepo.SelectFeaturesAndAmenitiesByIDs",
+			zap.Error(err), zap.Any("landing.FeaturesAndAmenitiesIDs", landing.FeaturesAndAmenitiesIDs))
 	}
 
-	data.Availabilities, err = s.lendingRepo.GetAvailabilitiesByLandingID(ctx, id)
+	data.Availabilities, err = s.landingRepo.GetAvailabilitiesByLandingID(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.client.GetLendingData s.lendingRepo.GetAvailabilitiesByLandingID",
-			zap.Error(err), zap.Any("lending.FeaturesAndAmenitiesIDs", lending.FeaturesAndAmenitiesIDs))
+		s.logger.Error("internal.client.GetLandingData s.landingRepo.GetAvailabilitiesByLandingID",
+			zap.Error(err), zap.Any("landing.FeaturesAndAmenitiesIDs", landing.FeaturesAndAmenitiesIDs))
 	}
 
 	data.FileURL = structs.FileBaseURLPathRafflesHomes

@@ -1,4 +1,4 @@
-package lending
+package landing
 
 import (
 	"context"
@@ -15,7 +15,7 @@ SELECT
 FROM feature_or_amenity
 WHERE id = ANY ($1);`, ids)
 	if err != nil {
-		r.logger.Error("pkg.repo.client.lending.SelectFeaturesAndAmenitiesByIDs r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.client.landing.SelectFeaturesAndAmenitiesByIDs r.db.Query", zap.Error(err))
 		return list, err
 	}
 
@@ -26,7 +26,7 @@ WHERE id = ANY ($1);`, ids)
 			&data.Icon,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.client.lending.SelectFeaturesAndAmenitiesByIDs rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.client.landing.SelectFeaturesAndAmenitiesByIDs rows.Scan()", zap.Error(err))
 			return nil, err
 		}
 

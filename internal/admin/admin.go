@@ -18,7 +18,7 @@ type Params struct {
 	CommentRepo interfaces.CommentRepo
 	EstateRepo  interfaces.EstateAdminRepo
 	TextRepo    interfaces.TextAdminRepo
-	LendingRepo interfaces.LendingAdminRepo
+	LandingRepo interfaces.LandingAdminRepo
 }
 
 type Service interface {
@@ -45,13 +45,13 @@ type Service interface {
 	GetTexts(ctx context.Context) (texts []structs.Text, err error)
 	UpdateText(ctx context.Context, text structs.Text) error
 
-	//lending
-	SaveLending(ctx context.Context, data structs.Lending) error
-	UpdateLending(ctx context.Context, data structs.Lending) error
-	GetLendingData(ctx context.Context, landingID int) (data structs.Lending, err error)
-	GetLendingList(ctx context.Context, offset, limit int) (list []structs.LendingList, count int, err error)
-	UploadLendingImages(ctx context.Context, id int, files []multipart.File) error
-	DeleteLendingImages(ctx context.Context, id int, imageName string) error
+	//landing
+	SaveLanding(ctx context.Context, data structs.Landing) error
+	UpdateLanding(ctx context.Context, data structs.Landing) error
+	GetLandingData(ctx context.Context, landingID int) (data structs.Landing, err error)
+	GetLandingList(ctx context.Context, offset, limit int) (list []structs.LandingList, count int, err error)
+	UploadLandingImages(ctx context.Context, id int, files []multipart.File) error
+	DeleteLandingImages(ctx context.Context, id int, imageName string) error
 	UploadBackgroundImage(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadBackgroundForMobile(ctx context.Context, landingID int, file multipart.File, typeName string) error
 	UploadMainLogo(ctx context.Context, landingID int, file multipart.File, typeName string) error
@@ -77,7 +77,7 @@ type service struct {
 	commentRepo interfaces.CommentRepo
 	estateRepo  interfaces.EstateAdminRepo
 	textRepo    interfaces.TextAdminRepo
-	lendingRepo interfaces.LendingAdminRepo
+	landingRepo interfaces.LandingAdminRepo
 }
 
 func NewService(params Params) Service {
@@ -87,6 +87,6 @@ func NewService(params Params) Service {
 		commentRepo: params.CommentRepo,
 		estateRepo:  params.EstateRepo,
 		textRepo:    params.TextRepo,
-		lendingRepo: params.LendingRepo,
+		landingRepo: params.LandingRepo,
 	}
 }

@@ -5,14 +5,14 @@ import (
 	"crm/internal/structs"
 )
 
-type LendingAdminRepo interface {
-	SaveLending(ctx context.Context, data structs.Lending) error
-	UpdateLending(ctx context.Context, data structs.Lending) (err error)
-	GetLendingList(ctx context.Context, offset, limit int) (list []structs.LendingList, count int, err error)
-	GetLendingByID(ctx context.Context, id int) (data structs.Lending, err error)
+type LandingAdminRepo interface {
+	SaveLanding(ctx context.Context, data structs.Landing) error
+	UpdateLanding(ctx context.Context, data structs.Landing) (err error)
+	GetLandingList(ctx context.Context, offset, limit int) (list []structs.LandingList, count int, err error)
+	GetLandingByID(ctx context.Context, id int) (data structs.Landing, err error)
 
-	GetImagesByLendingID(ctx context.Context, id int) (images []string, err error)
-	UpdateLendingImages(ctx context.Context, id int, images []string) error
+	GetImagesByLandingID(ctx context.Context, id int) (images []string, err error)
+	UpdateLandingImages(ctx context.Context, id int, images []string) error
 	SelectBackgroundImageByLandingID(ctx context.Context, id int) (backgroundImage string, err error)
 	UpdateBackgroundImage(ctx context.Context, id int, new string) error
 	SelectBackgroundForMobileByLandingID(ctx context.Context, id int) (backgroundImage string, err error)
@@ -39,9 +39,9 @@ type LendingAdminRepo interface {
 	UpdateFilePlan(ctx context.Context, id int, new string) error
 }
 
-type LendingClientRepo interface {
-	SelectLandingList(ctx context.Context) (list []structs.LendingListMainPage, err error)
-	SelectLendingData(ctx context.Context, id int) (data structs.Lending, err error)
+type LandingClientRepo interface {
+	SelectLandingList(ctx context.Context) (list []structs.LandingListMainPage, err error)
+	SelectLandingData(ctx context.Context, id int) (data structs.Landing, err error)
 	SelectFeaturesAndAmenitiesByIDs(ctx context.Context, ids []int) (list []structs.FeatureOrAmenity, err error)
 	GetAvailabilitiesByLandingID(ctx context.Context, landingID int) (list []structs.Availability, err error)
 }

@@ -17,7 +17,7 @@ type Params struct {
 	EstateRepo     interfaces.EstateClientRepo
 	TextRepo       interfaces.TextClientRepo
 	FavoritesRepo  interfaces.FavoritesClientRepo
-	LendingRepo    interfaces.LendingClientRepo
+	LandingRepo    interfaces.LandingClientRepo
 	ServiceKeyRepo interfaces.ServiceKeysClientRepo
 }
 
@@ -37,7 +37,7 @@ type Service interface {
 	DeleteFavorite(ctx context.Context, favorite structs.Favorite) error
 	GetEstateFavorites(ctx context.Context, userID int) (estates []structs.EstateForList, err error)
 
-	GetLendingData(ctx context.Context, key string) (data structs.LendingData, err error)
+	GetLandingData(ctx context.Context, key string) (data structs.LandingData, err error)
 	GetLandingsList(ctx context.Context) (data structs.ListMainPage, err error)
 }
 
@@ -47,7 +47,7 @@ type service struct {
 	estateRepo     interfaces.EstateClientRepo
 	textRepo       interfaces.TextClientRepo
 	favoritesRepo  interfaces.FavoritesClientRepo
-	lendingRepo    interfaces.LendingClientRepo
+	landingRepo    interfaces.LandingClientRepo
 	serviceKeyRepo interfaces.ServiceKeysClientRepo
 }
 
@@ -58,7 +58,7 @@ func NewService(params Params) Service {
 		estateRepo:     params.EstateRepo,
 		textRepo:       params.TextRepo,
 		favoritesRepo:  params.FavoritesRepo,
-		lendingRepo:    params.LendingRepo,
+		landingRepo:    params.LandingRepo,
 		serviceKeyRepo: params.ServiceKeyRepo,
 	}
 }

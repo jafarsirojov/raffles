@@ -34,13 +34,13 @@ type Handler interface {
 	GetTexts(http.ResponseWriter, *http.Request)
 	UpdateText(http.ResponseWriter, *http.Request)
 
-	// lending
-	AddLendingPage(http.ResponseWriter, *http.Request)
-	UpdateLendingPage(http.ResponseWriter, *http.Request)
-	GetLendingData(http.ResponseWriter, *http.Request)
-	GetLendingList(http.ResponseWriter, *http.Request)
-	UploadLendingImages(http.ResponseWriter, *http.Request)
-	DeleteLendingImages(http.ResponseWriter, *http.Request)
+	// landing
+	AddLandingPage(http.ResponseWriter, *http.Request)
+	UpdateLandingPage(http.ResponseWriter, *http.Request)
+	GetLandingData(http.ResponseWriter, *http.Request)
+	GetLandingList(http.ResponseWriter, *http.Request)
+	UploadLandingImages(http.ResponseWriter, *http.Request)
+	DeleteLandingImages(http.ResponseWriter, *http.Request)
 	UploadBackgroundImage(http.ResponseWriter, *http.Request)
 	UploadBackgroundForMobile(http.ResponseWriter, *http.Request)
 	UploadMainLogo(http.ResponseWriter, *http.Request)

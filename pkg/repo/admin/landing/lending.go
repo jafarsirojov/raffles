@@ -1,4 +1,4 @@
-package lending
+package landing
 
 import (
 	"context"
@@ -18,7 +18,7 @@ type Params struct {
 	Logger *zap.Logger
 }
 
-func NewRepo(params Params) interfaces.LendingAdminRepo {
+func NewRepo(params Params) interfaces.LandingAdminRepo {
 	return &repo{
 		db:     params.DB,
 		logger: params.Logger,
@@ -30,9 +30,9 @@ type repo struct {
 	logger *zap.Logger
 }
 
-func (r *repo) SaveLending(ctx context.Context, data structs.Lending) (err error) {
+func (r *repo) SaveLanding(ctx context.Context, data structs.Landing) (err error) {
 	_, err = r.db.Exec(ctx, `
-INSERT INTO lending(
+INSERT INTO landing(
     name,
     main_description,
     full_name,
@@ -71,14 +71,14 @@ INSERT INTO lending(
 		[]string{},
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.SaveLending r.db.Exec", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.SaveLanding r.db.Exec", zap.Error(err))
 		return err
 	}
 
 	return nil
 }
 
-func (r *repo) GetLendingByID(ctx context.Context, id int) (data structs.Lending, err error) {
+func (r *repo) GetLandingByID(ctx context.Context, id int) (data structs.Landing, err error) {
 	err = r.db.QueryRow(ctx, `
 SELECT 
     id,
@@ -109,7 +109,7 @@ SELECT
     location_description,
     to_char(created_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI'),
     to_char(updated_at AT TIME ZONE 'Asia/Dubai', 'DD-MM HH24:MI')
-FROM lending
+FROM landing
 WHERE id = $1;`, id).Scan(
 		&data.ID,
 		&data.Name,
@@ -141,34 +141,34 @@ WHERE id = $1;`, id).Scan(
 		&data.UpdatedAt,
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.GetLendingByID r.db.QueryRow", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.GetLandingByID r.db.QueryRow", zap.Error(err))
 		return data, err
 	}
 
 	return data, nil
 }
 
-func (r *repo) GetLendingList(ctx context.Context, offset, limit int) (list []structs.LendingList, count int, err error) {
+func (r *repo) GetLandingList(ctx context.Context, offset, limit int) (list []structs.LandingList, count int, err error) {
 	rows, err := r.db.Query(ctx, `
 SELECT 
     id,
     name
-FROM lending
+FROM landing
 WHERE 1=1
 ORDER BY id DESC OFFSET $1 LIMIT $2;`, offset, limit)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.GetLendingList r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.GetLandingList r.db.Query", zap.Error(err))
 		return list, 0, err
 	}
 
 	for rows.Next() {
-		var data structs.LendingList
+		var data structs.LandingList
 		err = rows.Scan(
 			&data.ID,
 			&data.Name,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.admin.lending.GetLendingList rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.admin.landing.GetLandingList rows.Scan()", zap.Error(err))
 			return nil, 0, err
 		}
 
@@ -179,17 +179,17 @@ ORDER BY id DESC OFFSET $1 LIMIT $2;`, offset, limit)
 		return nil, 0, errors.ErrNotFound
 	}
 
-	err = r.db.QueryRow(ctx, "SELECT count(1) FROM lending WHERE 1=1;").Scan(&count)
+	err = r.db.QueryRow(ctx, "SELECT count(1) FROM landing WHERE 1=1;").Scan(&count)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.GetLendingList rows.Scan()", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.GetLandingList rows.Scan()", zap.Error(err))
 	}
 
 	return list, count, nil
 }
 
-func (r *repo) UpdateLending(ctx context.Context, data structs.Lending) (err error) {
+func (r *repo) UpdateLanding(ctx context.Context, data structs.Landing) (err error) {
 	_, err = r.db.Exec(ctx, `
-UPDATE lending SET
+UPDATE landing SET
     name = $2,
     full_name = $3,
     address = $4,
@@ -229,7 +229,7 @@ UPDATE lending SET
 		data.LocationDescription,
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.UpdateLending r.db.Exec", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.UpdateLanding r.db.Exec", zap.Error(err))
 		return err
 	}
 
@@ -238,9 +238,9 @@ UPDATE lending SET
 
 func (r *repo) SelectFilePlanByLandingID(ctx context.Context, id int) (paymentPlan string, err error) {
 	err = r.db.QueryRow(ctx,
-		`SELECT file_plan FROM lending WHERE id = $1;`, id).Scan(&paymentPlan)
+		`SELECT file_plan FROM landing WHERE id = $1;`, id).Scan(&paymentPlan)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.SelectFilePlanByLandingID r.db.QueryRow",
+		r.logger.Error("pkg.repo.admin.landing.SelectFilePlanByLandingID r.db.QueryRow",
 			zap.Error(err), zap.Int("id", id))
 		return paymentPlan, err
 	}
@@ -250,9 +250,9 @@ func (r *repo) SelectFilePlanByLandingID(ctx context.Context, id int) (paymentPl
 
 func (r *repo) UpdateFilePlan(ctx context.Context, id int, new string) error {
 	_, err := r.db.Exec(ctx,
-		`UPDATE lending SET file_plan = $2, updated_at = now() WHERE id = $1;`, id, new)
+		`UPDATE landing SET file_plan = $2, updated_at = now() WHERE id = $1;`, id, new)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.UpdateFilePlan r.db.Exec",
+		r.logger.Error("pkg.repo.admin.landing.UpdateFilePlan r.db.Exec",
 			zap.Error(err), zap.Int("id", id), zap.Any("new", new))
 		return err
 	}

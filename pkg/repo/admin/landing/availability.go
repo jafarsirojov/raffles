@@ -1,4 +1,4 @@
-package lending
+package landing
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 func (r *repo) SaveAvailability(ctx context.Context, data structs.Availability) (err error) {
 	_, err = r.db.Exec(ctx, `
 INSERT INTO availability(
-    lending_id,
+    landing_id,
     price_aed,
     price_usd,
     unique_id,
@@ -20,7 +20,7 @@ INSERT INTO availability(
     plot,
     special_gift,
     special_gift_icon) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);`,
-		data.LendingID,
+		data.LandingID,
 		data.Price.AED,
 		data.Price.USD,
 		data.UniqueID,
@@ -32,7 +32,7 @@ INSERT INTO availability(
 		data.SpecialGiftIcon,
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.SaveAvailability r.db.Exec", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.SaveAvailability r.db.Exec", zap.Error(err))
 		return err
 	}
 
@@ -43,7 +43,7 @@ func (r *repo) GetAvailabilitiesByLandingID(ctx context.Context, landingID int) 
 	rows, err := r.db.Query(ctx, `
 SELECT 
     id,
-    lending_id,
+    landing_id,
     price_aed,
     price_usd,
     unique_id,
@@ -54,10 +54,10 @@ SELECT
     special_gift,
     special_gift_icon
 FROM availability
-WHERE lending_id = $1
+WHERE landing_id = $1
 ORDER BY id;`, landingID)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.GetAvailabilitiesByLandingID r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.GetAvailabilitiesByLandingID r.db.Query", zap.Error(err))
 		return list, err
 	}
 
@@ -65,7 +65,7 @@ ORDER BY id;`, landingID)
 		var a structs.Availability
 		err = rows.Scan(
 			&a.ID,
-			&a.LendingID,
+			&a.LandingID,
 			&a.Price.AED,
 			&a.Price.USD,
 			&a.UniqueID,
@@ -77,7 +77,7 @@ ORDER BY id;`, landingID)
 			&a.SpecialGiftIcon,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.admin.lending.GetAvailabilitiesByLandingID rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.admin.landing.GetAvailabilitiesByLandingID rows.Scan()", zap.Error(err))
 			return nil, err
 		}
 
@@ -94,7 +94,7 @@ ORDER BY id;`, landingID)
 func (r *repo) UpdateAvailability(ctx context.Context, data structs.Availability) (err error) {
 	_, err = r.db.Exec(ctx, `
 UPDATE availability SET
-    lending_id = $2,
+    landing_id = $2,
     price_aed = $3,
     price_usd = $4,
     unique_id = $5,
@@ -107,7 +107,7 @@ UPDATE availability SET
     updated_at = now()
     WHERE id = $1`,
 		data.ID,
-		data.LendingID,
+		data.LandingID,
 		data.Price.AED,
 		data.Price.USD,
 		data.UniqueID,
@@ -119,7 +119,7 @@ UPDATE availability SET
 		data.SpecialGiftIcon,
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.UpdateAvailability r.db.Exec", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.UpdateAvailability r.db.Exec", zap.Error(err))
 		return err
 	}
 
@@ -129,7 +129,7 @@ UPDATE availability SET
 func (r *repo) DeleteAvailability(ctx context.Context, id int) (err error) {
 	_, err = r.db.Exec(ctx, `DELETE FROM availability WHERE id = $1;`, id)
 	if err != nil {
-		r.logger.Error("pkg.repo.admin.lending.DeleteAvailability r.db.Exec", zap.Error(err))
+		r.logger.Error("pkg.repo.admin.landing.DeleteAvailability r.db.Exec", zap.Error(err))
 		return err
 	}
 

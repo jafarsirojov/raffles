@@ -14,22 +14,22 @@ import (
 	"strconv"
 )
 
-func (h *handler) AddLendingPage(w http.ResponseWriter, r *http.Request) {
+func (h *handler) AddLandingPage(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
 	var ctx = r.Context()
-	var request structs.Lending
+	var request structs.Landing
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.AddLendingPage json.NewDecoder", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.AddLandingPage json.NewDecoder", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
 
-	err = h.adminService.SaveLending(ctx, request)
+	err = h.adminService.SaveLanding(ctx, request)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.AddLendingPage h.adminService.SaveLending", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.AddLandingPage h.adminService.SaveLanding", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}
@@ -37,22 +37,22 @@ func (h *handler) AddLendingPage(w http.ResponseWriter, r *http.Request) {
 	response = responses.Success
 }
 
-func (h *handler) UpdateLendingPage(w http.ResponseWriter, r *http.Request) {
+func (h *handler) UpdateLandingPage(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
 	var ctx = r.Context()
-	var request structs.Lending
+	var request structs.Landing
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UpdateLendingPage json.NewDecoder", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UpdateLandingPage json.NewDecoder", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
 
-	err = h.adminService.UpdateLending(ctx, request)
+	err = h.adminService.UpdateLanding(ctx, request)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UpdateLendingPage h.adminService.UpdateLending", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UpdateLandingPage h.adminService.UpdateLanding", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}
@@ -60,7 +60,7 @@ func (h *handler) UpdateLendingPage(w http.ResponseWriter, r *http.Request) {
 	response = responses.Success
 }
 
-func (h *handler) GetLendingList(w http.ResponseWriter, r *http.Request) {
+func (h *handler) GetLandingList(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -78,21 +78,21 @@ func (h *handler) GetLendingList(w http.ResponseWriter, r *http.Request) {
 		limit = 10
 	}
 
-	estate, count, err := h.adminService.GetLendingList(ctx, offset, limit)
+	estate, count, err := h.adminService.GetLandingList(ctx, offset, limit)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.GetLendingList h.adminService.GetLendingList not found")
+			h.logger.Info("cmd.admin-api.handlers.GetLandingList h.adminService.GetLandingList not found")
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.GetLendingList h.adminService.GetLendingList", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.GetLandingList h.adminService.GetLandingList", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}
 
 	response = responses.Success
 	response.Payload = struct {
-		List      []structs.LendingList
+		List      []structs.LandingList
 		CountRows int
 	}{
 		List:      estate,
@@ -100,7 +100,7 @@ func (h *handler) GetLendingList(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *handler) GetLendingData(w http.ResponseWriter, r *http.Request) {
+func (h *handler) GetLandingData(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -108,24 +108,24 @@ func (h *handler) GetLendingData(w http.ResponseWriter, r *http.Request) {
 	idStr := mux.Vars(r)["id"]
 	id, _ := strconv.Atoi(idStr)
 
-	lending, err := h.adminService.GetLendingData(ctx, id)
+	landing, err := h.adminService.GetLandingData(ctx, id)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.GetLendingData h.adminService.GetLendingData not found",
+			h.logger.Info("cmd.admin-api.handlers.GetLandingData h.adminService.GetLandingData not found",
 				zap.Int("id", id))
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.GetLendingData h.adminService.GetLendingData", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.GetLandingData h.adminService.GetLandingData", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}
 
 	response = responses.Success
-	response.Payload = lending
+	response.Payload = landing
 }
 
-func (h *handler) UploadLendingImages(w http.ResponseWriter, r *http.Request) {
+func (h *handler) UploadLandingImages(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -138,7 +138,7 @@ func (h *handler) UploadLendingImages(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseMultipartForm(30 << 20)
 	if err != nil {
-		h.logger.Error("cmd.admin-api.handlers.UploadLendingImages r.ParseMultipartForm", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadLandingImages r.ParseMultipartForm", zap.Error(err))
 		response = responses.BadRequest
 		return
 	}
@@ -147,7 +147,7 @@ func (h *handler) UploadLendingImages(w http.ResponseWriter, r *http.Request) {
 	for i := 1; i <= countImages; i++ {
 		file, _, err := r.FormFile(strconv.Itoa(i))
 		if err != nil {
-			h.logger.Error("cmd.admin-api.handlers.UploadLendingImages r.FormFile - Error Retrieving the File", zap.Error(err))
+			h.logger.Error("cmd.admin-api.handlers.UploadLandingImages r.FormFile - Error Retrieving the File", zap.Error(err))
 			response = responses.BadRequest
 			return
 		}
@@ -162,14 +162,14 @@ func (h *handler) UploadLendingImages(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	err = h.adminService.UploadLendingImages(ctx, id, files)
+	err = h.adminService.UploadLandingImages(ctx, id, files)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.UploadLendingImages h.adminService.UploadLendingImages not found")
+			h.logger.Info("cmd.admin-api.handlers.UploadLandingImages h.adminService.UploadLandingImages not found")
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.UploadLendingImages h.adminService.UploadLendingImages", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.UploadLandingImages h.adminService.UploadLandingImages", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}
@@ -177,7 +177,7 @@ func (h *handler) UploadLendingImages(w http.ResponseWriter, r *http.Request) {
 	response = responses.Success
 }
 
-func (h *handler) DeleteLendingImages(w http.ResponseWriter, r *http.Request) {
+func (h *handler) DeleteLandingImages(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
@@ -186,14 +186,14 @@ func (h *handler) DeleteLendingImages(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(idStr)
 	imageName := mux.Vars(r)["imageName"]
 
-	err := h.adminService.DeleteLendingImages(ctx, id, imageName)
+	err := h.adminService.DeleteLandingImages(ctx, id, imageName)
 	if err != nil {
 		if err == errors.ErrNotFound {
-			h.logger.Info("cmd.admin-api.handlers.DeleteLendingImages h.adminService.DeleteLendingImages not found")
+			h.logger.Info("cmd.admin-api.handlers.DeleteLandingImages h.adminService.DeleteLandingImages not found")
 			response = responses.NotFound
 			return
 		}
-		h.logger.Error("cmd.admin-api.handlers.DeleteLendingImages h.adminService.DeleteLendingImages", zap.Error(err))
+		h.logger.Error("cmd.admin-api.handlers.DeleteLandingImages h.adminService.DeleteLandingImages", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}

@@ -30,16 +30,16 @@ type repo struct {
 	logger *zap.Logger
 }
 
-func (r *repo) SelectLendingIdByKey(ctx context.Context, key string) (id int, err error) {
+func (r *repo) SelectLandingIdByKey(ctx context.Context, key string) (id int, err error) {
 	err = r.db.QueryRow(ctx,
-		`SELECT lending_id FROM service_keys WHERE key = $1;`, key).Scan(&id)
+		`SELECT landing_id FROM service_keys WHERE key = $1;`, key).Scan(&id)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			r.logger.Warn("pkg.repo.client.serviceKeys.SelectLendingIdByKey r.db.QueryRow not found",
+			r.logger.Warn("pkg.repo.client.serviceKeys.SelectLandingIdByKey r.db.QueryRow not found",
 				zap.String("key", key))
 			return id, errors.ErrNotFound
 		}
-		r.logger.Error("pkg.repo.client.serviceKeys.SelectLendingIdByKey r.db.QueryRow",
+		r.logger.Error("pkg.repo.client.serviceKeys.SelectLandingIdByKey r.db.QueryRow",
 			zap.String("key", key), zap.Error(err))
 		return id, err
 	}

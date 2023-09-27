@@ -127,7 +127,7 @@ create table favorite
 create table availability
 (
     id                bigserial                not null primary key,
-    lending_id        integer                  not null,
+    landing_id        integer                  not null,
     price_aed         integer                  not null,
     price_usd         integer                  not null,
     unique_id         varchar                  not null,
@@ -141,7 +141,7 @@ create table availability
     updated_at        timestamp with time zone not null default now()
 );
 
-create table lending
+create table landing
 (
     id                     bigserial                not null primary key,
     name                   varchar                  not null,
@@ -185,5 +185,5 @@ create table service_keys
     id         serial  not null primary key,
     name       varchar not null,
     key        varchar not null unique,
-    lending_id integer not null
+    landing_id integer not null
 );

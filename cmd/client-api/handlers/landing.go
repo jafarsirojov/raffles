@@ -32,22 +32,22 @@ func (h *handler) GetLandingsList(w http.ResponseWriter, r *http.Request) {
 	response.Payload = data
 }
 
-func (h *handler) GetLendingData(w http.ResponseWriter, r *http.Request) {
+func (h *handler) GetLandingData(w http.ResponseWriter, r *http.Request) {
 	var response structs.Response
 	defer reply.Json(w, http.StatusOK, &response)
 
 	var ctx = r.Context()
 	authKey := r.Header.Get("ExternalServiceKey")
 
-	data, err := h.clientService.GetLendingData(ctx, authKey)
+	data, err := h.clientService.GetLandingData(ctx, authKey)
 	if err != nil {
 		if err == errors.ErrBadRequest {
-			h.logger.Info("cmd.client-api.handlers.GetLendingData h.clientService.GetLendingData bad request")
+			h.logger.Info("cmd.client-api.handlers.GetLandingData h.clientService.GetLandingData bad request")
 			response = responses.BadRequest
 			return
 		}
 
-		h.logger.Error("cmd.client-api.handlers.GetLendingData h.clientService.GetLendingData", zap.Error(err))
+		h.logger.Error("cmd.client-api.handlers.GetLandingData h.clientService.GetLandingData", zap.Error(err))
 		response = responses.InternalErr
 		return
 	}

@@ -1,6 +1,6 @@
 package structs
 
-type Lending struct {
+type Landing struct {
 	ID                      int
 	Name                    string
 	MainDescription         string
@@ -31,7 +31,7 @@ type Lending struct {
 	UpdatedAt               string
 }
 
-type LendingData struct {
+type LandingData struct {
 	Name                 string
 	MainDescription      string
 	FullName             string
@@ -59,17 +59,17 @@ type LendingData struct {
 	FileURL              string
 }
 
-type LendingList struct {
+type LandingList struct {
 	ID   int
 	Name string
 }
 
 type ListMainPage struct {
-	List    []LendingListMainPage
+	List    []LandingListMainPage
 	FileURL string
 }
 
-type LendingListMainPage struct {
+type LandingListMainPage struct {
 	Name            string
 	MainDescription string
 	BackgroundImage string
@@ -78,7 +78,7 @@ type LendingListMainPage struct {
 
 type Availability struct {
 	ID              int
-	LendingID       int
+	LandingID       int
 	Price           MultiCurrency
 	UniqueID        string
 	Bedroom         int

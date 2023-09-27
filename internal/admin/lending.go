@@ -12,43 +12,43 @@ import (
 	"strings"
 )
 
-func (s *service) GetLendingList(ctx context.Context, offset, limit int) (list []structs.LendingList, count int, err error) {
-	list, count, err = s.lendingRepo.GetLendingList(ctx, offset, limit)
+func (s *service) GetLandingList(ctx context.Context, offset, limit int) (list []structs.LandingList, count int, err error) {
+	list, count, err = s.landingRepo.GetLandingList(ctx, offset, limit)
 	if err != nil {
-		s.logger.Error("internal.admin.GetLendingList s.lendingRepo.GetLendingList", zap.Error(err))
+		s.logger.Error("internal.admin.GetLandingList s.landingRepo.GetLandingList", zap.Error(err))
 		return nil, 0, err
 	}
 
 	return list, 0, nil
 }
 
-func (s *service) GetLendingData(ctx context.Context, landingID int) (data structs.Lending, err error) {
-	data, err = s.lendingRepo.GetLendingByID(ctx, landingID)
+func (s *service) GetLandingData(ctx context.Context, landingID int) (data structs.Landing, err error) {
+	data, err = s.landingRepo.GetLandingByID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.GetLendingData s.lendingRepo.GetLendingByID",
+		s.logger.Error("internal.admin.GetLandingData s.landingRepo.GetLandingByID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return data, err
 	}
 
-	data.FeaturesAndAmenities, err = s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, data.FeaturesAndAmenitiesIDs)
+	data.FeaturesAndAmenities, err = s.landingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, data.FeaturesAndAmenitiesIDs)
 	if err != nil {
-		s.logger.Error("internal.admin.GetLendingData s.lendingRepo.SelectFeaturesAndAmenitiesByIDs",
+		s.logger.Error("internal.admin.GetLandingData s.landingRepo.SelectFeaturesAndAmenitiesByIDs",
 			zap.Error(err), zap.Int("landingID", landingID))
 	}
 
-	data.Availabilities, err = s.lendingRepo.GetAvailabilitiesByLandingID(ctx, data.ID)
+	data.Availabilities, err = s.landingRepo.GetAvailabilitiesByLandingID(ctx, data.ID)
 	if err != nil {
-		s.logger.Error("internal.admin.GetLendingData s.lendingRepo.GetAvailabilitiesByLandingID",
+		s.logger.Error("internal.admin.GetLandingData s.landingRepo.GetAvailabilitiesByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 	}
 
 	return data, nil
 }
 
-func (s *service) SaveLending(ctx context.Context, data structs.Lending) error {
-	err := s.lendingRepo.SaveLending(ctx, data)
+func (s *service) SaveLanding(ctx context.Context, data structs.Landing) error {
+	err := s.landingRepo.SaveLanding(ctx, data)
 	if err != nil {
-		s.logger.Error("internal.admin.SaveLending s.lendingRepo.SaveLending",
+		s.logger.Error("internal.admin.SaveLanding s.landingRepo.SaveLanding",
 			zap.Error(err), zap.Any("data", data))
 		return err
 	}
@@ -56,10 +56,10 @@ func (s *service) SaveLending(ctx context.Context, data structs.Lending) error {
 	return nil
 }
 
-func (s *service) UpdateLending(ctx context.Context, data structs.Lending) error {
-	err := s.lendingRepo.UpdateLending(ctx, data)
+func (s *service) UpdateLanding(ctx context.Context, data structs.Landing) error {
+	err := s.landingRepo.UpdateLanding(ctx, data)
 	if err != nil {
-		s.logger.Error("internal.admin.UpdateLending s.lendingRepo.UpdateLending",
+		s.logger.Error("internal.admin.UpdateLanding s.landingRepo.UpdateLanding",
 			zap.Error(err), zap.Any("data", data))
 		return err
 	}
@@ -68,9 +68,9 @@ func (s *service) UpdateLending(ctx context.Context, data structs.Lending) error
 }
 
 func (s *service) SaveAvailability(ctx context.Context, data structs.Availability) error {
-	err := s.lendingRepo.SaveAvailability(ctx, data)
+	err := s.landingRepo.SaveAvailability(ctx, data)
 	if err != nil {
-		s.logger.Error("internal.admin.SaveAvailability s.lendingRepo.SaveAvailability",
+		s.logger.Error("internal.admin.SaveAvailability s.landingRepo.SaveAvailability",
 			zap.Error(err), zap.Any("data", data))
 		return err
 	}
@@ -79,9 +79,9 @@ func (s *service) SaveAvailability(ctx context.Context, data structs.Availabilit
 }
 
 func (s *service) UpdateAvailability(ctx context.Context, data structs.Availability) error {
-	err := s.lendingRepo.UpdateAvailability(ctx, data)
+	err := s.landingRepo.UpdateAvailability(ctx, data)
 	if err != nil {
-		s.logger.Error("internal.admin.UpdateAvailability s.lendingRepo.UpdateAvailability",
+		s.logger.Error("internal.admin.UpdateAvailability s.landingRepo.UpdateAvailability",
 			zap.Error(err), zap.Any("data", data))
 		return err
 	}
@@ -90,9 +90,9 @@ func (s *service) UpdateAvailability(ctx context.Context, data structs.Availabil
 }
 
 func (s *service) RemoveAvailability(ctx context.Context, id int) error {
-	err := s.lendingRepo.DeleteAvailability(ctx, id)
+	err := s.landingRepo.DeleteAvailability(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.admin.RemoveAvailability s.lendingRepo.RemoveAvailability",
+		s.logger.Error("internal.admin.RemoveAvailability s.landingRepo.RemoveAvailability",
 			zap.Error(err), zap.Any("id", id))
 		return err
 	}
@@ -100,26 +100,26 @@ func (s *service) RemoveAvailability(ctx context.Context, id int) error {
 	return nil
 }
 
-func (s *service) UploadLendingImages(ctx context.Context, id int, files []multipart.File) error {
+func (s *service) UploadLandingImages(ctx context.Context, id int, files []multipart.File) error {
 
 	newImagesName, err := s.uploadImages(files, structs.FilePathRafflesHomes)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadLendingImages s.uploadImages", zap.Error(err), zap.Int("id", id))
+		s.logger.Error("internal.admin.UploadLandingImages s.uploadImages", zap.Error(err), zap.Int("id", id))
 		return err
 	}
 
-	imagesName, err := s.lendingRepo.GetImagesByLendingID(ctx, id)
+	imagesName, err := s.landingRepo.GetImagesByLandingID(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadLendingImages s.lendingRepo.GetImagesByLendingID",
+		s.logger.Error("internal.admin.UploadLandingImages s.landingRepo.GetImagesByLandingID",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
 
 	imagesName = append(imagesName, newImagesName...)
 
-	err = s.lendingRepo.UpdateLendingImages(ctx, id, imagesName)
+	err = s.landingRepo.UpdateLandingImages(ctx, id, imagesName)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadLendingImages s.lendingRepo.UpdateLendingImages",
+		s.logger.Error("internal.admin.UploadLandingImages s.landingRepo.UpdateLandingImages",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
@@ -127,10 +127,10 @@ func (s *service) UploadLendingImages(ctx context.Context, id int, files []multi
 	return nil
 }
 
-func (s *service) DeleteLendingImages(ctx context.Context, id int, imageName string) error {
-	imageNames, err := s.lendingRepo.GetImagesByLendingID(ctx, id)
+func (s *service) DeleteLandingImages(ctx context.Context, id int, imageName string) error {
+	imageNames, err := s.landingRepo.GetImagesByLandingID(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteLendingImages s.lendingRepo.GetImagesByLendingID",
+		s.logger.Error("internal.admin.DeleteLandingImages s.landingRepo.GetImagesByLandingID",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
@@ -151,16 +151,16 @@ func (s *service) DeleteLendingImages(ctx context.Context, id int, imageName str
 		return errors.ErrNotFound
 	}
 
-	err = s.lendingRepo.UpdateLendingImages(ctx, id, imageNames)
+	err = s.landingRepo.UpdateLandingImages(ctx, id, imageNames)
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteLendingImages s.lendingRepo.UpdateLendingImages",
+		s.logger.Error("internal.admin.DeleteLandingImages s.landingRepo.UpdateLandingImages",
 			zap.Error(err), zap.Int("id", id), zap.Any("images", imageNames))
 		return err
 	}
 
 	err = os.Remove(structs.FilePathRafflesHomes + imageName)
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteLendingImages os.Remove",
+		s.logger.Error("internal.admin.DeleteLandingImages os.Remove",
 			zap.Error(err), zap.Int("id", id), zap.Any("image", imageName))
 		return err
 	}
@@ -169,9 +169,9 @@ func (s *service) DeleteLendingImages(ctx context.Context, id int, imageName str
 }
 
 func (s *service) GetFeaturesAndAmenities(ctx context.Context) (list []structs.FeatureOrAmenity, err error) {
-	list, err = s.lendingRepo.SelectFeaturesAndAmenities(ctx)
+	list, err = s.landingRepo.SelectFeaturesAndAmenities(ctx)
 	if err != nil {
-		s.logger.Error("internal.admin.GetFeaturesAndAmenities s.lendingRepo.SelectFeaturesAndAmenities",
+		s.logger.Error("internal.admin.GetFeaturesAndAmenities s.landingRepo.SelectFeaturesAndAmenities",
 			zap.Error(err))
 		return nil, err
 	}
@@ -201,16 +201,16 @@ func (s *service) UploadFilePlan(ctx context.Context, availabilityID int, file m
 		return err
 	}
 
-	paymentPlan, err := s.lendingRepo.SelectFilePlanByLandingID(ctx, availabilityID)
+	paymentPlan, err := s.landingRepo.SelectFilePlanByLandingID(ctx, availabilityID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadFilePlan s.lendingRepo.SelectFilePlanByLandingID",
+		s.logger.Error("internal.admin.UploadFilePlan s.landingRepo.SelectFilePlanByLandingID",
 			zap.Error(err), zap.Int("availabilityID", availabilityID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdateFilePlan(ctx, availabilityID, filename)
+	err = s.landingRepo.UpdateFilePlan(ctx, availabilityID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadFilePlan s.lendingRepo.UpdateFilePlan",
+		s.logger.Error("internal.admin.UploadFilePlan s.landingRepo.UpdateFilePlan",
 			zap.Error(err), zap.Int("availabilityID", availabilityID))
 		return err
 	}
@@ -248,16 +248,16 @@ func (s *service) UploadBackgroundImage(ctx context.Context, landingID int, file
 		return err
 	}
 
-	backgroundImage, err := s.lendingRepo.SelectBackgroundImageByLandingID(ctx, landingID)
+	backgroundImage, err := s.landingRepo.SelectBackgroundImageByLandingID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadBackgroundImage s.lendingRepo.SelectBackgroundImageByLandingID",
+		s.logger.Error("internal.admin.UploadBackgroundImage s.landingRepo.SelectBackgroundImageByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdateBackgroundImage(ctx, landingID, filename)
+	err = s.landingRepo.UpdateBackgroundImage(ctx, landingID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadBackgroundImage s.lendingRepo.UpdateBackgroundImage",
+		s.logger.Error("internal.admin.UploadBackgroundImage s.landingRepo.UpdateBackgroundImage",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
@@ -295,16 +295,16 @@ func (s *service) UploadBackgroundForMobile(ctx context.Context, landingID int, 
 		return err
 	}
 
-	backgroundImage, err := s.lendingRepo.SelectBackgroundForMobileByLandingID(ctx, landingID)
+	backgroundImage, err := s.landingRepo.SelectBackgroundForMobileByLandingID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadBackgroundForMobile s.lendingRepo.SelectBackgroundForMobileByLandingID",
+		s.logger.Error("internal.admin.UploadBackgroundForMobile s.landingRepo.SelectBackgroundForMobileByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdateBackgroundForMobile(ctx, landingID, filename)
+	err = s.landingRepo.UpdateBackgroundForMobile(ctx, landingID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadBackgroundForMobile s.lendingRepo.UpdateBackgroundForMobile",
+		s.logger.Error("internal.admin.UploadBackgroundForMobile s.landingRepo.UpdateBackgroundForMobile",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
@@ -342,16 +342,16 @@ func (s *service) UploadMainLogo(ctx context.Context, landingID int, file multip
 		return err
 	}
 
-	oldFile, err := s.lendingRepo.SelectMainLogoByLandingID(ctx, landingID)
+	oldFile, err := s.landingRepo.SelectMainLogoByLandingID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadMainLogo s.lendingRepo.SelectMainLogoByLandingID",
+		s.logger.Error("internal.admin.UploadMainLogo s.landingRepo.SelectMainLogoByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdateMainLogo(ctx, landingID, filename)
+	err = s.landingRepo.UpdateMainLogo(ctx, landingID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadMainLogo s.lendingRepo.UpdateMainLogo",
+		s.logger.Error("internal.admin.UploadMainLogo s.landingRepo.UpdateMainLogo",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
@@ -389,16 +389,16 @@ func (s *service) UploadPartnerLogo(ctx context.Context, landingID int, file mul
 		return err
 	}
 
-	oldFile, err := s.lendingRepo.SelectPartnerLogoByLandingID(ctx, landingID)
+	oldFile, err := s.landingRepo.SelectPartnerLogoByLandingID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadPartnerLogo s.lendingRepo.SelectPartnerLogoByLandingID",
+		s.logger.Error("internal.admin.UploadPartnerLogo s.landingRepo.SelectPartnerLogoByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdatePartnerLogo(ctx, landingID, filename)
+	err = s.landingRepo.UpdatePartnerLogo(ctx, landingID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadPartnerLogo s.lendingRepo.UpdatePartnerLogo",
+		s.logger.Error("internal.admin.UploadPartnerLogo s.landingRepo.UpdatePartnerLogo",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
@@ -436,16 +436,16 @@ func (s *service) UploadOurLogo(ctx context.Context, landingID int, file multipa
 		return err
 	}
 
-	oldFile, err := s.lendingRepo.SelectOurLogoByLandingID(ctx, landingID)
+	oldFile, err := s.landingRepo.SelectOurLogoByLandingID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadOurLogo s.lendingRepo.SelectOurLogoByLandingID",
+		s.logger.Error("internal.admin.UploadOurLogo s.landingRepo.SelectOurLogoByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdateOurLogo(ctx, landingID, filename)
+	err = s.landingRepo.UpdateOurLogo(ctx, landingID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadOurLogo s.lendingRepo.UpdateOurLogo",
+		s.logger.Error("internal.admin.UploadOurLogo s.landingRepo.UpdateOurLogo",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
@@ -483,16 +483,16 @@ func (s *service) UploadVideoCover(ctx context.Context, landingID int, file mult
 		return err
 	}
 
-	oldFile, err := s.lendingRepo.SelectVideoCoverByLandingID(ctx, landingID)
+	oldFile, err := s.landingRepo.SelectVideoCoverByLandingID(ctx, landingID)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadVideoCover s.lendingRepo.SelectVideoCoverByLandingID",
+		s.logger.Error("internal.admin.UploadVideoCover s.landingRepo.SelectVideoCoverByLandingID",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
 
-	err = s.lendingRepo.UpdateVideoCover(ctx, landingID, filename)
+	err = s.landingRepo.UpdateVideoCover(ctx, landingID, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.UploadVideoCover s.lendingRepo.UpdateVideoCover",
+		s.logger.Error("internal.admin.UploadVideoCover s.landingRepo.UpdateVideoCover",
 			zap.Error(err), zap.Int("landingID", landingID))
 		return err
 	}
@@ -530,9 +530,9 @@ func (s *service) AddFeatureAndAmenity(ctx context.Context, file multipart.File,
 		return err
 	}
 
-	err = s.lendingRepo.InsertFeatureAndAmenity(ctx, featureName, filename)
+	err = s.landingRepo.InsertFeatureAndAmenity(ctx, featureName, filename)
 	if err != nil {
-		s.logger.Error("internal.admin.AddFeatureAndAmenity s.lendingRepo.UpdateOurLogo",
+		s.logger.Error("internal.admin.AddFeatureAndAmenity s.landingRepo.UpdateOurLogo",
 			zap.Error(err), zap.String("featureName", featureName))
 		return err
 	}
@@ -542,16 +542,16 @@ func (s *service) AddFeatureAndAmenity(ctx context.Context, file multipart.File,
 
 func (s *service) DeleteFeatureAndAmenity(ctx context.Context, id int) error {
 
-	list, err := s.lendingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, []int{id})
+	list, err := s.landingRepo.SelectFeaturesAndAmenitiesByIDs(ctx, []int{id})
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteFeatureAndAmenity s.lendingRepo.SelectFeaturesAndAmenitiesByIDs",
+		s.logger.Error("internal.admin.DeleteFeatureAndAmenity s.landingRepo.SelectFeaturesAndAmenitiesByIDs",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}
 
-	err = s.lendingRepo.DeleteFeatureAndAmenity(ctx, id)
+	err = s.landingRepo.DeleteFeatureAndAmenity(ctx, id)
 	if err != nil {
-		s.logger.Error("internal.admin.DeleteFeatureAndAmenity s.lendingRepo.DeleteFeatureAndAmenity",
+		s.logger.Error("internal.admin.DeleteFeatureAndAmenity s.landingRepo.DeleteFeatureAndAmenity",
 			zap.Error(err), zap.Int("id", id))
 		return err
 	}

@@ -45,7 +45,7 @@ func NewRouter(params RouterParams) {
 	router.HandleFunc(baseUrl+"/favorites", middleware.ApplyMiddleware(params.Handler.GetFavorites, params.Handler.MwCheckAuthToken)).Methods("GET")
 
 	router.HandleFunc(baseUrl+"/landings", params.Handler.GetLandingsList).Methods("GET")
-	router.HandleFunc(baseUrl+"/landing", params.Handler.GetLendingData).Methods("GET")
+	router.HandleFunc(baseUrl+"/landing", params.Handler.GetLandingData).Methods("GET")
 
 	router.HandleFunc(baseUrl+"/texts", params.Handler.GetTexts).Methods("GET")
 

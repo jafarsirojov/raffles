@@ -1,4 +1,4 @@
-package lending
+package landing
 
 import (
 	"context"
@@ -18,7 +18,7 @@ type Params struct {
 	Logger *zap.Logger
 }
 
-func NewRepo(params Params) interfaces.LendingClientRepo {
+func NewRepo(params Params) interfaces.LandingClientRepo {
 	return &repo{
 		db:     params.DB,
 		logger: params.Logger,
@@ -30,22 +30,22 @@ type repo struct {
 	logger *zap.Logger
 }
 
-func (r *repo) SelectLandingList(ctx context.Context) (landings []structs.LendingListMainPage, err error) {
+func (r *repo) SelectLandingList(ctx context.Context) (landings []structs.LandingListMainPage, err error) {
 	rows, err := r.db.Query(ctx, `
 SELECT l.name,
        l.main_description,
        l.background_image,
        sk.key
-FROM lending l
-         JOIN service_keys sk on l.id = sk.lending_id
+FROM landing l
+         JOIN service_keys sk on l.id = sk.landing_id
 WHERE 1 = 1;`)
 	if err != nil {
-		r.logger.Error("pkg.repo.client.lending.SelectLandingList r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.client.landing.SelectLandingList r.db.Query", zap.Error(err))
 		return nil, err
 	}
 
 	for rows.Next() {
-		var l structs.LendingListMainPage
+		var l structs.LandingListMainPage
 		err = rows.Scan(
 			&l.Name,
 			&l.MainDescription,
@@ -53,7 +53,7 @@ WHERE 1 = 1;`)
 			&l.Key,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.client.lending.SelectLandingList rows.Scan", zap.Error(err))
+			r.logger.Error("pkg.repo.client.landing.SelectLandingList rows.Scan", zap.Error(err))
 			return nil, err
 		}
 
@@ -67,7 +67,7 @@ WHERE 1 = 1;`)
 	return landings, nil
 }
 
-func (r *repo) SelectLendingData(ctx context.Context, id int) (data structs.Lending, err error) {
+func (r *repo) SelectLandingData(ctx context.Context, id int) (data structs.Landing, err error) {
 	err = r.db.QueryRow(ctx, `
 SELECT 
     id,
@@ -96,7 +96,7 @@ SELECT
 	latitude, 
 	longitude,
 	location_description
-FROM lending
+FROM landing
 WHERE id = $1;`, id).Scan(
 		&data.ID,
 		&data.Name,
@@ -126,7 +126,7 @@ WHERE id = $1;`, id).Scan(
 		&data.LocationDescription,
 	)
 	if err != nil {
-		r.logger.Error("pkg.repo.client.lending.SelectLendingData r.db.QueryRow", zap.Error(err))
+		r.logger.Error("pkg.repo.client.landing.SelectLandingData r.db.QueryRow", zap.Error(err))
 		return data, err
 	}
 

@@ -32,7 +32,7 @@ type Handler interface {
 	SaveFavorite(http.ResponseWriter, *http.Request)
 	DeleteFavorite(http.ResponseWriter, *http.Request)
 	GetFavorites(http.ResponseWriter, *http.Request)
-	GetLendingData(http.ResponseWriter, *http.Request)
+	GetLandingData(http.ResponseWriter, *http.Request)
 	GetLandingsList(http.ResponseWriter, *http.Request)
 
 	MwCheckAuthToken(middleware middleware.Handler) middleware.Handler

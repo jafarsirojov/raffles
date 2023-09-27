@@ -1,4 +1,4 @@
-package lending
+package landing
 
 import (
 	"context"
@@ -11,7 +11,7 @@ func (r *repo) GetAvailabilitiesByLandingID(ctx context.Context, landingID int) 
 	rows, err := r.db.Query(ctx, `
 SELECT 
     id,
-    lending_id,
+    landing_id,
     price_aed,
     price_usd,
     unique_id,
@@ -22,10 +22,10 @@ SELECT
     special_gift,
     special_gift_icon
 FROM availability
-WHERE lending_id = $1
+WHERE landing_id = $1
 ORDER BY id;`, landingID)
 	if err != nil {
-		r.logger.Error("pkg.repo.client.lending.GetAvailabilitiesByLandingID r.db.Query", zap.Error(err))
+		r.logger.Error("pkg.repo.client.landing.GetAvailabilitiesByLandingID r.db.Query", zap.Error(err))
 		return list, err
 	}
 
@@ -33,7 +33,7 @@ ORDER BY id;`, landingID)
 		var a structs.Availability
 		err = rows.Scan(
 			&a.ID,
-			&a.LendingID,
+			&a.LandingID,
 			&a.Price.AED,
 			&a.Price.USD,
 			&a.UniqueID,
@@ -45,7 +45,7 @@ ORDER BY id;`, landingID)
 			&a.SpecialGiftIcon,
 		)
 		if err != nil {
-			r.logger.Error("pkg.repo.client.lending.GetAvailabilitiesByLandingID rows.Scan()", zap.Error(err))
+			r.logger.Error("pkg.repo.client.landing.GetAvailabilitiesByLandingID rows.Scan()", zap.Error(err))
 			return nil, err
 		}
 
